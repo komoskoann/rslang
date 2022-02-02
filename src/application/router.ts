@@ -18,9 +18,6 @@ export default class Router {
       case 'main':
         resolved = MainSection;
         break;
-      case 'authorization':
-        resolved = AuthorizationSection;
-        break;
       case 'eBook':
         resolved = EBookSection;
         break;

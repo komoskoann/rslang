@@ -3,8 +3,6 @@ import Control from '../../controls/control';
 export default class Navbar extends Control {
   toMainButton: Control<HTMLElement>;
 
-  toAuthorizationButton: Control<HTMLElement>;
-
   toEbookButton: Control<HTMLElement>;
 
   toMiniGamesButton: Control<HTMLElement>;
@@ -21,8 +19,6 @@ export default class Navbar extends Control {
     super(parentNode, 'nav', 'navbar', '');
     this.toMainButton = new Control(this.node, 'button', 'nav-button', 'to Main');
     this.toMainButton.node.id = 'main';
-    this.toAuthorizationButton = new Control(this.node, 'button', 'nav-button', 'to Authorization');
-    this.toAuthorizationButton.node.id = 'authorization';
     this.toEbookButton = new Control(this.node, 'button', 'nav-button', 'to E-Book');
     this.toEbookButton.node.id = 'eBook';
     this.toMiniGamesButton = new Control(this.node, 'button', 'nav-button', 'to Mini Games');
