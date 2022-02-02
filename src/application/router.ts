@@ -1,5 +1,4 @@
 import MainSection from '../application/mainPage/mainSection';
-import AuthorizationSection from '../application/authorizationPage/authorizationSection';
 import EBookSection from '../application/eBookPage/eBookSection';
 import MiniGamesSection from '../application/gamesPage/miniGamesSection';
 import StatisticsSection from '../application/statisticsPage/statisticsSection';
