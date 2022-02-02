@@ -8,12 +8,13 @@ import AboutTeamSection from '../application/aboutTeamPage/aboutTeamSection';
 
 export default class Router {
   private defaultPath = 'main';
+
   path: string = this.defaultPath;
 
   resolve(path?: string) {
     this.path = path || this.defaultPath;
     let resolved;
-    switch(path) {
+    switch (path) {
       case 'main':
         resolved = MainSection;
         break;
@@ -41,5 +42,4 @@ export default class Router {
     }
     return resolved;
   }
-
 }

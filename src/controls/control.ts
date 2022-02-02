@@ -1,10 +1,11 @@
 class Control<NodeType extends HTMLElement = HTMLElement> {
   public node: NodeType;
 
-  constructor(parentNode: HTMLElement, tagName = 'div', className = '', content = '', id = '') {
+  public isReloadRequired: boolean = false;
+
+  constructor(parentNode: HTMLElement, tagName = 'div', className = '', content = '') {
     const el = document.createElement(tagName);
     el.className = className;
-    el.id = id;
     el.textContent = content;
     if (parentNode) {
       parentNode.append(el);

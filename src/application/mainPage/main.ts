@@ -4,21 +4,26 @@ import Router from '../router';
 
 export default class Main extends Control {
   navbar: Navbar;
-  router: Router;
-  section: Control<HTMLElement>;
-  
 
-  constructor(parentNode: HTMLElement) {
+  router: Router = new Router();
+
+  section: Control<HTMLElement>;
+
+  navButtons: NodeListOf<ChildNode>;
+
+  constructor(parentNode: HTMLElement, navButtons: NodeListOf<ChildNode>) {
     super(parentNode, 'main', 'main', '');
-    this.navbar = new Navbar(this.node);
-    this.router = new Router();
+    this.navButtons = navButtons;
+  }
+
+  call() {
     this.section = new (this.router.resolve())(this.node);
     this.navigateApp();
   }
-  
+
   private resolvePaths(path: string) {
     const newSection = this.router.resolve(path);
-    if (this.section instanceof newSection) {
+    if (this.section instanceof newSection && !this.section.isReloadRequired) {
       return;
     }
     this.section.destroy();
@@ -26,11 +31,13 @@ export default class Main extends Control {
   }
 
   private navigateApp() {
-    this.navbar.navButtons.forEach(navButton => {
-      navButton.addEventListener('click', (function(mainInstance: Main) {
-        mainInstance.resolvePaths((navButton as HTMLElement).id);
-      }).bind(null, this))
-    })
+    this.navButtons.forEach((navButton) => {
+      navButton.addEventListener(
+        'click',
+        function (mainInstance: Main) {
+          mainInstance.resolvePaths((navButton as HTMLElement).id);
+        }.bind(null, this),
+      );
+    });
   }
-
 }
