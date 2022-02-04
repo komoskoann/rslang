@@ -30,6 +30,10 @@ const baseConfig = {
         test: /\.(woff(2)?|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
+      {
+        test: /\.html$/i,
+        loader: "html-loader",
+      },
     ],
   },
   resolve: {
