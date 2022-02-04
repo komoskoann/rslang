@@ -10,26 +10,38 @@ export default class Router {
 
   path: string = this.defaultPath;
 
+  private main: string = 'main';
+
+  private eBook: string = 'eBook';
+
+  private miniGames: string = 'miniGames';
+
+  private statistics: string = 'statistics';
+
+  private dictionary: string = 'dictionary';
+
+  private aboutTeam: string = 'aboutTeam';
+
   resolve(path?: string) {
     this.path = path || this.defaultPath;
     let resolved;
     switch (path) {
-      case 'main':
+      case this.main:
         resolved = MainSection;
         break;
-      case 'eBook':
+      case this.eBook:
         resolved = EBookSection;
         break;
-      case 'miniGames':
+      case this.miniGames:
         resolved = MiniGamesSection;
         break;
-      case 'statistics':
+      case this.statistics:
         resolved = StatisticsSection;
         break;
-      case 'dictionary':
+      case this.dictionary:
         resolved = DictionarySection;
         break;
-      case 'aboutTeam':
+      case this.aboutTeam:
         resolved = AboutTeamSection;
         break;
       default:
