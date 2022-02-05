@@ -14,32 +14,35 @@ export default class WordCard extends Control {
   wordCardInfo: IWordCard;
   playList: IPlayList[];
   playNum: number = 0;
+  container: Control<HTMLElement>;
 
   constructor(parentNode: HTMLElement, wordCardInfo: IWordCard) {
     super(parentNode, 'div', 'word-card-wrapper', '');
+    this.container = new Control(this.node, 'div');
     this.isDifficult = false;
     this.isLearnt = false;
     this.wordCardInfo = wordCardInfo;
   }
 
+  private renderCardNameWrapper() {
+    const cardNameWrapper = new Control(this.container.node, 'div', 'card-name-wrapper');
+    const cardTitle = new Control(cardNameWrapper.node, 'div', 'card-title-wrapper');
+    this.playButton = new Control(cardTitle.node, 'button', 'play-button');
+    const wordName = new Control(cardTitle.node, 'span', 'word-name', this.wordCardInfo.word);
+    const cardName = new Control(cardNameWrapper.node, 'div', 'card-name');
+    const wordInfo = new Control(cardName.node, 'span', 'word-info', `${this.wordCardInfo.transcription} ${this.wordCardInfo.wordTranslate}`);
+  }
+
   private renderCardImage() {
-    const cardImageWrapper = new Control(this.node, 'div', 'card-image-wrapper');
+    const cardImageWrapper = new Control(this.container.node, 'div', 'card-image-wrapper');
     cardImageWrapper.node.innerHTML = `<img src="https://rslangapplication.herokuapp.com/${this.wordCardInfo.image}" alt="word image" class="card-image">`;
   }
 
   private renderCardInfoWrapper() {
-    this.cardInfoWrapper = new Control(this.node, 'div', 'card-info-wrapper');
+    this.cardInfoWrapper = new Control(this.container.node, 'div', 'card-info-wrapper');
   }
 
-  private renderCardNameWrapper() {
-    const cardNameWrapper = new Control(this.cardInfoWrapper.node, 'div', 'card-name-wrapper');
-    this.playButton = new Control(cardNameWrapper.node, 'button', 'play-button');
-    const cardName = new Control(cardNameWrapper.node, 'div', 'card-name');
-    const wordName = new Control(cardName.node, 'span', 'word-name', this.wordCardInfo.word);
-    const wordTranscription = new Control(cardName.node, 'span', 'word-transcription', this.wordCardInfo.transcription);
-    const wordTranslation = new Control(cardName.node, 'span', 'word-translation', this.wordCardInfo.wordTranslate);
 
-  }
 
   private renderCardMeaningWrapper() {
     const cardMeaningWrapper = new Control(this.cardInfoWrapper.node, 'div', 'card-meaning-wrapper');
@@ -54,7 +57,7 @@ export default class WordCard extends Control {
   }
 
   private renderControlButtons() {
-    const controlButtonsWrapper = new Control(this.cardInfoWrapper.node, 'div', 'control-buttons-wrapper');
+    const controlButtonsWrapper = new Control(this.node, 'div', 'control-buttons-wrapper');
     this.difficultWordButton = new Control(controlButtonsWrapper.node, 'button', 'difficult-word-button', 'Сложное');
     this.learntWordButton = new Control(controlButtonsWrapper.node, 'button', 'delete-word-button', 'Изученное');
   }
@@ -106,9 +109,9 @@ export default class WordCard extends Control {
 
   render() {
     this.node.id = this.wordCardInfo.id;
+    this.renderCardNameWrapper();
     this.renderCardImage();
     this.renderCardInfoWrapper();
-    this.renderCardNameWrapper();
     this.renderCardMeaningWrapper();
     this.renderCardExampleWrapper();
     this.renderControlButtons();
