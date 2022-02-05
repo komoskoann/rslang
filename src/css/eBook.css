@@ -1,0 +1,133 @@
+.book-text {
+  margin: 30px 40px;
+}
+
+.levels{
+  cursor: pointer;
+  margin: auto;
+  width: 720px;
+  gap: 30px 40px;
+}
+
+.level-cont {
+  padding: 5px;
+  height: 50px;
+  width: 210px;
+  border: var(--main-border);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: scale(1);
+}
+.level-cont:hover {
+  transform: scale(1.1);
+  transition: 0.5s ease-in-out;
+}
+.lev-text{
+  font-weight: 600;
+  margin: 0;
+  width: 150px;
+}
+.lev-desig {
+  text-align: center;
+  font-weight: 600;
+  width: 45px;
+  background-color: var(--main-color);
+  border-radius: 50%;
+  font-size: 1.7rem;
+}
+.lev-desig.red{
+  background-color: var(--color-a2);
+}
+.lev-desig.purple{
+  background-color: var(--color-b1);
+}
+.lev-desig.deep-blue{
+  background-color: var(--color-b2);
+}
+.lev-desig.green{
+  background-color: var(--color-c1);
+}
+.lev-desig.blue{
+  background-color: var(--color-c2);
+}
+.games-nav-cont {
+  display: flex;
+  justify-content: space-around;
+}
+.games-nav{
+  margin-top: 30px;
+  gap: 60px 40px;
+}
+.to-sprint,
+.to-chalenge{
+  margin: 10px;
+  display: flex;
+  width: 450px;
+  justify-content: space-between;
+  align-items: center;
+  border: var(--main-border);
+  border-radius: 10px;
+}
+.to-sprint img,
+.to-chalenge img {
+  margin: 10px;
+  width: 120px; 
+  height: 80px;
+}
+.sprint-descript {
+  margin: 5px 10px;
+}
+
+@media (max-width: 790px) {
+  .levels{
+    width: 500px;
+  }
+}
+@media (max-width: 500px) {
+  .levels{
+    width: 350px;
+    gap: 30px 20px;
+  }
+  .level-cont {
+    width: 155px;
+  }
+  .lev-desig{
+    width: 50px;
+    height: 35px;
+    font-size: 1.3rem;
+  }
+  .to-sprint,
+  .to-chalenge{
+    width: 350px;
+  }
+  .lev-text{
+    font-weight: 600;
+    margin: 0;
+    width: 120px;
+  }
+}
+@media (max-width: 370px) {
+  .level-cont {
+    width: 130px;
+  }
+  .lev-desig{
+    width: 50px;
+    height: 35px;
+    font-size: 1.3rem;
+  }
+  .to-sprint,
+  .to-chalenge{
+    width: 350px;
+  }
+  .levels{
+    width: 340px;
+    gap: 30px 20px;
+  }
+  .lev-text{
+    font-weight: 600;
+    margin: 0;
+    width: 120px;
+  }
+}
