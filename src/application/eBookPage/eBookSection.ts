@@ -1,6 +1,6 @@
 import Control from '../../controls/control';
 import eBook from './eBook.html';
-import '../../css/eBook.css'
+import '../../css/eBook.css';
 
 export default class EBookSection extends Control {
   constructor(parentNode: HTMLElement) {
