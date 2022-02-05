@@ -1,0 +1,262 @@
+.btn-outline-warning {
+  margin-right: 15px;
+}
+.menu {
+  background: var(--main-color);
+  font-weight: 500;
+}
+.button-menu{
+  margin: 10px 30px;
+}
+.menu-list {
+  margin-left: 30px;
+  transform: scale(1);
+}
+.menu-list:hover{
+  transform: scale(1.05);
+  transition: 0.5s ease-in-out;
+}
+.menu-list>.dropdown-menu {
+  margin-top: -15px;
+  background-color: unset;
+  border: none;
+}
+.login {
+  margin-top: -10px;
+  position: absolute;
+  right: 7%;
+  color:var(--text-color);
+  background: white;
+  opacity: 0.5;
+  width: 80px;
+  height: 50px;
+}
+.login:hover {
+  box-shadow: 0px 2px 6px black;
+  transition: 0.5s ease-out;
+}
+.general-cont {
+  background: var(--main-color);
+  display: flex;
+  flex-direction: column;
+}
+.general-container{
+  height: 18vh;
+}
+.general-cont path {
+  width: 100%;
+}
+.general-text{
+  margin-right: 50px;
+}
+.wave {
+  width: 100%;
+}
+.blocks,
+.team-page {
+  margin: 50px auto;
+}
+.blocks .col-2{
+  padding: 0;
+  margin: 0;
+  width: 300px;
+  height: 450px;
+  box-shadow: var(--main-box-shadow);
+}
+.card {
+  width: 300px;
+  height: 450px;
+  transform: scale(1);
+  cursor: pointer;
+}
+.card:hover{
+  transform: scale(1.1);
+  transition: 0.5s ease-in-out;
+}
+.card-img-top {
+  margin: 5px auto;
+  padding: 0;
+  width: 260px;
+  height: 190px;
+}
+.card-body{
+  height: 250px;
+  margin-top: 5px;
+}
+.footer-section {
+  margin-top: 20px;
+  background: var(--main-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;  
+  padding: 10px 20px;
+}
+.footer-section .git {
+  display: flex;
+  width: 30%;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-color);
+}
+a,
+.footer-section span{
+  font-weight:600;
+  color: var(--text-color);
+  text-decoration: none;  
+}
+.git a:hover,
+.about-team:hover{
+  color: rgb(110, 110, 110);
+  transition: 0.5s ease-in-out;
+  cursor: pointer;
+}
+.logo-icon{
+  width: 90px; 
+}
+.footer-section h5{
+  color: var(--text-color);
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .blocks{
+    width: 800px;
+  }
+  .cards-cont{
+    gap: 60px 70px;
+  }
+}
+@media (max-width: 990px) {
+  .menu>.nav-cont{
+    margin: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 500px;
+  }
+  .navbar-nav{
+    height: 90px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+.menu-list>.dropdown-menu {
+    margin-top: -15px;
+    background-color: unset;
+    border: none;
+}
+.navbar-nav .dropdown-menu {
+    position: absolute;
+    height: 50px;
+  }
+}
+@media (max-width: 768px) {
+  .login {
+    margin-top: -23px;
+    right: 5%;
+    width: 80px;
+    height: 40px;
+  }
+  h2{
+    font-size: 1rem;
+  }
+  .general-text{
+    font-size: 0.8rem;
+  }
+  .cards-cont{
+    gap: 30px 50px;
+  }
+  .blocks{
+    width: 700px;
+  }
+  .footer-section,
+  .footer-section h5{
+    font-size: 0.8rem;
+  }
+}
+@media (max-width: 690px) {
+  .general-text p{
+    width: 230px;
+  }
+  .blocks .col-2,
+  .card{
+    width: 200px;
+    height: 330px;
+  }
+  .card-img-top {
+    width: 140px;
+    height: 100px;
+  }
+  .card-body{
+    height: 150px;
+  }
+  .card-text {
+    font-size: 0.8rem;
+  }
+  .blocks{
+    width: 480px;
+  }
+  .footer-section,
+  .footer-section h5{
+    font-size: 0.8rem;
+  }
+}
+@media (max-width: 600px) {
+  .general-container{
+    height: 40vh;
+  }
+  .general-text,
+  .general-text p{
+    width: 100%;
+  }
+  .img-text-cont{
+    width: 100%;
+    flex-direction: column-reverse;
+  }
+  .col-sm-7 {
+    flex: 0 0 auto;
+    width: 90%
+  }
+  .dropdown-menu{
+    font-size: 0.7rem;
+  }
+}
+@media (max-width: 500px) {
+  .menu-list{
+    font-size: 0.8rem;
+    margin-left: 10px;
+  }
+  .blocks{
+    width: 400px;
+  }
+  .blocks .col-2,
+  .card{
+    width: 180px;
+    height: 350px;
+  }
+  .cards-cont{
+    gap: 20px 10px;
+  }
+  .card-img-top {
+    width: 120px;
+    height: 90px;
+  }
+  .footer-section,
+  .footer-section h5{
+    font-size: 0.6rem;
+  }
+  .logo-icon{
+    width: 50px;
+  }
+}
+@media (max-width: 400px) {
+  .blocks{
+    width: 340px;
+  }
+  .blocks .col-2,
+  .card{
+    width: 150px;
+    height: 380px;
+  }
+  .card-text{
+    font-size: 0.75rem;
+  }
+}

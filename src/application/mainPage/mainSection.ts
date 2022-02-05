@@ -1,11 +1,13 @@
 import Control from '../../controls/control';
+import '../../css/firstPage.css';
+import '/src/global.css';
+import firstPage from './main-page.html';
 
 export default class MainSection extends Control {
   toAuthorizationButton: Control<HTMLElement>;
 
   constructor(parentNode: HTMLElement) {
-    super(parentNode, 'section', 'main-section', 'test main-section');
-    this.toAuthorizationButton = new Control(this.node, 'button', 'nav-button', 'to Authorization');
-    this.toAuthorizationButton.node.id = 'authorization';
+    super(parentNode, 'section', 'main-section', '');
+    this.node.innerHTML = firstPage;
   }
 }

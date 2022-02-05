@@ -27,20 +27,37 @@ export default class Navbar extends Control {
 
   private aboutTeam: string = 'aboutTeam';
 
+  private navbarCol: string = 'navbarTogglerDemo03';
+
   constructor(parentNode: HTMLElement) {
-    super(parentNode, 'nav', 'navbar', '');
-    this.toMainButton = new Control(this.node, 'button', 'nav-button', 'to Main');
+    super(parentNode, 'nav', 'menu navbar navbar-expand-lg navbar-light', '');
+    const divContainerFluid = new Control(this.node, 'div', 'nav-cont container-fluid');
+    divContainerFluid.node.innerHTML = `
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>`;
+    const divNavbarCol = new Control(divContainerFluid.node, 'div', 'collapse navbar-collapse');
+    divNavbarCol.node.id = this.navbarCol;
+    const ulNavig = new Control(divNavbarCol.node, 'ul', 'navbar-nav me-auto mb-2 mb-lg-0');
+    this.toMainButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Main');
     this.toMainButton.node.id = this.main;
-    this.toEbookButton = new Control(this.node, 'button', 'nav-button', 'to E-Book');
+    this.toMainButton.node.innerHTML = `<a class="nav-main nav-link"  href="#">Главная</a>`;
+    this.toEbookButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to E-Book');
     this.toEbookButton.node.id = this.eBook;
-    this.toMiniGamesButton = new Control(this.node, 'button', 'nav-button', 'to Mini Games');
+    this.toEbookButton.node.innerHTML = `<a class="nav-book nav-link" href="#">Учебник</a>`;
+    this.toMiniGamesButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Mini Games');
     this.toMiniGamesButton.node.id = this.miniGames;
-    this.toStatisticsButton = new Control(this.node, 'button', 'nav-button', 'to Statistics');
+    this.toMiniGamesButton.node.innerHTML = ` <a class="nav-link" href="#" id="navbarDropdown" 
+    role="button" data-bs-toggle="dropdown" aria-expanded="false">Игры</a>`;
+    this.toStatisticsButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Statistics');
     this.toStatisticsButton.node.id = this.statistics;
-    this.toDictionaryButton = new Control(this.node, 'button', 'nav-button', 'to Dictionary');
+    this.toStatisticsButton.node.innerHTML = `<a class="nav-link" href="#">Статистика</a>`;
+    this.toDictionaryButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Dictionary');
     this.toDictionaryButton.node.id = this.dictionary;
-    this.toAboutTeamButton = new Control(this.node, 'button', 'nav-button', 'to About team');
+    this.toDictionaryButton.node.innerHTML = `<a class="nav-link disabled">Словарь</a>`;
+    this.toAboutTeamButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to About team');
     this.toAboutTeamButton.node.id = this.aboutTeam;
-    this.navButtons = this.node.childNodes;
+    this.toAboutTeamButton.node.innerHTML = `<a class="nav-book nav-link" href="#">О команде</a>`;
+    this.navButtons = ulNavig.node.childNodes;
   }
 }
