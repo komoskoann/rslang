@@ -3,33 +3,31 @@ import WordCard from './wordCard';
 import eBook from './eBook.html';
 import '../../css/eBook.css';
 import { IWordCard } from './IWordCard';
+import WordsPagination from './wordsPagination';
 
 export default class EBookSection extends Control {
   wordCards: WordCard[];
 
   private defaultEnglishLevel: number = 0;
 
-  private currentEnglishLevel: number;
+  private currentEnglishLevel: number = this.defaultEnglishLevel;
 
   private defaultWordsPage: number = 0;
 
-  private numOfLevels: number = 6;
-
-  private wordsPerPage: number = 20;
-
-  private numOfPages: number = 30;
+  private currentWordsPage: number = this.defaultWordsPage;
 
   wordCardsWrapper: Control<HTMLElement>;
 
-  paginationWrapper: Control<HTMLElement>;
+  paginationWrapper: WordsPagination;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
     this.node.innerHTML = eBook;
     this.wordCardsWrapper = new Control(this.node, 'div', 'word-cards-wrapper');
-    this.paginationWrapper = new Control(this.node, 'div', 'pagination-wrapper');
+    this.paginationWrapper = new WordsPagination(this.node);
     this.getWords(this.defaultWordsPage, this.defaultEnglishLevel);
     this.navLevels();
+    this.navPages();
   }
 
   async getWord(id: string) {
@@ -54,4 +52,20 @@ export default class EBookSection extends Control {
       }.bind(null, this),);
     })
   }
+
+  navPages() {
+    this.node.querySelectorAll("[data-nav]").forEach(nav => {
+      nav.addEventListener('click', function(instance: EBookSection) {
+        if(+nav.getAttribute('data-nav') === instance.paginationWrapper.firstPage) {
+          instance.currentWordsPage = instance.paginationWrapper.goToFirstPage();
+        } else if(+nav.getAttribute('data-nav') === instance.paginationWrapper.lastPage) {
+          instance.currentWordsPage = instance.paginationWrapper.goToLastPage();
+        }
+        instance.wordCardsWrapper.node.innerHTML = '';
+        instance.getWords(instance.currentWordsPage, instance.currentEnglishLevel);
+      }.bind(null, this),);
+    })
+  }
+
+
 }

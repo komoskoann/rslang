@@ -133,11 +133,11 @@
 }
 
 .difficult-word-button {
-  background-color: rgba(255, 0, 0, 0.3);
+  background-color: var(--color-a2);
 }
 
 .delete-word-button {
-  background-color: rgba(0, 186, 0, 0.3);
+  background-color: var(--color-c1);
 }
 
 .difficult-word-button:hover,
