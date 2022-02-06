@@ -16,6 +16,9 @@ export default class WordCard extends Control {
   playNum: number = 0;
   container: Control<HTMLElement>;
 
+  private serverURL: string = 'https://rslangapplication.herokuapp.com/';
+  isPlaying: boolean = false;
+
   constructor(parentNode: HTMLElement, wordCardInfo: IWordCard) {
     super(parentNode, 'div', 'word-card-wrapper', '');
     this.container = new Control(this.node, 'div');
@@ -35,14 +38,12 @@ export default class WordCard extends Control {
 
   private renderCardImage() {
     const cardImageWrapper = new Control(this.container.node, 'div', 'card-image-wrapper');
-    cardImageWrapper.node.innerHTML = `<img src="https://rslangapplication.herokuapp.com/${this.wordCardInfo.image}" alt="word image" class="card-image">`;
+    cardImageWrapper.node.innerHTML = `<img src="${this.serverURL}${this.wordCardInfo.image}" alt="word image" class="card-image">`;
   }
 
   private renderCardInfoWrapper() {
     this.cardInfoWrapper = new Control(this.container.node, 'div', 'card-info-wrapper');
   }
-
-
 
   private renderCardMeaningWrapper() {
     const cardMeaningWrapper = new Control(this.cardInfoWrapper.node, 'div', 'card-meaning-wrapper');
@@ -65,28 +66,44 @@ export default class WordCard extends Control {
   }
 
   playAudio() {
-    if (!this.audio || this.audio?.ended) {
+    this.createPlaylist();
+    if (!this.isPlaying || this.audio?.ended) {
       this.audio = new Audio();
       this.audio.src = this.playList[this.playNum].src;
       this.audio.play();
+      this.isPlaying = true;
+      this.audio.addEventListener('ended', this.getSongNext.bind(this));
+    } else if(this.isPlaying) {
+      this.audio.pause();
+      this.isPlaying = false;
     }
   }
 
   createPlaylist() {
-    this.playList = [
+    return this.playList = [
       {
-        title: 'Example',
-        src: `https://rslangapplication.herokuapp.com/${this.wordCardInfo.audio}`,
+        title: 'example',
+        src: `${this.serverURL}${this.wordCardInfo.audio}`,
       },
       {
         title: 'audioMeaning',
-        src: this.wordCardInfo.audioMeaning,
+        src: `${this.serverURL}${this.wordCardInfo.audioMeaning}`,
       },
       {
         title: 'audioExample',
-        src: this.wordCardInfo.audioExample,
+        src: `${this.serverURL}${this.wordCardInfo.audioExample}`,
       },
     ]
+  }
+
+  getSongNext() {
+    this.isPlaying = !this.isPlaying;
+    if(this.playNum != this.playList.length - 1) {
+      this.playNum++;
+      this.playAudio();
+    } else {
+      this.playNum = 0;
+    }
   }
 
   toggleToDifficult() {
