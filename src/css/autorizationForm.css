@@ -59,10 +59,20 @@
 }
 .input-item {
   display: flex;
+  position: relative;
   flex-direction: column;
   width: 100%;
   border-bottom: 2px solid var(--autorization-border-color);
   position: relative;
+}
+.input-item::after {
+  color: red;
+  content: attr(data-after);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -22px;
+  width: max-content;
 }
 .input-item:not(:last-child) {
   margin: 0 0 15px 0;
@@ -108,8 +118,12 @@
   border: 2px solid var(--autorization-border-color-2);
   border-radius: 20px;
 }
-.button-signin:hover,
-.button-signup:hover {
+.button-signin:disabled,
+.button-signup:disabled {
+  border: 2px solid var(--autorization-border-color);
+}
+.button-signin:not(:disabled):hover,
+.button-signup:not(:disabled):hover {
   border: 2px solid var(--autorization-border-color);
   color: var(--autorization-bgc);
   background-color: var(--autorization-border-color);
@@ -132,11 +146,12 @@
   border: none;
   height: min-content;
   width: max-content;
+  text-decoration: underline;
 }
 .button-changeComponent:hover {
   color: var(--autorization-border-color-2);
 }
 .authorizationForm__subtitle {
-  font-size: 14px;
+  font-size: 16px;
   margin: 0;
 }
