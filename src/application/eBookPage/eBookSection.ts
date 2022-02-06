@@ -48,12 +48,15 @@ export default class EBookSection extends Control {
       level.addEventListener('click', function(instance: EBookSection) {
         instance.currentEnglishLevel = +level.getAttribute('data-level');
         instance.wordCardsWrapper.node.innerHTML = '';
-        instance.getWords(instance.defaultWordsPage, instance.currentEnglishLevel);
+        instance.currentWordsPage = instance.defaultWordsPage;
+        instance.paginationWrapper.changePageNumber(instance.node);
+        instance.getWords(instance.currentWordsPage, instance.currentEnglishLevel);
       }.bind(null, this),);
     })
   }
 
   navPages() {
+    this.paginationWrapper.blockButtons(this.node);
     this.node.querySelectorAll("[data-nav]").forEach(nav => {
       nav.addEventListener('click', function(instance: EBookSection) {
         if(+nav.getAttribute('data-nav') === instance.paginationWrapper.firstPage) {
@@ -61,6 +64,8 @@ export default class EBookSection extends Control {
         } else if(+nav.getAttribute('data-nav') === instance.paginationWrapper.lastPage) {
           instance.currentWordsPage = instance.paginationWrapper.goToLastPage();
         }
+        instance.paginationWrapper.blockButtons(instance.node);
+        instance.paginationWrapper.changePageNumber(instance.node);
         instance.wordCardsWrapper.node.innerHTML = '';
         instance.getWords(instance.currentWordsPage, instance.currentEnglishLevel);
       }.bind(null, this),);

@@ -53,4 +53,11 @@
 .input-page-number {
   width: 100%;
   text-align: center;
+  background-color: transparent;
+  border: none;
+}
+
+.block-buttons {
+  pointer-events: none;
+  filter: invert(79%) sepia(0%) saturate(74%) hue-rotate(229deg) brightness(97%) contrast(95%);
 }
