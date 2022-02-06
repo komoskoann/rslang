@@ -1,16 +1,48 @@
 .authorizationForm {
-  position: absolute;
-  left: 10%;
-  top: 10%;
+  position: fixed;
   visibility: hidden;
-  opacity: 0;
-  background-color: whitesmoke;
-  border-radius: 10px;
+  top: 50%;
+  left: 50%;
+  width: 450px;
+  z-index: 666;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  -webkit-perspective: 666px;
+	-moz-perspective: 666px;
+	perspective: 666px;
+}
+.authorizationForm .authorizationForm__content {
   padding: 30px;
-  min-width: 450px;
+  border-radius: 10px;
+  background-color: var(--autorization-bgc);
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	-webkit-transform: rotateX(-120deg);
+	-moz-transform: rotateX(-120deg);
+	-ms-transform: rotateX(-120deg);
+	transform: rotateX(-120deg);
+	-webkit-transform-origin: 50% 0;
+	-moz-transform-origin: 50% 0;
+	transform-origin: 50% 0;
+	opacity: 0;
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	transition: all 0.2s;
+  -webkit-box-shadow: 0px 6px 12px 6px var(--autorization-shadow-color);
+  -moz-box-shadow: 0px 6px 12px 6px var(--autorization-shadow-color);
+  box-shadow: 0px 6px 12px 6px var(--autorization-shadow-color);
 }
 .authorizationForm.active {
   visibility: visible;
+}
+.authorizationForm.active .authorizationForm__content {
+  -webkit-transform: rotateX(0deg);
+  -moz-transform: rotateX(0deg);
+  -ms-transform: rotateX(0deg);
+  transform: rotateX(0deg);
   opacity: 1;
 }
 .authorizationForm__wrapper {
@@ -29,7 +61,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-bottom: 2px solid #bbb;
+  border-bottom: 2px solid var(--autorization-border-color);
   position: relative;
 }
 .input-item:not(:last-child) {
@@ -41,14 +73,17 @@
 }
 .input__input {
   font-size: 16px;
-  color: #333;
+  font-weight: 500;
   line-height: 1.2;
-  display: block;
   height: 40px;
   background: transparent;
   border: none;
   outline: none;
   padding: 0 0 0 40px;
+}
+.input__input::placeholder {
+  font-weight: 400;
+  color: var(--autorization-border-color-2);
 }
 .input__icon {
   position: absolute;
@@ -70,13 +105,18 @@
   margin: 35px 0 20px 0;
   width: 100%;
   font-size: 18px;
-  border: 2px solid #666;
+  border: 2px solid var(--autorization-border-color-2);
   border-radius: 20px;
 }
 .button-signin:hover,
 .button-signup:hover {
-  border: 2px solid #bbb;
-  color: #888;
+  border: 2px solid var(--autorization-border-color);
+  color: var(--autorization-bgc);
+  background-color: var(--autorization-border-color);
+}
+.button-signin:active,
+.button-signup:active {
+  transform: scale(1.03);
 }
 .authorizationForm__closeButton {
   position: absolute;
@@ -86,7 +126,6 @@
   top: 30px;
 }
 .authorizationForm__closeButton:hover {
-  filter: invert(59%) sepia(0%) saturate(120%) hue-rotate(134deg) brightness(91%) contrast(82%);
   transform: scale(1.2);
 }
 .button-changeComponent {
@@ -94,7 +133,10 @@
   height: min-content;
   width: max-content;
 }
+.button-changeComponent:hover {
+  color: var(--autorization-border-color-2);
+}
 .authorizationForm__subtitle {
-  font-size: 12px;
+  font-size: 14px;
   margin: 0;
 }

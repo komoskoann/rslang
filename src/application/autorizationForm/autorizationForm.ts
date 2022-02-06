@@ -28,7 +28,7 @@ export default class AuthorizationForm extends Control {
   private searchCloseAuthorizationButton = (form: HTMLElement): HTMLButtonElement => form.querySelector('.authorizationForm__closeButton');
   private openAuthorizationForm = (): void => {
     this.node.classList.add('active');
-    this.node.firstElementChild.innerHTML = this.autorizationComponent;
+    this.node.firstElementChild.firstElementChild.innerHTML = this.autorizationComponent;
     this.signInButton = this.node.querySelector('.button-signin');
     this.changeComponentButton = this.node.querySelector('.button-changeComponent');
     this.signInButton.addEventListener('click', this.signInAction);
@@ -50,7 +50,7 @@ export default class AuthorizationForm extends Control {
     this.changeComponentButton.removeEventListener('click', this.openRegistationComponent);
     e.preventDefault();
     const form = document.querySelector('.authorizationForm') as HTMLElement;
-    form.firstElementChild.innerHTML = this.registrationComponent;
+    form.firstElementChild.firstElementChild.innerHTML = this.registrationComponent;
     this.signUpButton = this.node.querySelector('.button-signup');
     this.changeComponentButton = this.node.querySelector('.button-changeComponent');
     this.signUpButton.addEventListener('click', this.signUpAction);
@@ -61,7 +61,7 @@ export default class AuthorizationForm extends Control {
     this.signUpButton.removeEventListener('click', this.signInAction);
     this.changeComponentButton.removeEventListener('click', this.openAuthorizationForm);
     const form = document.querySelector('.authorizationForm') as HTMLElement;
-    form.firstElementChild.innerHTML = this.autorizationComponent;
+    form.firstElementChild.firstElementChild.innerHTML = this.autorizationComponent;
     this.signInButton = this.node.querySelector('.button-signin');
     this.changeComponentButton = this.node.querySelector('.button-changeComponent');
     this.signInButton.addEventListener('click', this.signInAction);
