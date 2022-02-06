@@ -46,13 +46,15 @@ export default class WordCard extends Control {
 
   private renderCardMeaningWrapper() {
     const cardMeaningWrapper = new Control(this.cardInfoWrapper.node, 'div', 'card-meaning-wrapper');
-    const wordMeaningEng = new Control(cardMeaningWrapper.node, 'span', 'word-meaning-eng', this.wordCardInfo.textMeaning);
+    const wordMeaningEng = new Control(cardMeaningWrapper.node, 'span', 'word-meaning-eng');
+    wordMeaningEng.node.innerHTML = this.wordCardInfo.textMeaning;
     const wordMeaningRus = new Control(cardMeaningWrapper.node, 'span', 'word-meaning-rus', this.wordCardInfo.textMeaningTranslate);
   }
 
   private renderCardExampleWrapper() {
     const cardExampleWrapper = new Control(this.cardInfoWrapper.node, 'div', 'card-example-wrapper');
-    const wordExampleEng = new Control(cardExampleWrapper.node, 'span', 'word-example-eng', `→ ${this.wordCardInfo.textExample}`);
+    const wordExampleEng = new Control(cardExampleWrapper.node, 'span', 'word-example-eng');
+    wordExampleEng.node.innerHTML = `→ ${this.wordCardInfo.textExample}`;
     const wordExampleRus = new Control(cardExampleWrapper.node, 'span', 'word-example-rus', this.wordCardInfo.textExampleTranslate);
   }
 
