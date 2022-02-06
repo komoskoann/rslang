@@ -4,6 +4,7 @@ import autorizationFormHTML from './autorizationForm.html';
 import autorizationHTML from './autorizationComponent.html';
 import registrationHTML from './registrationComponent.html';
 import '../../css/autorizationForm.css';
+import { app } from '../..';
 
 export default class AuthorizationForm extends Control {
   private autorizationService: autorizationService;
@@ -19,6 +20,7 @@ export default class AuthorizationForm extends Control {
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'form', 'authorizationForm', '');
     this.openAuthorizationButton = this.searchOpenAuthorizationButton();
+    this.openAuthorizationButton.textContent = JSON.parse(localStorage.getItem('currentUser'))?.message === 'Authenticated' ? 'Выйти' : 'Войти';
     this.openAuthorizationButton.addEventListener('click', this.openAuthorizationForm);
     this.node.innerHTML = autorizationFormHTML;
     this.autorizationComponent = autorizationHTML;
@@ -28,6 +30,12 @@ export default class AuthorizationForm extends Control {
   private searchOpenAuthorizationButton = (): HTMLButtonElement => document.querySelector('.login');
   private searchCloseAuthorizationButton = (): HTMLButtonElement => document.querySelector('.authorizationForm__closeButton');
   private openAuthorizationForm = (): void => {
+    if (app.currentUser.authenticatedStatus) {
+      localStorage.removeItem('currentUser');
+      app.currentUser = app.signOut();
+      this.openAuthorizationButton.textContent = 'Войти';
+      return;
+    }
     this.node.classList.add('active');
     this.node.firstElementChild.firstElementChild.innerHTML = this.autorizationComponent;
     this.submitButton = this.node.querySelector('.button-signin');
@@ -114,6 +122,9 @@ export default class AuthorizationForm extends Control {
     if (response.status === 200) {
       this.openAuthorizationButton.innerHTML = 'Выйти';
       const content = await response.json();
+      localStorage.setItem('currentUser', JSON.stringify(content));
+      [app.currentUser.authenticatedStatus, app.currentUser.token, app.currentUser.refreshToken, app.currentUser.userId, app.currentUser.name] =
+      [content.message === 'Authenticated', content.token, content.refreshToken, content.userId, content.name];
       this.closeAuthorizationForm();
       console.log(content);
     }
