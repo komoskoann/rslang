@@ -1,0 +1,100 @@
+.authorizationForm {
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  visibility: hidden;
+  opacity: 0;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  padding: 30px;
+  min-width: 450px;
+}
+.authorizationForm.active {
+  visibility: visible;
+  opacity: 1;
+}
+.authorizationForm__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.authorizationForm__inputs-container {
+  width: 100%;
+}
+.authorizationForm__title {
+  margin: 20px 0;
+  font-size: 32px;
+}
+.input-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-bottom: 2px solid #bbb;
+  position: relative;
+}
+.input-item:not(:last-child) {
+  margin: 0 0 15px 0;
+}
+.input__label {
+  font-size: 16px;
+  line-height: 24px;
+}
+.input__input {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.2;
+  display: block;
+  height: 40px;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0 0 0 40px;
+}
+.input__icon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 40px;
+  width: 40px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+.authorizationForm__button {
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.button-signin,
+.button-signup {
+  height: 45px;
+  margin: 35px 0 20px 0;
+  width: 100%;
+  font-size: 18px;
+  border: 2px solid #666;
+  border-radius: 20px;
+}
+.button-signin:hover,
+.button-signup:hover {
+  border: 2px solid #bbb;
+  color: #888;
+}
+.authorizationForm__closeButton {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 30px;
+  top: 30px;
+}
+.authorizationForm__closeButton:hover {
+  filter: invert(59%) sepia(0%) saturate(120%) hue-rotate(134deg) brightness(91%) contrast(82%);
+  transform: scale(1.2);
+}
+.button-changeComponent {
+  border: none;
+  height: min-content;
+  width: max-content;
+}
+.authorizationForm__subtitle {
+  font-size: 12px;
+  margin: 0;
+}
