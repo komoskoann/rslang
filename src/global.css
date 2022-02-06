@@ -13,3 +13,14 @@
   --autorization-border-color: #bbb;
   --autorization-border-color-2: #888;
 }
+html {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+main {
+  flex-grow: 1;
+}
