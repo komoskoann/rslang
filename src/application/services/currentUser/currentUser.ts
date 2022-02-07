@@ -1,21 +1,21 @@
 export interface ICurrentUser {
   authenticatedStatus: boolean;
-  name: string | null;
-  token: string | null;
-  refreshToken: string | null;
-  userId: string | null;
+  name: string;
+  token: string;
+  refreshToken: string;
+  userId: string;
 }
 
 export default class CurrentUser implements ICurrentUser {
   authenticatedStatus: boolean;
 
-  name: string | null;
+  name: string;
 
-  token: string | null;
+  token: string;
 
-  refreshToken: string | null;
+  refreshToken: string;
 
-  userId: string | null;
+  userId: string;
 
   constructor() {
     this.authenticatedStatus = JSON.parse(localStorage.getItem('currentUser'))?.message === 'Authenticated';
