@@ -52,27 +52,22 @@ export default class WordsPagination extends Control {
   }
 
   blockButtons(instance: HTMLElement) {
-    const buttons = instance.querySelectorAll(this.buttonsClassName);
+    const buttons = Array.from(instance.querySelectorAll(this.buttonsClassName));
     if (this.currentPage === this.firstPage) {
-      this.blockEvents(buttons[0] as HTMLElement);
-      this.blockEvents(buttons[1] as HTMLElement);
-      this.unblockEvents(buttons[2] as HTMLElement);
-      this.unblockEvents(buttons[3] as HTMLElement);
+      this.blockEvents(buttons.splice(0, 2) as HTMLElement[]);
+      this.unblockEvents(buttons as HTMLElement[]);
     } else if (this.currentPage === this.lastPage) {
-      this.blockEvents(buttons[2] as HTMLElement);
-      this.blockEvents(buttons[3] as HTMLElement);
-      this.unblockEvents(buttons[0] as HTMLElement);
-      this.unblockEvents(buttons[1] as HTMLElement);
+      this.blockEvents(buttons.reverse().splice(0, 2) as HTMLElement[]);
+      this.unblockEvents(buttons as HTMLElement[]);
     }
-
   }
 
-  blockEvents(button: HTMLElement) {
-    button.classList.add('block-buttons');
+  blockEvents(buttons: HTMLElement[]) {
+    buttons.forEach(button => button.classList.add('block-buttons'));
   }
 
-  unblockEvents(button: HTMLElement) {
-    button.classList.remove('block-buttons');
+  unblockEvents(buttons: HTMLElement[]) {
+    buttons.forEach(button => button.classList.remove('block-buttons'));
   }
 
 }
