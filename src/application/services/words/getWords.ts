@@ -3,11 +3,11 @@ export default class GetWords {
 
   async getWord(id: string) {
     const rawResponse = await fetch(`${this.url}/${id}`);
-    const content = await rawResponse.json();
+    return rawResponse.json();
   }
 
   async getWords(page: number, group: number) {
     const rawResponse = await fetch(`${this.url}?page=${page}&group=${group}`);
-    return await rawResponse.json();
+    return rawResponse.json();
   }
 }

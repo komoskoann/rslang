@@ -33,8 +33,10 @@ export default class EBookSection extends Control {
     this.node.innerHTML = eBook;
     this.wordCardsWrapper = new Control(this.node, 'div', 'word-cards-wrapper');
     this.paginationWrapper = new WordsPagination(this.node);
-    this.currentWordsPage = +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName) || this.defaultWordsPage;
-    this.currentEnglishLevel = +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentLevelLSName) || this.defaultEnglishLevel;
+    this.currentWordsPage =
+      +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName) || this.defaultWordsPage;
+    this.currentEnglishLevel =
+      +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentLevelLSName) || this.defaultEnglishLevel;
     this.getWords(this.currentWordsPage, this.currentEnglishLevel);
     this.navLevels();
     this.navPages();
@@ -54,43 +56,52 @@ export default class EBookSection extends Control {
   }
 
   private navLevels() {
-    this.node.querySelectorAll("[data-level]").forEach(level => {
-      level.addEventListener('click', function(instance: EBookSection) {
-        instance.currentEnglishLevel = +level.getAttribute('data-level');
-        instance.currentWordsPage = instance.defaultWordsPage;
-        instance.paginationWrapper.currentPage = instance.defaultWordsPage;
-        instance.update();
-      }.bind(null, this),);
-    })
+    this.node.querySelectorAll('[data-level]').forEach((level) => {
+      level.addEventListener(
+        'click',
+        function (instance: EBookSection) {
+          instance.currentEnglishLevel = +level.getAttribute('data-level');
+          instance.currentWordsPage = instance.defaultWordsPage;
+          instance.paginationWrapper.currentPage = instance.defaultWordsPage;
+          instance.update();
+        }.bind(null, this),
+      );
+    });
   }
 
   private navPages() {
-    if(!+this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName)) {
+    if (!+this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName)) {
       this.paginationWrapper.blockButtons(this.node);
     }
-    this.node.querySelectorAll("[data-nav]").forEach(nav => {
-      nav.addEventListener('click', function(instance: EBookSection) {
-        if(+nav.getAttribute('data-nav') === instance.paginationWrapper.firstPage) {
-          instance.currentWordsPage = instance.paginationWrapper.goToFirstPage();
-        } else if(+nav.getAttribute('data-nav') === instance.paginationWrapper.lastPage) {
-          instance.currentWordsPage = instance.paginationWrapper.goToLastPage();
-        } else if(nav.getAttribute('data-nav') === instance.paginationWrapper.nextButtonDataAttr) {
-          instance.currentWordsPage = instance.paginationWrapper.goToNextPage();
-        } else if(nav.getAttribute('data-nav') === instance.paginationWrapper.prevButtonDataAttr) {
-          instance.currentWordsPage = instance.paginationWrapper.goToPrevPage();
-        }
-        instance.update();
-      }.bind(null, this),);
-    })
+    this.node.querySelectorAll('[data-nav]').forEach((nav) => {
+      nav.addEventListener(
+        'click',
+        function (instance: EBookSection) {
+          if (+nav.getAttribute('data-nav') === instance.paginationWrapper.firstPage) {
+            instance.currentWordsPage = instance.paginationWrapper.goToFirstPage();
+          } else if (+nav.getAttribute('data-nav') === instance.paginationWrapper.lastPage) {
+            instance.currentWordsPage = instance.paginationWrapper.goToLastPage();
+          } else if (nav.getAttribute('data-nav') === instance.paginationWrapper.nextButtonDataAttr) {
+            instance.currentWordsPage = instance.paginationWrapper.goToNextPage();
+          } else if (nav.getAttribute('data-nav') === instance.paginationWrapper.prevButtonDataAttr) {
+            instance.currentWordsPage = instance.paginationWrapper.goToPrevPage();
+          }
+          instance.update();
+        }.bind(null, this),
+      );
+    });
   }
 
   private enterUserPage() {
     const inputElement = this.node.querySelector(this.paginationWrapper.inputClassName);
-    inputElement.addEventListener('change', function(instance: EBookSection) {
-      let userNumber = instance.paginationWrapper.goToUserPage(inputElement);
-      instance.currentWordsPage = userNumber;
-      instance.update();
-    }.bind(null, this),)
+    inputElement.addEventListener(
+      'change',
+      function (instance: EBookSection) {
+        let userNumber = instance.paginationWrapper.goToUserPage(inputElement);
+        instance.currentWordsPage = userNumber;
+        instance.update();
+      }.bind(null, this),
+    );
   }
 
   private update() {
@@ -101,5 +112,4 @@ export default class EBookSection extends Control {
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentPageLSName, `${this.currentWordsPage}`);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${this.currentEnglishLevel}`);
   }
-
 }

@@ -3,8 +3,8 @@ import '../../css/word.css';
 import { IWordCard } from './IWordCard';
 
 export interface IPlayList {
-  title: string,
-  src: string,
+  title: string;
+  src: string;
 }
 
 export default class WordCard extends Control {
@@ -50,10 +50,10 @@ export default class WordCard extends Control {
     const cardNameWrapper = new Control(this.container.node, 'div', 'card-name-wrapper');
     const cardTitle = new Control(cardNameWrapper.node, 'div', 'card-title-wrapper');
     this.playButton = new Control(cardTitle.node, 'button', 'play-button');
-    const wordName = new Control(cardTitle.node, 'span', 'word-name', this.wordCardInfo.word);
+    new Control(cardTitle.node, 'span', 'word-name', this.wordCardInfo.word);
     const cardName = new Control(cardNameWrapper.node, 'div', 'card-name');
-    const wordTranscription = new Control(cardName.node, 'span', 'word-transcription', `${this.wordCardInfo.transcription}`);
-    const wordTranslation = new Control(cardName.node, 'span', 'word-translation', `${this.wordCardInfo.wordTranslate}`);
+    new Control(cardName.node, 'span', 'word-transcription', `${this.wordCardInfo.transcription}`);
+    new Control(cardName.node, 'span', 'word-translation', `${this.wordCardInfo.wordTranslate}`);
   }
 
   private renderCardImage() {
@@ -69,14 +69,14 @@ export default class WordCard extends Control {
     const cardMeaningWrapper = new Control(this.cardInfoWrapper.node, 'div', 'card-meaning-wrapper');
     const wordMeaningEng = new Control(cardMeaningWrapper.node, 'span', 'word-meaning-eng');
     wordMeaningEng.node.innerHTML = this.wordCardInfo.textMeaning;
-    const wordMeaningRus = new Control(cardMeaningWrapper.node, 'span', 'word-meaning-rus', this.wordCardInfo.textMeaningTranslate);
+    new Control(cardMeaningWrapper.node, 'span', 'word-meaning-rus', this.wordCardInfo.textMeaningTranslate);
   }
 
   private renderCardExampleWrapper() {
     const cardExampleWrapper = new Control(this.cardInfoWrapper.node, 'div', 'card-example-wrapper');
     const wordExampleEng = new Control(cardExampleWrapper.node, 'span', 'word-example-eng');
     wordExampleEng.node.innerHTML = `→ ${this.wordCardInfo.textExample}`;
-    const wordExampleRus = new Control(cardExampleWrapper.node, 'span', 'word-example-rus', this.wordCardInfo.textExampleTranslate);
+    new Control(cardExampleWrapper.node, 'span', 'word-example-rus', this.wordCardInfo.textExampleTranslate);
   }
 
   private renderControlButtons() {
@@ -93,14 +93,14 @@ export default class WordCard extends Control {
       this.audio.play();
       this.isPlaying = true;
       this.audio.addEventListener('ended', this.getSongNext.bind(this));
-    } else if(this.isPlaying) {
+    } else if (this.isPlaying) {
       this.audio.pause();
       this.isPlaying = false;
     }
   }
 
   private createPlaylist() {
-    return this.playList = [
+    return (this.playList = [
       {
         title: 'example',
         src: `${this.serverURL}${this.wordCardInfo.audio}`,
@@ -113,12 +113,12 @@ export default class WordCard extends Control {
         title: 'audioExample',
         src: `${this.serverURL}${this.wordCardInfo.audioExample}`,
       },
-    ]
+    ]);
   }
 
   private getSongNext() {
     this.isPlaying = !this.isPlaying;
-    if(this.playNum != this.playList.length - 1) {
+    if (this.playNum != this.playList.length - 1) {
       this.playNum++;
       this.playAudio();
     } else {
@@ -127,20 +127,20 @@ export default class WordCard extends Control {
   }
 
   private toggleToDifficult() {
-    if(!this.isDifficult) {
+    if (!this.isDifficult) {
       this.isDifficult = true;
       this.node.classList.add(this.difficultWordClassName);
-    } else if(this.isDifficult) {
+    } else if (this.isDifficult) {
       this.node.classList.remove(this.difficultWordClassName);
       this.isDifficult = false;
     }
   }
 
   private toggleToLearnt() {
-    if(!this.isLearnt) {
+    if (!this.isLearnt) {
       this.isLearnt = true;
       this.node.classList.add(this.learntWordClassName);
-    } else if(this.isLearnt) {
+    } else if (this.isLearnt) {
       this.node.classList.remove(this.learntWordClassName);
       this.isLearnt = false;
     }

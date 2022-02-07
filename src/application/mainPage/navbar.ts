@@ -41,23 +41,23 @@ export default class Navbar extends Control {
     const ulNavig = new Control(divNavbarCol.node, 'ul', 'navbar-nav me-auto mb-2 mb-lg-0');
     this.toMainButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Main');
     this.toMainButton.node.id = this.main;
-    this.toMainButton.node.innerHTML = `<a class="nav-main nav-link"  href="#">Главная</a>`;
+    this.toMainButton.node.innerHTML = '<a class="nav-main nav-link"  href="#">Главная</a>';
     this.toEbookButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to E-Book');
     this.toEbookButton.node.id = this.eBook;
-    this.toEbookButton.node.innerHTML = `<a class="nav-book nav-link" href="#">Учебник</a>`;
+    this.toEbookButton.node.innerHTML = '<a class="nav-book nav-link" href="#">Учебник</a>';
     this.toMiniGamesButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Mini Games');
     this.toMiniGamesButton.node.id = this.miniGames;
     this.toMiniGamesButton.node.innerHTML = ` <a class="nav-link" href="#" id="navbarDropdown"
     role="button" data-bs-toggle="dropdown" aria-expanded="false">Игры</a>`;
     this.toStatisticsButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Statistics');
     this.toStatisticsButton.node.id = this.statistics;
-    this.toStatisticsButton.node.innerHTML = `<a class="nav-link" href="#">Статистика</a>`;
+    this.toStatisticsButton.node.innerHTML = '<a class="nav-link" href="#">Статистика</a>';
     this.toDictionaryButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Dictionary');
     this.toDictionaryButton.node.id = this.dictionary;
-    this.toDictionaryButton.node.innerHTML = `<a class="nav-link disabled">Словарь</a>`;
+    this.toDictionaryButton.node.innerHTML = '<a class="nav-link disabled">Словарь</a>';
     this.toAboutTeamButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to About team');
     this.toAboutTeamButton.node.id = this.aboutTeam;
-    this.toAboutTeamButton.node.innerHTML = `<a class="nav-book nav-link" href="#">О команде</a>`;
+    this.toAboutTeamButton.node.innerHTML = '<a class="nav-book nav-link" href="#">О команде</a>';
     this.navButtons = ulNavig.node.childNodes;
   }
 }

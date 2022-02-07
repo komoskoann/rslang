@@ -35,30 +35,28 @@ export default class WordsPagination extends Control {
   }
 
   goToFirstPage() {
-    return this.currentPage = this.firstPage;
+    return (this.currentPage = this.firstPage);
   }
 
   goToLastPage() {
-    return this.currentPage = this.lastPage;
+    return (this.currentPage = this.lastPage);
   }
 
   goToNextPage() {
-    if(this.currentPage < this.lastPage) {
-      return this.currentPage += 1;
+    if (this.currentPage < this.lastPage) {
+      return (this.currentPage += 1);
     }
   }
 
   goToPrevPage() {
-    if(this.currentPage > this.firstPage) {
-      return this.currentPage -= 1;
+    if (this.currentPage > this.firstPage) {
+      return (this.currentPage -= 1);
     }
   }
 
   goToUserPage(e: EventTarget) {
-    const userPageInput = +(e as HTMLInputElement).value
-    if(userPageInput > this.lastPage + 1 || userPageInput < this.firstPage + 1) {
-      this.currentPage;
-    } else {
+    const userPageInput = +(e as HTMLInputElement).value;
+    if (userPageInput < this.lastPage + 1 && userPageInput > this.firstPage + 1) {
       this.currentPage = userPageInput - 1;
     }
     return this.currentPage;
@@ -85,11 +83,10 @@ export default class WordsPagination extends Control {
   }
 
   private blockEvents(buttons: HTMLElement[]) {
-    buttons.forEach(button => button.classList.add(this.classNameForBlockButtons));
+    buttons.forEach((button) => button.classList.add(this.classNameForBlockButtons));
   }
 
   private unblockEvents(buttons: HTMLElement[]) {
-    buttons.forEach(button => button.classList.remove(this.classNameForBlockButtons));
+    buttons.forEach((button) => button.classList.remove(this.classNameForBlockButtons));
   }
-
 }
