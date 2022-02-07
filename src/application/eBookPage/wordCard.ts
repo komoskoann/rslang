@@ -1,23 +1,42 @@
 import Control from '../../controls/control';
-import './word.css';
+import '../../css/word.css';
 import { IWordCard } from './IWordCard';
-import { IPlayList } from './IPlayList';
+
+export interface IPlayList {
+  title: string,
+  src: string,
+}
 
 export default class WordCard extends Control {
-  cardInfoWrapper: Control<HTMLElement>;
-  audio: HTMLAudioElement;
-  isDifficult: boolean;
-  playButton: Control<HTMLElement>;
-  difficultWordButton: Control<HTMLElement>;
-  learntWordButton: Control<HTMLElement>;
-  isLearnt: boolean;
-  wordCardInfo: IWordCard;
-  playList: IPlayList[];
-  playNum: number = 0;
-  container: Control<HTMLElement>;
+  private cardInfoWrapper: Control<HTMLElement>;
+
+  private audio: HTMLAudioElement;
+
+  private isDifficult: boolean;
+
+  private playButton: Control<HTMLElement>;
+
+  private difficultWordButton: Control<HTMLElement>;
+
+  private learntWordButton: Control<HTMLElement>;
+
+  private isLearnt: boolean;
+
+  private wordCardInfo: IWordCard;
+
+  private playList: IPlayList[];
+
+  private playNum: number = 0;
+
+  private container: Control<HTMLElement>;
 
   private serverURL: string = 'https://rslangapplication.herokuapp.com/';
-  isPlaying: boolean = false;
+
+  private isPlaying: boolean = false;
+
+  private difficultWordClassName: string = 'difficult-word-card';
+
+  private learntWordClassName: string = 'learnt-word-card';
 
   constructor(parentNode: HTMLElement, wordCardInfo: IWordCard) {
     super(parentNode, 'div', 'word-card-wrapper', '');
@@ -33,7 +52,8 @@ export default class WordCard extends Control {
     this.playButton = new Control(cardTitle.node, 'button', 'play-button');
     const wordName = new Control(cardTitle.node, 'span', 'word-name', this.wordCardInfo.word);
     const cardName = new Control(cardNameWrapper.node, 'div', 'card-name');
-    const wordInfo = new Control(cardName.node, 'span', 'word-info', `${this.wordCardInfo.transcription} ${this.wordCardInfo.wordTranslate}`);
+    const wordTranscription = new Control(cardName.node, 'span', 'word-transcription', `${this.wordCardInfo.transcription}`);
+    const wordTranslation = new Control(cardName.node, 'span', 'word-translation', `${this.wordCardInfo.wordTranslate}`);
   }
 
   private renderCardImage() {
@@ -65,7 +85,7 @@ export default class WordCard extends Control {
     this.learntWordButton = new Control(controlButtonsWrapper.node, 'button', 'delete-word-button', 'Изученное');
   }
 
-  playAudio() {
+  private playAudio() {
     this.createPlaylist();
     if (!this.isPlaying || this.audio?.ended) {
       this.audio = new Audio();
@@ -79,7 +99,7 @@ export default class WordCard extends Control {
     }
   }
 
-  createPlaylist() {
+  private createPlaylist() {
     return this.playList = [
       {
         title: 'example',
@@ -96,7 +116,7 @@ export default class WordCard extends Control {
     ]
   }
 
-  getSongNext() {
+  private getSongNext() {
     this.isPlaying = !this.isPlaying;
     if(this.playNum != this.playList.length - 1) {
       this.playNum++;
@@ -106,22 +126,22 @@ export default class WordCard extends Control {
     }
   }
 
-  toggleToDifficult() {
+  private toggleToDifficult() {
     if(!this.isDifficult) {
       this.isDifficult = true;
-      this.node.classList.add('difficult-word-card');
+      this.node.classList.add(this.difficultWordClassName);
     } else if(this.isDifficult) {
-      this.node.classList.remove('difficult-word-card');
+      this.node.classList.remove(this.difficultWordClassName);
       this.isDifficult = false;
     }
   }
 
-  toggleToLearnt() {
+  private toggleToLearnt() {
     if(!this.isLearnt) {
       this.isLearnt = true;
-      this.node.classList.add('learnt-word-card');
+      this.node.classList.add(this.learntWordClassName);
     } else if(this.isLearnt) {
-      this.node.classList.remove('learnt-word-card');
+      this.node.classList.remove(this.learntWordClassName);
       this.isLearnt = false;
     }
   }
@@ -137,7 +157,7 @@ export default class WordCard extends Control {
     this.listenEvents();
   }
 
-  listenEvents() {
+  private listenEvents() {
     this.playButton.node.addEventListener('click', this.playAudio.bind(this));
     this.difficultWordButton.node.addEventListener('click', this.toggleToDifficult.bind(this));
     this.learntWordButton.node.addEventListener('click', this.toggleToLearnt.bind(this));

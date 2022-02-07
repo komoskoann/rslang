@@ -4,9 +4,9 @@ import eBook from './eBook.html';
 import '../../css/eBook.css';
 import { IWordCard } from './IWordCard';
 import WordsPagination from './wordsPagination';
-import GetWords from '../service/getWords';
-import LocalStorage from '../service/localStorage';
-import './preloader.css';
+import GetWords from '../services/words/getWords';
+import LocalStorage from '../services/words/localStorage';
+import '../../css/preloader.css';
 import preloadHtml from './preloader.html';
 
 export default class EBookSection extends Control {
@@ -20,28 +20,26 @@ export default class EBookSection extends Control {
 
   private currentWordsPage: number;
 
-  wordCardsWrapper: Control<HTMLElement>;
+  private wordCardsWrapper: Control<HTMLElement>;
 
-  paginationWrapper: WordsPagination;
+  private paginationWrapper: WordsPagination;
 
   service: GetWords = new GetWords();
 
   localStorage: LocalStorage = new LocalStorage();
 
-  currentPageLSName: string = 'currentWordPage';
-
-  currentLevelLSName: string = 'currentEngLevel';
-
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
     this.node.innerHTML = eBook;
-    this.currentWordsPage = +this.localStorage.getFromLocalStorage(this.currentPageLSName) || this.defaultWordsPage;
-    this.currentEnglishLevel = +this.localStorage.getFromLocalStorage(this.currentLevelLSName) || this.defaultEnglishLevel;
     this.wordCardsWrapper = new Control(this.node, 'div', 'word-cards-wrapper');
     this.paginationWrapper = new WordsPagination(this.node);
+    this.currentWordsPage = +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName) || this.defaultWordsPage;
+    this.currentEnglishLevel = +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentLevelLSName) || this.defaultEnglishLevel;
     this.getWords(this.currentWordsPage, this.currentEnglishLevel);
     this.navLevels();
     this.navPages();
+    this.enterUserPage();
+    this.paginationWrapper.changePageNumber(this.node);
   }
 
   async getWords(page: number, group: number) {
@@ -55,7 +53,7 @@ export default class EBookSection extends Control {
     this.wordCards.forEach((word) => word.render());
   }
 
-  navLevels() {
+  private navLevels() {
     this.node.querySelectorAll("[data-level]").forEach(level => {
       level.addEventListener('click', function(instance: EBookSection) {
         instance.currentEnglishLevel = +level.getAttribute('data-level');
@@ -66,27 +64,42 @@ export default class EBookSection extends Control {
     })
   }
 
-  navPages() {
-    this.paginationWrapper.blockButtons(this.node);
+  private navPages() {
+    if(!+this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName)) {
+      this.paginationWrapper.blockButtons(this.node);
+    }
     this.node.querySelectorAll("[data-nav]").forEach(nav => {
       nav.addEventListener('click', function(instance: EBookSection) {
         if(+nav.getAttribute('data-nav') === instance.paginationWrapper.firstPage) {
           instance.currentWordsPage = instance.paginationWrapper.goToFirstPage();
         } else if(+nav.getAttribute('data-nav') === instance.paginationWrapper.lastPage) {
           instance.currentWordsPage = instance.paginationWrapper.goToLastPage();
+        } else if(nav.getAttribute('data-nav') === instance.paginationWrapper.nextButtonDataAttr) {
+          instance.currentWordsPage = instance.paginationWrapper.goToNextPage();
+        } else if(nav.getAttribute('data-nav') === instance.paginationWrapper.prevButtonDataAttr) {
+          instance.currentWordsPage = instance.paginationWrapper.goToPrevPage();
         }
         instance.update();
       }.bind(null, this),);
     })
   }
 
-  update() {
+  private enterUserPage() {
+    const inputElement = this.node.querySelector(this.paginationWrapper.inputClassName);
+    inputElement.addEventListener('change', function(instance: EBookSection) {
+      let userNumber = instance.paginationWrapper.goToUserPage(inputElement);
+      instance.currentWordsPage = userNumber;
+      instance.update();
+    }.bind(null, this),)
+  }
+
+  private update() {
     this.paginationWrapper.blockButtons(this.node);
-    this.paginationWrapper.changePageNumber(this.node);
     this.wordCardsWrapper.node.innerHTML = '';
     this.getWords(this.currentWordsPage, this.currentEnglishLevel);
-    this.localStorage.setToLocalStorage(this.currentPageLSName, `${this.currentWordsPage}`);
-    this.localStorage.setToLocalStorage(this.currentLevelLSName, `${this.currentEnglishLevel}`);
+    this.paginationWrapper.changePageNumber(this.node);
+    this.localStorage.setToLocalStorage(this.paginationWrapper.currentPageLSName, `${this.currentWordsPage}`);
+    this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${this.currentEnglishLevel}`);
   }
 
 }

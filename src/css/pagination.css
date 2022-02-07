@@ -61,3 +61,7 @@
   pointer-events: none;
   filter: invert(79%) sepia(0%) saturate(74%) hue-rotate(229deg) brightness(97%) contrast(95%);
 }
+
+.wrong-page {
+  background-color: var(--color-a2);
+}
