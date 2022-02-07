@@ -73,6 +73,7 @@
   transform: translateX(-50%);
   bottom: -22px;
   width: max-content;
+  font-size: 14px;
 }
 .input-item:not(:last-child) {
   margin: 0 0 15px 0;
@@ -152,6 +153,6 @@
   color: var(--autorization-border-color-2);
 }
 .authorizationForm__subtitle {
-  font-size: 16px;
+  font-size: 15px;
   margin: 0;
 }

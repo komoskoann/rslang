@@ -51,18 +51,10 @@ export default class AuthorizationForm extends Control {
       this.openAuthorizationButton.textContent = 'Войти';
       return;
     }
-    this.node.classList.add('active');
-    this.node.firstElementChild.firstElementChild.innerHTML = this.autorizationComponent;
-    this.submitButton = this.node.querySelector('.button-signin');
     this.closeAutorizationButton = this.searchCloseAuthorizationButton();
-    this.changeComponentButton = this.node.querySelector('.button-changeComponent');
-    this.submitButton.addEventListener('click', this.signInAction);
-    this.changeComponentButton.addEventListener('click', this.openRegistationComponent);
+    this.node.classList.add('active');
     window.addEventListener('click', this.checkMouseclick);
-    this.inputEmail = document.getElementById('authorizationFormInputEmail') as HTMLInputElement;
-    this.inputPassword = document.getElementById('authorizationFormInputPassword') as HTMLInputElement;
-    this.inputEmail.addEventListener('input', this.activateSubmitButton);
-    this.inputPassword.addEventListener('input', this.activateSubmitButton);
+    this.openAuthorizationComponent();
   };
 
   private checkEmail = (): boolean => /\S+@\S+\.\S+/.test(this.inputEmail.value);
@@ -144,10 +136,9 @@ export default class AuthorizationForm extends Control {
     this.inputName.addEventListener('input', this.activateSubmitButton);
   };
 
-  private openAuthorizationComponent = (e: Event): void => {
-    e.preventDefault();
-    const form = document.querySelector('.authorizationForm') as HTMLElement;
-    form.firstElementChild.firstElementChild.innerHTML = this.autorizationComponent;
+  private openAuthorizationComponent = (e?: Event): void => {
+    e?.preventDefault();
+    this.node.firstElementChild.firstElementChild.innerHTML = this.autorizationComponent;
     this.submitButton = this.node.querySelector('.button-signin');
     this.changeComponentButton = this.node.querySelector('.button-changeComponent');
     this.submitButton.addEventListener('click', this.signInAction);
