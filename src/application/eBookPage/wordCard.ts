@@ -46,7 +46,18 @@ export default class WordCard extends Control {
     this.wordCardInfo = wordCardInfo;
   }
 
-  private renderCardNameWrapper() {
+  render(): void {
+    this.node.id = this.wordCardInfo.id;
+    this.renderCardNameWrapper();
+    this.renderCardImage();
+    this.renderCardInfoWrapper();
+    this.renderCardMeaningWrapper();
+    this.renderCardExampleWrapper();
+    this.renderControlButtons();
+    this.listenEvents();
+  }
+
+  private renderCardNameWrapper(): void {
     const cardNameWrapper = new Control(this.container.node, 'div', 'card-name-wrapper');
     const cardTitle = new Control(cardNameWrapper.node, 'div', 'card-title-wrapper');
     this.playButton = new Control(cardTitle.node, 'button', 'play-button');
@@ -56,36 +67,36 @@ export default class WordCard extends Control {
     new Control(cardName.node, 'span', 'word-translation', `${this.wordCardInfo.wordTranslate}`);
   }
 
-  private renderCardImage() {
+  private renderCardImage(): void {
     const cardImageWrapper = new Control(this.container.node, 'div', 'card-image-wrapper');
     cardImageWrapper.node.innerHTML = `<img src="${this.serverURL}${this.wordCardInfo.image}" alt="word image" class="card-image">`;
   }
 
-  private renderCardInfoWrapper() {
+  private renderCardInfoWrapper(): void {
     this.cardInfoWrapper = new Control(this.container.node, 'div', 'card-info-wrapper');
   }
 
-  private renderCardMeaningWrapper() {
+  private renderCardMeaningWrapper(): void {
     const cardMeaningWrapper = new Control(this.cardInfoWrapper.node, 'div', 'card-meaning-wrapper');
     const wordMeaningEng = new Control(cardMeaningWrapper.node, 'span', 'word-meaning-eng');
     wordMeaningEng.node.innerHTML = this.wordCardInfo.textMeaning;
     new Control(cardMeaningWrapper.node, 'span', 'word-meaning-rus', this.wordCardInfo.textMeaningTranslate);
   }
 
-  private renderCardExampleWrapper() {
+  private renderCardExampleWrapper(): void {
     const cardExampleWrapper = new Control(this.cardInfoWrapper.node, 'div', 'card-example-wrapper');
     const wordExampleEng = new Control(cardExampleWrapper.node, 'span', 'word-example-eng');
     wordExampleEng.node.innerHTML = `→ ${this.wordCardInfo.textExample}`;
     new Control(cardExampleWrapper.node, 'span', 'word-example-rus', this.wordCardInfo.textExampleTranslate);
   }
 
-  private renderControlButtons() {
+  private renderControlButtons(): void {
     const controlButtonsWrapper = new Control(this.node, 'div', 'control-buttons-wrapper');
     this.difficultWordButton = new Control(controlButtonsWrapper.node, 'button', 'difficult-word-button', 'Сложное');
     this.learntWordButton = new Control(controlButtonsWrapper.node, 'button', 'delete-word-button', 'Изученное');
   }
 
-  private playAudio() {
+  private playAudio(): void {
     this.createPlaylist();
     if (!this.isPlaying || this.audio?.ended) {
       this.audio = new Audio();
@@ -99,7 +110,7 @@ export default class WordCard extends Control {
     }
   }
 
-  private createPlaylist() {
+  private createPlaylist(): IPlayList[] {
     return (this.playList = [
       {
         title: 'example',
@@ -116,7 +127,7 @@ export default class WordCard extends Control {
     ]);
   }
 
-  private getSongNext() {
+  private getSongNext(): void {
     this.isPlaying = !this.isPlaying;
     if (this.playNum != this.playList.length - 1) {
       this.playNum++;
@@ -126,7 +137,7 @@ export default class WordCard extends Control {
     }
   }
 
-  private toggleToDifficult() {
+  private toggleToDifficult(): void {
     if (!this.isDifficult) {
       this.isDifficult = true;
       this.node.classList.add(this.difficultWordClassName);
@@ -136,7 +147,7 @@ export default class WordCard extends Control {
     }
   }
 
-  private toggleToLearnt() {
+  private toggleToLearnt(): void {
     if (!this.isLearnt) {
       this.isLearnt = true;
       this.node.classList.add(this.learntWordClassName);
@@ -146,18 +157,7 @@ export default class WordCard extends Control {
     }
   }
 
-  render() {
-    this.node.id = this.wordCardInfo.id;
-    this.renderCardNameWrapper();
-    this.renderCardImage();
-    this.renderCardInfoWrapper();
-    this.renderCardMeaningWrapper();
-    this.renderCardExampleWrapper();
-    this.renderControlButtons();
-    this.listenEvents();
-  }
-
-  private listenEvents() {
+  private listenEvents(): void {
     this.playButton.node.addEventListener('click', this.playAudio.bind(this));
     this.difficultWordButton.node.addEventListener('click', this.toggleToDifficult.bind(this));
     this.learntWordButton.node.addEventListener('click', this.toggleToLearnt.bind(this));

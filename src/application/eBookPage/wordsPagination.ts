@@ -12,7 +12,11 @@ export default class WordsPagination extends Control {
 
   inputClassName: string = '.input-page-number';
 
-  private buttonsClassName: string = '.pagination-button';
+  localStorage: LocalStorage = new LocalStorage();
+
+  currentPageLSName: string = 'currentWordPage';
+
+  currentLevelLSName: string = 'currentEngLevel';
 
   nextButtonDataAttr: string = 'to-next-page';
 
@@ -22,11 +26,7 @@ export default class WordsPagination extends Control {
 
   private classNameForBlockButtons: string = 'block-buttons';
 
-  localStorage: LocalStorage = new LocalStorage();
-
-  currentPageLSName: string = 'currentWordPage';
-
-  currentLevelLSName: string = 'currentEngLevel';
+  private buttonsClassName: string = '.pagination-button';
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'div', 'pagination-wrapper');
@@ -34,27 +34,27 @@ export default class WordsPagination extends Control {
     this.currentPage = +this.localStorage.getFromLocalStorage(this.currentPageLSName) || this.firstPage;
   }
 
-  goToFirstPage() {
+  goToFirstPage(): number {
     return (this.currentPage = this.firstPage);
   }
 
-  goToLastPage() {
+  goToLastPage(): number {
     return (this.currentPage = this.lastPage);
   }
 
-  goToNextPage() {
+  goToNextPage(): number {
     if (this.currentPage < this.lastPage) {
       return (this.currentPage += 1);
     }
   }
 
-  goToPrevPage() {
+  goToPrevPage(): number {
     if (this.currentPage > this.firstPage) {
       return (this.currentPage -= 1);
     }
   }
 
-  goToUserPage(e: EventTarget) {
+  goToUserPage(e: EventTarget): number {
     const userPageInput = +(e as HTMLInputElement).value;
     if (userPageInput < this.lastPage + 1 && userPageInput > this.firstPage + 1) {
       this.currentPage = userPageInput - 1;
@@ -62,14 +62,14 @@ export default class WordsPagination extends Control {
     return this.currentPage;
   }
 
-  changePageNumber(instance: HTMLElement) {
+  changePageNumber(instance: HTMLElement): string {
     const element: HTMLInputElement = instance.querySelector(this.inputClassName);
     const pageNumber = this.currentPage + 1;
     element.value = `${pageNumber}`;
     return element.value;
   }
 
-  blockButtons(instance: HTMLElement) {
+  blockButtons(instance: HTMLElement): void {
     const buttons = Array.from(instance.querySelectorAll(this.buttonsClassName));
     if (this.currentPage === this.firstPage) {
       this.blockEvents(buttons.splice(0, this.numOfLeftButtons) as HTMLElement[]);
@@ -82,11 +82,11 @@ export default class WordsPagination extends Control {
     }
   }
 
-  private blockEvents(buttons: HTMLElement[]) {
+  private blockEvents(buttons: HTMLElement[]): void {
     buttons.forEach((button) => button.classList.add(this.classNameForBlockButtons));
   }
 
-  private unblockEvents(buttons: HTMLElement[]) {
+  private unblockEvents(buttons: HTMLElement[]): void {
     buttons.forEach((button) => button.classList.remove(this.classNameForBlockButtons));
   }
 }

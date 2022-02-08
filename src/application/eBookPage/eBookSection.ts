@@ -12,6 +12,10 @@ import preloadHtml from './preloader.html';
 export default class EBookSection extends Control {
   wordCards: WordCard[];
 
+  service: GetWords = new GetWords();
+
+  localStorage: LocalStorage = new LocalStorage();
+
   private defaultEnglishLevel: number = 0;
 
   private currentEnglishLevel: number;
@@ -23,10 +27,6 @@ export default class EBookSection extends Control {
   private wordCardsWrapper: Control<HTMLElement>;
 
   private paginationWrapper: WordsPagination;
-
-  service: GetWords = new GetWords();
-
-  localStorage: LocalStorage = new LocalStorage();
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
@@ -44,7 +44,7 @@ export default class EBookSection extends Control {
     this.paginationWrapper.changePageNumber(this.node);
   }
 
-  async getWords(page: number, group: number) {
+  private async getWords(page: number, group: number): Promise<void> {
     const preloader = document.createElement('div');
     preloader.className = 'loader-wrapper';
     preloader.innerHTML = preloadHtml;
@@ -55,7 +55,7 @@ export default class EBookSection extends Control {
     this.wordCards.forEach((word) => word.render());
   }
 
-  private navLevels() {
+  private navLevels(): void {
     this.node.querySelectorAll('[data-level]').forEach((level) => {
       level.addEventListener(
         'click',
@@ -69,7 +69,7 @@ export default class EBookSection extends Control {
     });
   }
 
-  private navPages() {
+  private navPages(): void {
     if (!+this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName)) {
       this.paginationWrapper.blockButtons(this.node);
     }
@@ -92,7 +92,7 @@ export default class EBookSection extends Control {
     });
   }
 
-  private enterUserPage() {
+  private enterUserPage(): void {
     const inputElement = this.node.querySelector(this.paginationWrapper.inputClassName);
     inputElement.addEventListener(
       'change',
@@ -104,7 +104,7 @@ export default class EBookSection extends Control {
     );
   }
 
-  private update() {
+  private update(): void {
     this.paginationWrapper.blockButtons(this.node);
     this.wordCardsWrapper.node.innerHTML = '';
     this.getWords(this.currentWordsPage, this.currentEnglishLevel);
