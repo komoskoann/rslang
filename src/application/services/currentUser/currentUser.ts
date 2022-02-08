@@ -1,3 +1,5 @@
+import { app } from "../../..";
+
 export default class CurrentUser {
   isAuthenticated: boolean;
 
@@ -17,8 +19,8 @@ export default class CurrentUser {
     this.userId = JSON.parse(localStorage.getItem('currentUser'))?.userId || null;
   }
 
-  signOut(): CurrentUser {
+  signOut(): void {
     localStorage.removeItem('currentUser');
-    return new CurrentUser();
+    app.currentUser = new CurrentUser();
   }
 }

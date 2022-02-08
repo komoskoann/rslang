@@ -45,12 +45,14 @@ export default class AuthorizationForm extends Control {
     document.querySelector('.authorizationForm__closeButton');
 
   private openAuthorizationForm = (): void => {
+    console.log('test1')
     if (app.currentUser.isAuthenticated) {
       localStorage.removeItem('currentUser');
       app.currentUser.signOut();
       this.openAuthorizationButton.textContent = 'Войти';
       return;
     }
+    console.log('test2')
     this.closeAutorizationButton = this.searchCloseAuthorizationButton();
     this.node.classList.add('active');
     window.addEventListener('click', this.checkMouseclick);
