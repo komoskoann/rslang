@@ -2,7 +2,7 @@ import Header from './mainPage/header';
 import Navbar from './mainPage/navbar';
 import Main from './mainPage/main';
 import Footer from './mainPage/footer';
-import CurrentUser, { ICurrentUser } from './services/currentUser/currentUser';
+import CurrentUser  from './services/currentUser/currentUser';
 
 export class Application {
   header: Header;
@@ -13,7 +13,7 @@ export class Application {
 
   footer: Footer;
 
-  currentUser: ICurrentUser;
+  currentUser: CurrentUser;
 
   constructor() {
     this.header = new Header(document.body);
@@ -23,10 +23,5 @@ export class Application {
     this.footer = new Footer(document.body);
     this.currentUser = new CurrentUser();
     console.log(this.currentUser); // индикатор
-  }
-
-  signOut(): ICurrentUser {
-    localStorage.removeItem('currentUser');
-    return new CurrentUser();
   }
 }

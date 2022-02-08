@@ -45,9 +45,9 @@ export default class AuthorizationForm extends Control {
     document.querySelector('.authorizationForm__closeButton');
 
   private openAuthorizationForm = (): void => {
-    if (app.currentUser.authenticatedStatus) {
+    if (app.currentUser.isAuthenticated) {
       localStorage.removeItem('currentUser');
-      app.currentUser = app.signOut();
+      app.currentUser.signOut();
       this.openAuthorizationButton.textContent = 'Войти';
       return;
     }
@@ -63,44 +63,29 @@ export default class AuthorizationForm extends Control {
 
   private checkName = (): boolean => (this.inputName.value.length >= 3 ? true : false);
 
-  private checkInputs = (): boolean => {
-    if (this.inputEmail?.value.length > 0) {
-      if (this.checkEmail() === true) {
-        (this.inputEmail.parentElement as HTMLElement).setAttribute('data-after', '');
-      } else {
-        (this.inputEmail.parentElement as HTMLElement).setAttribute(
-          'data-after',
-          'Email должен быть формата email@example.com',
-        );
-      }
+  private checkInput = (input: HTMLInputElement, func: Function, mistake: string): void => {
+    if (func()) {
+      (input.parentElement as HTMLElement).setAttribute('data-after', '');
+    } else {
+      (input.parentElement as HTMLElement).setAttribute('data-after', mistake);
     }
-    if (this.inputPassword.value.length > 0) {
-      if (this.checkPassword() === true) {
-        (this.inputPassword.parentElement as HTMLElement).setAttribute('data-after', '');
-      } else {
-        (this.inputPassword.parentElement as HTMLElement).setAttribute(
-          'data-after',
-          'Пароль должен содержать более восьми символов',
-        );
-      }
+  };
+
+  private checkAllInputs = (): boolean => {
+    if (this.inputEmail.value.length) {
+      this.checkInput(this.inputEmail, this.checkEmail, 'Email должен быть формата email@example.com');
     }
-    if (this.inputName?.value.length > 0) {
-      if (this.checkName() === true) {
-        (this.inputName.parentElement as HTMLElement).setAttribute('data-after', '');
-      } else {
-        (this.inputName.parentElement as HTMLElement).setAttribute(
-          'data-after',
-          'Имя должно содержать более трех символов',
-        );
-      }
+    if (this.inputPassword.value.length) {
+      this.checkInput(this.inputPassword, this.checkPassword, 'Пароль должен содержать более восьми символов');
     }
-    return this.inputName
-      ? [this.checkEmail(), this.checkPassword(), this.checkName()].every((item) => item === true)
-      : [this.checkEmail(), this.checkPassword()].every((item) => item === true);
+    if (this.inputName?.value.length) {
+      this.checkInput(this.inputName, this.checkName, 'Имя должно содержать более трех символов');
+    }
+    return this.checkEmail() && this.checkPassword() && (this.inputName ? this.checkName() : true);
   };
 
   private activateSubmitButton = (): void => {
-    if (this.checkInputs()) {
+    if (this.checkAllInputs()) {
       this.submitButton.disabled = false;
     } else this.submitButton.disabled = true;
   };
@@ -151,16 +136,15 @@ export default class AuthorizationForm extends Control {
 
   private signInAction = async (e: Event): Promise<void> => {
     e.preventDefault();
-    this.checkInputs();
     const email = (document.getElementById('authorizationFormInputEmail') as HTMLInputElement).value;
     const password = (document.getElementById('authorizationFormInputPassword') as HTMLInputElement).value;
-    const response = await this.autorizationService.signInUserRequest({ email, password });
+    const response = await this.autorizationService.signIn({ email, password });
     if (response.status === 200) {
       this.openAuthorizationButton.innerHTML = 'Выйти';
       const content = await response.json();
       localStorage.setItem('currentUser', JSON.stringify(content));
       [
-        app.currentUser.authenticatedStatus,
+        app.currentUser.isAuthenticated,
         app.currentUser.token,
         app.currentUser.refreshToken,
         app.currentUser.userId,
@@ -176,7 +160,7 @@ export default class AuthorizationForm extends Control {
     const name = (document.getElementById('authorizationFormInputName') as HTMLInputElement).value;
     const email = (document.getElementById('authorizationFormInputEmail') as HTMLInputElement).value;
     const password = (document.getElementById('authorizationFormInputPassword') as HTMLInputElement).value;
-    const response = await this.autorizationService.signUpUserRequest({ email, password, name });
+    const response = await this.autorizationService.signUp({ email, password, name });
     if (response.status === 200) {
       const content = await response.json();
       console.log(content);
