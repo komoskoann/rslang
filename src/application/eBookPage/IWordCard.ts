@@ -1,9 +1,9 @@
 export interface IWordCard {
+  readonly id: string;
   audio: string;
   audioExample: string;
   audioMeaning: string;
   group: number;
-  id: string;
   image: string;
   page: number;
   textExample: string;
