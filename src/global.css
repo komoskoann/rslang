@@ -8,4 +8,19 @@
   --color-b2: rgba(86, 105, 168, 0.76);
   --color-c1: rgba(86, 168, 104, 0.76);
   --color-c2: rgba(24, 179, 171, 0.76);
+  --autorization-bgc: whitesmoke;
+  --autorization-shadow-color: rgba(44, 44, 44, 0.4);
+  --autorization-border-color: #bbb;
+  --autorization-border-color-2: #888;
+}
+html {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+main {
+  flex-grow: 1;
 }
