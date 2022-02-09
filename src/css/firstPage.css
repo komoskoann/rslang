@@ -22,9 +22,10 @@
   border: none;
 }
 .login {
-  margin-top: -10px;
+  /* margin-top: -10px; */
   position: absolute;
-  right: 7%;
+  right: 2%;
+  top: 0.2%;
   color:var(--text-color);
   background: white;
   opacity: 0.5;

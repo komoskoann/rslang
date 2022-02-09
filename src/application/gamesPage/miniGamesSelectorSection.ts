@@ -1,4 +1,6 @@
 import Control from '../../controls/control';
+import '../../css/miniGamesSelector.css';
+import html from './miniGamesSection.html';
 
 export default class MiniGamesSelectorSection extends Control {
   toSprintButton: Control<HTMLElement>;
@@ -6,10 +8,7 @@ export default class MiniGamesSelectorSection extends Control {
   toAudioCallButton: Control<HTMLElement>;
 
   constructor(parentNode: HTMLElement) {
-    super(parentNode, 'section', 'select-game-section', 'test select-game');
-    this.toSprintButton = new Control(this.node, 'button', 'games-nav-button', 'to Sprint');
-    this.toSprintButton.node.id = 'sprint';
-    this.toAudioCallButton = new Control(this.node, 'button', 'games-nav-button', 'to AudioCall');
-    this.toAudioCallButton.node.id = 'audioCall';
+    super(parentNode, 'section', 'select-game-section');
+    this.node.innerHTML = html;
   }
 }

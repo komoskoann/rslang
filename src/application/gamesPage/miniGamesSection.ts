@@ -31,7 +31,7 @@ export default class MiniGamesSection {
   }
 
   private getButtons(): NodeListOf<ChildNode> {
-    return this.section.node.childNodes;
+    return this.node.querySelectorAll('.games-nav-button');
   }
 
   private navigateGames() {
