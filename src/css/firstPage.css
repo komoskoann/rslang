@@ -84,11 +84,10 @@
   margin-top: 5px;
 }
 .footer-section {
-  margin-top: 20px;
   background: var(--main-color);
   display: flex;
   justify-content: space-between;
-  align-items: center;  
+  align-items: center;
   padding: 10px 20px;
 }
 .footer-section .git {
@@ -102,7 +101,7 @@ a,
 .footer-section span{
   font-weight:600;
   color: var(--text-color);
-  text-decoration: none;  
+  text-decoration: none;
 }
 .git a:hover,
 .about-team:hover{
@@ -111,7 +110,7 @@ a,
   cursor: pointer;
 }
 .logo-icon{
-  width: 90px; 
+  width: 90px;
 }
 .footer-section h5{
   color: var(--text-color);
