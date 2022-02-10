@@ -3,7 +3,6 @@
 }
 
 .select-game-section {
-  min-height: 87vh;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;

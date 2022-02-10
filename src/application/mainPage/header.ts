@@ -1,5 +1,4 @@
 import Control from '../../controls/control';
-import Avatar from './avatar';
 import '../../css/header.css';
 
 export default class Header extends Control {

@@ -8,7 +8,9 @@ class Control<NodeType extends HTMLElement = HTMLElement> {
     el.className = className;
     el.textContent = content;
     if (parentNode) {
-      isBefore ? parentNode.prepend(el) : parentNode.append(el);
+      if (isBefore) {
+        parentNode.prepend(el);
+      } else parentNode.append(el);
     }
     this.node = el as NodeType;
   }

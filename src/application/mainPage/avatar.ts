@@ -40,5 +40,4 @@ export default class Avatar extends Control {
     }
     return this.backgroundColor;
   }
-
 }

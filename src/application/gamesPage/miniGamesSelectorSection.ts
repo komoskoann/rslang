@@ -16,11 +16,11 @@ export default class MiniGamesSelectorSection extends Control {
 
   private changeText(): string {
     const user = JSON.parse(localStorage.getItem('currentUser'));
-    if(!user) {
+    if (!user) {
       this.text = 'Выберите игру';
     } else {
       const userName = user.name.split(' ')[0];
-      this.text = `Выбери игру, ${userName}!`
+      this.text = `Выбери игру, ${userName}!`;
     }
     return this.text;
   }
