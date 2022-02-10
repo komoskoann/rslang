@@ -40,7 +40,7 @@
 
 .game-wrapper:hover button#sprint,
 .game-wrapper:hover button#audioCall {
-  background-image: url('../assets/play-game.svg');
+  background-image: url('../assets/select-games-page/play-game.svg');
   transition: 0.3s;
   background-size: 30%;
   background-position: 50% 70%;
@@ -75,12 +75,12 @@
 }
 
 button#sprint {
-  background-image: url('../assets/sprint-game.png');
+  background-image: url('../assets/select-games-page/sprint-game.png');
   animation: pulse-sprint 1s infinite alternate;
 }
 
 button#audioCall {
-  background-image: url('../assets/audio-challenge.png');
+  background-image: url('../assets/select-games-page/audio-challenge.png');
   animation: pulse-audio 1s infinite alternate;
 }
 
