@@ -23,8 +23,6 @@ export default class Navbar extends Control {
 
   private statistics: string = 'statistics';
 
-  private dictionary: string = 'dictionary';
-
   private aboutTeam: string = 'aboutTeam';
 
   private navbarCol: string = 'navbarTogglerDemo03';
@@ -52,9 +50,6 @@ export default class Navbar extends Control {
     this.toStatisticsButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Statistics');
     this.toStatisticsButton.node.id = this.statistics;
     this.toStatisticsButton.node.innerHTML = '<a class="nav-link" href="#">Статистика</a>';
-    this.toDictionaryButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Dictionary');
-    this.toDictionaryButton.node.id = this.dictionary;
-    this.toDictionaryButton.node.innerHTML = '<a class="nav-link disabled">Словарь</a>';
     this.toAboutTeamButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to About team');
     this.toAboutTeamButton.node.id = this.aboutTeam;
     this.toAboutTeamButton.node.innerHTML = '<a class="nav-book nav-link" href="#">О команде</a>';

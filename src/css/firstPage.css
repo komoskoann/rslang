@@ -83,14 +83,12 @@
   align-items: center;
   color: var(--text-color);
 }
-a,
-.footer-section span{
+.git-acc {
   font-weight:600;
   color: var(--text-color);
   text-decoration: none;
 }
-.git a:hover,
-.about-team:hover{
+.git-acc:hover {
   color: rgb(110, 110, 110);
   transition: 0.5s ease-in-out;
   cursor: pointer;
@@ -98,15 +96,16 @@ a,
 .logo-icon{
   width: 90px;
 }
-.footer-section h5{
+.footer-year{
   color: var(--text-color);
   margin: 0;
 }
-
-@media (max-width: 1024px) {
+@media (max-width: 1340px) {
   .blocks{
     width: 800px;
   }
+}
+@media (max-width: 1024px) {
   .cards-cont{
     gap: 60px 70px;
   }
@@ -133,6 +132,17 @@ a,
     height: 50px;
   }
 }
+@media (max-width: 910px) {
+  .general-text .text-adapt{
+    font-size: 1rem;
+  }
+  .text-adapt-p{
+    font-size: 0.9rem;
+  }
+  .blocks{
+    width: 690px;
+  }
+}
 @media (max-width: 768px) {
   .login {
     margin-top: -23px;
@@ -140,8 +150,8 @@ a,
     width: 80px;
     height: 40px;
   }
-  h2{
-    font-size: 1rem;
+  .general-container{
+    height: 20vh;
   }
   .general-text{
     font-size: 0.8rem;
@@ -153,13 +163,19 @@ a,
     width: 700px;
   }
   .footer-section,
-  .footer-section h5{
+  .footer-year{
     font-size: 0.8rem;
   }
 }
-@media (max-width: 690px) {
+@media (max-width: 700px) {
   .general-text p{
     width: 230px;
+  }
+  .text-adapt{
+    font-size: 1rem;
+  }
+  .text-adapt-p{
+    font-size: 0.8rem;
   }
   .blocks .col-2,
   .card{
@@ -178,10 +194,6 @@ a,
   }
   .blocks{
     width: 480px;
-  }
-  .footer-section,
-  .footer-section h5{
-    font-size: 0.8rem;
   }
 }
 @media (max-width: 600px) {
@@ -225,7 +237,7 @@ a,
     height: 90px;
   }
   .footer-section,
-  .footer-section h5{
+  .footer-year{
     font-size: 0.6rem;
   }
   .logo-icon{
