@@ -1,4 +1,4 @@
-import { app } from "../../..";
+import { app } from '../../..';
 
 export default class CurrentUser {
   isAuthenticated: boolean;

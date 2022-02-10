@@ -3,7 +3,6 @@
 }
 
 .word-cards-wrapper {
-  min-height: 500vh;
   margin: 20px 0;
   display: flex;
   flex-wrap: wrap;
@@ -153,4 +152,7 @@
 
 .learnt-word-card {
   background-color: rgba(0, 186, 0, 0.1);
+}
+@media (max-width: 370px) {
+  
 }

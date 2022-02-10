@@ -1,39 +1,173 @@
 .team-page{
   display: block;
 }
-
+.team-line {
+  position: absolute;
+  left: 0;
+  z-index: -5;
+  width: 100%;
+  top: 70px;
+}
+.team-image,
+.team-image2 {
+  width: 400px;
+  right: 50px;
+  top: 155px;
+  position: absolute;
+  height: 250px;
+}
+.team-image1{
+  width: 500px;
+  position: absolute;
+  height: 500px;
+  left: 0px;
+  top: 450px;
+}
+.team-image2{
+  width: 380px;
+  height: 270px;
+  top: 1020px;
+}
 .avatar {
-  width: 170px;
-  height: 170px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   border-radius: 50%;
   border: var(--main-border);
 }
+.avatar-image{
+  width: 200px;
+  height: 200px;
+  padding: 0;
+}
 .person-cont {
   width: 900px;
+  z-index: 5;
 }
 .person {
-  background: #fabb00de;
+  background: rgba(236, 144, 58, 0.76);
   height: 350px;
   margin-top: 20px;
   padding: 20px;
-  max-width: 750px;
+  width: 750px;
   border-radius: 10px;
-  box-shadow: var(--main-box-shadow);
-  z-index: 4;
+  box-shadow: 0px 12px 12px rgb(236, 144, 58);
+  z-index: 4; 
+  align-items: center;
 }
-h5 {
-  color: rgb(109, 109, 109);
+.team-cont > div:nth-child(2) > div{
+  background: rgba(236, 114, 58, 0.76);
+  box-shadow: 0px 12px 12px rgb(236, 114, 58);
+}
+.team-cont > div:nth-child(3) > div{
+  background: rgba(235, 159, 17, 0.76);
+  box-shadow: 0px 12px 12px rgb(235, 159, 17);
+}
+.developer {
+  color: rgb(94, 91, 91);
   font-weight: 400;
 }
-
 .team-cont {
   display: flex;
   margin: 20px auto;
   flex-direction: column;
   align-items: center;
+  gap: 30px 30px;
 }
 .reverse{
   flex-direction: row-reverse;
   margin-left: auto;
+}
+.git-icon {
+  width: 60px;
+  height: 40px;
+  position: relative;
+  top: 130px;
+  padding: 0;
+}
+@media (max-width: 950px) {
+  .person-cont {
+    width: 700px;
+    margin: auto;
+  }
+  .reverse{
+    margin: auto;
+  }
+  .person {
+    width: 700px;
+    margin-top: 30px;
+    margin: auto;
+  }
+}
+@media (max-width:768px) {
+  .team-title{
+    font-size: 1.5rem;
+  }
+  .person-cont {
+    width: 650px;
+  }
+  .person {
+    height: 350px;
+    width: 650px;
+  }
+  .git-icon {
+    top: 10px;
+  }
+}
+@media (max-width:700px) {
+  .person-cont {
+    width: 590px;
+  }
+  .person {
+    height: 350px;
+    width: 590px;
+  }
+}
+@media (max-width:653px) {
+  .person-cont {
+    width: 500px;
+  }
+  .person {
+    height: 350px;
+    width: 500px;
+  }
+  .person-text {
+    font-size: 1rem;
+    margin: 0;
+  }
+  .avatar {
+    width: 150px;
+    height: 150px;
+  }
+  .avatar-image {
+    width: 150px;
+    height: 150px;
+  }
+}
+@media (max-width:535px) {
+  .person-cont {
+    width: 400px;
+  }
+  .person {
+    height: 400px;
+    width: 400px;
+    flex-direction: column;
+  }
+  .description-text{
+    text-align: center;
+  }
+}
+@media (max-width:430px) {
+  .person-cont {
+    width: 330px;
+  }
+  .person {
+    height: 450px;
+    width: 330px;
+    flex-direction: row;
+    justify-content: center !important;
+  }
+  .description-text{
+    width: 100%;
+  }
 }

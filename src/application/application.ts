@@ -2,7 +2,7 @@ import Header from './mainPage/header';
 import Navbar from './mainPage/navbar';
 import Main from './mainPage/main';
 import Footer from './mainPage/footer';
-import CurrentUser  from './services/currentUser/currentUser';
+import CurrentUser from './services/currentUser/currentUser';
 
 export class Application {
   header: Header;
