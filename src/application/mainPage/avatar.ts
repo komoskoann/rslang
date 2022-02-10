@@ -1,7 +1,7 @@
 import Control from '../../controls/control';
 
 export default class Avatar extends Control {
-  private lettersColor: string = '#ffffff';
+  private readonly lettersColor: string = '#ffffff';
 
   private backgroundColor: string;
 
