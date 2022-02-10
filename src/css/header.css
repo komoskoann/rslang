@@ -15,10 +15,6 @@
   margin-right: 5px;
 }
 
-.avatar-img.hide {
-  display: none;
-}
-
 .login {
   color: var(--text-color);
   background: white;

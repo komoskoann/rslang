@@ -3,10 +3,6 @@ import '../../css/miniGamesSelector.css';
 import html from './miniGamesSection.html';
 
 export default class MiniGamesSelectorSection extends Control {
-  toSprintButton: Control<HTMLElement>;
-
-  toAudioCallButton: Control<HTMLElement>;
-
   private text: string = 'Выберите игру';
 
   constructor(parentNode: HTMLElement) {

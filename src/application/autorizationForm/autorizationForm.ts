@@ -158,7 +158,6 @@ export default class AuthorizationForm extends Control {
       console.log(content);
     }
     this.avatar = new Avatar(document.querySelector('.authorizationWrapper'), app.currentUser.name[0]);
-    this.avatar.node.classList.remove('hide');
   };
 
   private signUpAction = async (e: Event): Promise<void> => {
