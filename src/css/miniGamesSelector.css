@@ -14,13 +14,13 @@
 }
 
 .game-buttons-wrapper {
-  margin-top: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 70px;
   color: #ffffff;
+  margin-bottom: 10px;
 }
 
 .game-wrapper {
@@ -43,12 +43,22 @@
 .game-wrapper:hover button#audioCall {
   background-image: url('../assets/play-game.svg');
   transition: 0.3s;
-  background-size: 50%;
+  background-size: 30%;
   background-position: 50% 70%;
 }
 
-.game-wrapper:hover button#sprint {
-  content:
+.game-wrapper:hover button#sprint::after {
+  content: 'Игра на скорость, которая тренирует навык быстрого перевода с английского языка на русский';
+  position: absolute;
+  top: 10%;
+  left: 0;
+}
+
+.game-wrapper:hover button#audioCall::after {
+  content: 'Аудиовызов развивает словарный запас. Вы должны выбрать перевод услышанного слова';
+  position: absolute;
+  top: 10%;
+  left: 0;
 }
 
 .game-wrapper:hover {

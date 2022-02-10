@@ -3,7 +3,7 @@ import '../../css/miniGamesSelector.css';
 import html from './miniGamesSection.html';
 
 export default class MiniGamesSelectorSection extends Control {
-  private text: string = 'Выберите игру';
+  private text: string;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'select-game-section');
@@ -14,8 +14,7 @@ export default class MiniGamesSelectorSection extends Control {
     gameButtonsWrapper.node.innerHTML = html;
   }
 
-  changeText(): string {
-
+  private changeText(): string {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     if(!user) {
       this.text = 'Выберите игру';
