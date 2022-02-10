@@ -3,6 +3,7 @@ import AutorizationService from '../services/autorizationService/autorizationSer
 import autorizationFormHTML from './autorizationForm.html';
 import autorizationHTML from './autorizationComponent.html';
 import registrationHTML from './registrationComponent.html';
+import Avatar from '../mainPage/avatar';
 import '../../css/autorizationForm.css';
 import { app } from '../..';
 
@@ -27,6 +28,8 @@ export default class AuthorizationForm extends Control {
 
   private inputName: HTMLInputElement;
 
+  private avatar: Avatar;
+
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'form', 'authorizationForm', '');
     this.openAuthorizationButton = this.searchOpenAuthorizationButton();
@@ -49,6 +52,7 @@ export default class AuthorizationForm extends Control {
       localStorage.removeItem('currentUser');
       app.currentUser.signOut();
       this.openAuthorizationButton.textContent = 'Войти';
+      this.avatar.destroy();
       return;
     }
     this.closeAutorizationButton = this.searchCloseAuthorizationButton();
@@ -153,6 +157,8 @@ export default class AuthorizationForm extends Control {
       this.closeAuthorizationForm();
       console.log(content);
     }
+    this.avatar = new Avatar(document.querySelector('.authorizationWrapper'), app.currentUser.name[0]);
+    this.avatar.node.classList.remove('hide');
   };
 
   private signUpAction = async (e: Event): Promise<void> => {

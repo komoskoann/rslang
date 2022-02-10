@@ -1,0 +1,33 @@
+.authorizationWrapper {
+  display: flex;
+  position: absolute;
+  right: 2%;
+  top: 0.25%;
+}
+
+.avatar-img {
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  width: 50px;
+  height: 50px;
+  z-index: 100;
+  object-fit: cover;
+  margin-right: 5px;
+}
+
+.avatar-img.hide {
+  display: none;
+}
+
+.login {
+  color: var(--text-color);
+  background: white;
+  opacity: 0.5;
+  width: 80px;
+  height: 50px;
+  z-index: 10;
+}
+.login:hover {
+  box-shadow: 0px 2px 6px black;
+  transition: 0.5s ease-out;
+}
