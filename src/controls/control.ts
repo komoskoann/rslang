@@ -3,12 +3,14 @@ class Control<NodeType extends HTMLElement = HTMLElement> {
 
   public isReloadRequired: boolean = false;
 
-  constructor(parentNode: HTMLElement, tagName = 'div', className = '', content = '') {
+  constructor(parentNode: HTMLElement, tagName = 'div', className = '', content = '', isBefore = false) {
     const el = document.createElement(tagName);
     el.className = className;
     el.textContent = content;
     if (parentNode) {
-      parentNode.append(el);
+      if (isBefore) {
+        parentNode.prepend(el);
+      } else parentNode.append(el);
     }
     this.node = el as NodeType;
   }
