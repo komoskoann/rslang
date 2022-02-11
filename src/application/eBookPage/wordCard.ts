@@ -1,6 +1,7 @@
 import Control from '../../controls/control';
 import '../../css/word.css';
-import { IWordCard } from './IWordCard';
+import { IWordCard, IAggregatedWords } from './IWordCard';
+import wordsController from '../services/words/getWords';
 
 export interface IPlayList {
   title: string;
@@ -9,6 +10,8 @@ export interface IPlayList {
 
 export default class WordCard extends Control {
   private cardInfoWrapper: Control<HTMLElement>;
+
+  service: wordsController = new wordsController();
 
   private audio: HTMLAudioElement;
 
@@ -137,14 +140,40 @@ export default class WordCard extends Control {
     }
   }
 
+  async getUserWords(): Promise<void> {
+    const wordsAgr = await this.service.getUserWords();
+    console.log(wordsAgr[0])
+  }
+
+  async createUserWord(wordId : string, difficulty : string, optional : {} ): Promise<void> {
+    const wordsAgr = await this.service.createUserWord(wordId, difficulty, optional);
+
+  }
+
+  async updateUserWord(wordId : string, difficulty : string, optional : {} ): Promise<void> {
+    const wordsAgr = await this.service.changeUserWord(wordId, difficulty, optional);
+  }
+
+  async agregUserWord(wordId : string ): Promise<void> {
+    const wordsAgr = await this.service.getUserAgrWord(wordId);
+    console.log(wordsAgr[0]._id)
+  }
+
+
   private toggleToDifficult(): void {
+    const cardId = this.wordCardInfo.id;
+    console.log(cardId)
+    this.agregUserWord(cardId);
     if (!this.isDifficult) {
       this.isDifficult = true;
       this.node.classList.add(this.difficultWordClassName);
+      this.createUserWord(cardId, "hard", {isDifficult : true, group : 6, word: this.wordCardInfo.word});
     } else if (this.isDifficult) {
       this.node.classList.remove(this.difficultWordClassName);
       this.isDifficult = false;
+      this.updateUserWord(cardId, "easy", {isDifficult : false, group : 6});
     }
+    this.getUserWords(); 
   }
 
   private toggleToLearnt(): void {
