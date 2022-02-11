@@ -44,7 +44,7 @@ export default class AuthorizationForm extends Control {
   }
 
   private addAvatar() {
-    if (JSON.parse(localStorage.getItem('currentUser'))) {
+    if (JSON.parse(localStorage.getItem('currentUser')) && !document.querySelector('.avatar-img')) {
       this.avatar = new Avatar(
         document.querySelector('.authorizationWrapper'),
         JSON.parse(localStorage.getItem('currentUser'))?.name[0],
@@ -166,8 +166,8 @@ export default class AuthorizationForm extends Control {
       ] = [content.message === 'Authenticated', content.token, content.refreshToken, content.userId, content.name];
       this.closeAuthorizationForm();
       console.log(content);
+      this.addAvatar();
     }
-    this.addAvatar();
   };
 
   private signUpAction = async (e: Event): Promise<void> => {
