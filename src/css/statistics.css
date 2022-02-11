@@ -1,0 +1,43 @@
+* {
+  box-sizing: border-box;
+}
+
+.statistics-section {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  background-image: url('../assets/line.svg');
+  background-repeat: no-repeat;
+  background-position-y: 3vh;
+  background-size: contain;
+}
+
+.statistics-wrapper {
+  width: 80vw;
+  margin: 0 auto;
+}
+
+.nav-item {
+  background-color: var(--main-color);
+  border-top-right-radius: 5px;
+  color: var(--text-color);
+}
+
+.nav-tabs {
+  border-bottom: none;
+}
+
+.tab-content {
+  border: 1px solid var(--main-color);
+  border-radius: 5px;
+}
+
+.tab-pane {
+  display: flex;
+}
+
+.statistics-card-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
