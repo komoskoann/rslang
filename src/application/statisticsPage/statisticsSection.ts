@@ -2,9 +2,12 @@ import Control from '../../controls/control';
 import html from './statistics.html';
 import '../../css/statistics.css';
 import GeneralStatisticsCard from './generalStatisticsCard';
+import PieChart from './pieChart';
 
 export default class StatisticsSection extends Control {
   generalStatisticsCard: GeneralStatisticsCard;
+
+  pieChart: PieChart;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'statistics-section');
@@ -18,14 +21,15 @@ export default class StatisticsSection extends Control {
   }
 
   renderGeneralStatsWrapper() {
-    // console.log(this.node.querySelector('#general-stats').append())
     const generalStatsWrapper = this.node.querySelector('#general-stats') as HTMLElement;
     new GeneralStatisticsCard(generalStatsWrapper).render();
+    this.pieChart = new PieChart();
+    this.pieChart.createSVG('.pie-stats');
 
 
   }
 
-  navTabs() {
+  navTabs(): void {
     const tabs = this.node.querySelectorAll("ul.nav-tabs > li > a");
     const panes = this.node.querySelectorAll(".tab-pane");
     console.log(tabs,panes)
@@ -40,18 +44,18 @@ export default class StatisticsSection extends Control {
     });
   }
 
-  makeInactive(items: HTMLCollection) {
+  makeInactive(items: NodeListOf<Element>): void {
     Object.keys(items).map((item)=> {
       items[+item].classList.remove("active");
     });
   }
 
-  activateTab(e: Event) {
+  activateTab(e: Event): void {
     const clickedTab = e.currentTarget as HTMLElement;
     clickedTab.classList.add("active");
   }
 
-  activateTabContent(e: Event) {
+  activateTabContent(e: Event): void {
     const anchorReference = e.target as HTMLElement;
     const activePaneID = anchorReference.getAttribute("href");
     const activePane = this.node.querySelector(activePaneID);

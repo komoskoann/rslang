@@ -19,7 +19,6 @@ export default class GeneralStatisticsCard extends Control {
   }
 
   renderPieChartWrapper() {
-    const pieStatsWrapper = new Control(this.node, 'div', 'pie-stats');
-    pieStatsWrapper.node.innerHTML = 'ytdfyguhijh';
+    new Control(this.node, 'div', 'pie-stats');
   }
 }
