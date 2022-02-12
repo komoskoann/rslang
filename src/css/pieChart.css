@@ -7,9 +7,7 @@ path.color1 {
 }
 
 text {
-  font-family: "RamaGothicM-Heavy",Impact,"Franklin Gothic Bold","Helvetica Inserat","Bitstream Vera Sans Bold","Arial Black",sans-serif;
+  font-family: "RamaGothicM-Heavy",Impact,"Franklin Gothic Bold","Arial Black",sans-serif;
   fill: var(--main-color);
-  font-size: 5rem;
-  /* font-weight: 400; */
   line-height: 10rem;
 }

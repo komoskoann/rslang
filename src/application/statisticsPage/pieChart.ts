@@ -47,9 +47,11 @@ export default class PieChart {
       .attr('class', function(d, i) { return "color" + i });
 
     const text = svg.append("text")
-        .attr("text-anchor", "middle")
-        .attr("dy", "0.3em");
+      .attr("text-anchor", "middle")
+      .attr("dy", "0.3em")
+      .attr("font-size", "5rem");
     text.text(`${this.dataset[0].count}%`);
+
   }
 
 }

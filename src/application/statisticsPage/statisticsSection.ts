@@ -3,11 +3,14 @@ import html from './statistics.html';
 import '../../css/statistics.css';
 import GeneralStatisticsCard from './generalStatisticsCard';
 import PieChart from './pieChart';
+import BarChart from './barChart';
 
 export default class StatisticsSection extends Control {
   generalStatisticsCard: GeneralStatisticsCard;
 
   pieChart: PieChart;
+
+  barChart: BarChart;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'statistics-section');
@@ -25,7 +28,8 @@ export default class StatisticsSection extends Control {
     new GeneralStatisticsCard(generalStatsWrapper).render();
     this.pieChart = new PieChart();
     this.pieChart.createSVG('.pie-stats');
-
+    this.barChart = new BarChart();
+    this.barChart.createSVG('.words-stats');
 
   }
 
