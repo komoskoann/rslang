@@ -86,6 +86,7 @@ export default class EBookSection extends Control {
           } else if (nav.getAttribute('data-nav') === instance.paginationWrapper.prevButtonDataAttr) {
             instance.currentWordsPage = instance.paginationWrapper.goToPrevPage();
           }
+          instance.node.style.minHeight = getComputedStyle(instance.node).height;
           instance.update();
         }.bind(null, this),
       );
@@ -104,12 +105,31 @@ export default class EBookSection extends Control {
     );
   }
 
-  private update(): void {
+  private async update(): Promise<void> {
     this.paginationWrapper.blockButtons(this.node);
     this.wordCardsWrapper.node.innerHTML = '';
-    this.getWords(this.currentWordsPage, this.currentEnglishLevel);
+    const oldBodyClientHeight = document.body.clientHeight;
+    const oldWindowPageYBottom = document.body.clientHeight - (window.pageYOffset + window.innerHeight);
+    await this.getWords(this.currentWordsPage, this.currentEnglishLevel);
     this.paginationWrapper.changePageNumber(this.node);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentPageLSName, `${this.currentWordsPage}`);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${this.currentEnglishLevel}`);
+    this.node.style.removeProperty('min-height');
+    this.scrollWindow(oldBodyClientHeight, oldWindowPageYBottom);
+  }
+
+  private scrollWindow(oldBodyClientHeight: number, oldWindowPageYBottom: number): void {
+    let scroolYValue: number;
+    if (document.body.clientHeight > oldBodyClientHeight && oldWindowPageYBottom < 104) {
+      scroolYValue = document.body.clientHeight - oldWindowPageYBottom - window.innerHeight;
+    } else if (document.body.clientHeight < oldBodyClientHeight && oldWindowPageYBottom < 104) {
+      scroolYValue = document.body.clientHeight - oldWindowPageYBottom - window.innerHeight;
+    } else {
+      scroolYValue = window.pageYOffset;
+    }
+    window.scrollTo({
+      top: scroolYValue,
+      behavior: 'auto',
+    });
   }
 }

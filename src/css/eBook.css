@@ -1,22 +1,29 @@
+.e-book {
+  min-height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .book-text {
   margin: 30px 40px;
 }
-.ebook-container{
+.ebook-container {
   display: flex;
   flex-direction: column;
   min-height: 100%;
 }
-.levels{
+.levels {
   cursor: pointer;
   margin: auto;
   width: 720px;
   gap: 30px 40px;
 }
-.choose-level{
+.choose-level {
   color: var(--color-hard);
 }
 .level-cont,
-.hard-word-cont  {
+.hard-word-cont {
   padding: 5px;
   height: 50px;
   width: 210px;
@@ -27,10 +34,10 @@
   align-items: center;
   transform: scale(1);
 }
-.ebook-hard-cont{
+.ebook-hard-cont {
   width: 830px;
 }
-.hard-word-cont{
+.hard-word-cont {
   width: 300px;
   padding-left: 40px;
   font-size: 1.2rem;
