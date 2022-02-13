@@ -7,9 +7,9 @@ interface Data {
 }
 
 export default class PieChart {
-  private readonly pieWidth: number = 300;
+  private readonly pieWidth: number = 320;
 
-  private readonly pieHeight: number = 300;
+  private readonly pieHeight: number = 320;
 
   private readonly pieMargin: number = 30;
 

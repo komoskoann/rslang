@@ -3,17 +3,18 @@
 }
 
 .statistics-section {
+  min-height: 86vh;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  background-image: url('../assets/line.svg');
+  background-image: url('../assets/line.svg'), url('../assets/statistics-page/stats-1.png'), url('../assets/statistics-page/stats-2.png');
   background-repeat: no-repeat;
-  background-position-y: 3vh;
-  background-size: contain;
+  background-position: 0 3vh, right -60px top -90px, left -40px bottom -100px;
+  background-size: contain, 400px, 350px;
 }
 
 .statistics-wrapper {
-  width: 80vw;
+  max-width: 1850px;
   margin: 0 auto;
 }
 
@@ -25,11 +26,14 @@
 
 .nav-tabs {
   border-bottom: none;
+  font-size: 1.1rem;
 }
 
 .tab-content {
   border: 1px solid var(--main-color);
   border-radius: 5px;
+  box-shadow: var(--main-box-shadow);
+  background-color: hsla(45, 100%, 51%, 0.2);
 }
 
 .tab-pane {
@@ -39,5 +43,30 @@
 .statistics-card-wrapper {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  padding: 20px;
+  gap: 20px 50px;
+  font-size: 1.2rem;
+}
+
+.words-stats, .pie-stats {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.new-words-amount, .learnt-words-amount {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-b2);
+}
+
+.learnt-words-amount {
+  background-color: var(--color-b1);
+}
+
+.nav-tabs .nav-link {
+  border: 2px solid transparent;
 }

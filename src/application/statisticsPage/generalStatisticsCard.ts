@@ -7,18 +7,17 @@ export default class GeneralStatisticsCard extends Control {
   }
 
   render() {
-    this.renderWordsStatsWrapper(1, 1);
+    this.renderWordsStatsWrapper();
     this.renderPieChartWrapper();
   }
 
-  renderWordsStatsWrapper(newWords: number, learntWords: number) {
+  renderWordsStatsWrapper() {
     const wordsStatsWrapper = new Control(this.node, 'div', 'words-stats');
     wordsStatsWrapper.node.innerHTML = html;
-    this.node.querySelector('.new-words-amount').textContent = `${newWords}`;
-    this.node.querySelector('.learnt-words-amount').textContent = `${learntWords}`;
   }
 
   renderPieChartWrapper() {
-    new Control(this.node, 'div', 'pie-stats');
+    const wrapper = new Control(this.node, 'div', 'pie-stats');
+    new Control(wrapper.node, 'div', 'pie-stats-title', 'Правильных ответов за день');
   }
 }

@@ -8,8 +8,8 @@ interface Data {
 
 export default class barChart {
   private margin = {top: 30, right: 30, bottom: 70, left: 60};
-  private width: number = 300 - this.margin.left - this.margin.right;
-  private height: number = 300 - this.margin.top - this.margin.bottom;
+  private width: number = 320 - this.margin.left - this.margin.right;
+  private height: number = 320 - this.margin.top - this.margin.bottom;
 
   data: Data[] = [
     { name: "Новые слова", value: 7 },
@@ -53,7 +53,7 @@ export default class barChart {
       .attr("y", (d: Data) => y(d.value))
       .attr("width", x.bandwidth())
       .attr("height", (d: Data) => (this.height - y(d.value)))
-      .attr("fill", "#69b3a2");
+      .attr('class', function(d, i) { return "color" + i });
 
     svg.selectAll('.numbers')
      .data(this.data)
