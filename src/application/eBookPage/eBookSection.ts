@@ -108,25 +108,21 @@ export default class EBookSection extends Control {
   private async update(): Promise<void> {
     this.paginationWrapper.blockButtons(this.node);
     this.wordCardsWrapper.node.innerHTML = '';
-    const oldBodyClientHeight = document.body.clientHeight;
-    const oldWindowPageYBottom = document.body.clientHeight - (window.pageYOffset + window.innerHeight);
+    const oldWindowPageYBottom =
+      document.body.clientHeight - (window.pageYOffset + document.documentElement.clientHeight);
     await this.getWords(this.currentWordsPage, this.currentEnglishLevel);
     this.paginationWrapper.changePageNumber(this.node);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentPageLSName, `${this.currentWordsPage}`);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${this.currentEnglishLevel}`);
     this.node.style.removeProperty('min-height');
-    this.scrollWindow(oldBodyClientHeight, oldWindowPageYBottom);
+    this.scrollWindow(oldWindowPageYBottom);
   }
 
-  private scrollWindow(oldBodyClientHeight: number, oldWindowPageYBottom: number): void {
-    let scroolYValue: number;
-    if (document.body.clientHeight > oldBodyClientHeight && oldWindowPageYBottom < 104) {
-      scroolYValue = document.body.clientHeight - oldWindowPageYBottom - window.innerHeight;
-    } else if (document.body.clientHeight < oldBodyClientHeight && oldWindowPageYBottom < 104) {
-      scroolYValue = document.body.clientHeight - oldWindowPageYBottom - window.innerHeight;
-    } else {
-      scroolYValue = window.pageYOffset;
-    }
+  private scrollWindow(oldWindowPageYBottom: number): void {
+    let scroolYValue: number =
+      oldWindowPageYBottom < 104
+        ? document.body.clientHeight - oldWindowPageYBottom - document.documentElement.clientHeight
+        : window.pageYOffset;
     window.scrollTo({
       top: scroolYValue,
       behavior: 'auto',
