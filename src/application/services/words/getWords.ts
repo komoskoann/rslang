@@ -26,7 +26,7 @@ export default class wordsController {
     return rawResponse.json();
   }
 
-  async createUserWord(wordId : string, difficulty : string, optional : {}) : Promise<Response> {
+  async createUserWord(wordId : string, word : {difficulty : string, optional : {}}) : Promise<Response> {
     const rawResponse = await fetch(`${this.userUrl}/${app.currentUser.userId}/words/${wordId}`, {
       method: 'POST',
       headers: {
@@ -34,7 +34,7 @@ export default class wordsController {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({difficulty, optional})
+      body: JSON.stringify(word)
     });
     return rawResponse.json();
   };
@@ -50,7 +50,7 @@ export default class wordsController {
     return rawResponse.json();
   };
   
-  async changeUserWord(wordId : string, difficulty : string, optional : {}) : Promise<Response> {
+  async changeUserWord(wordId : string, word: {difficulty : string, optional : {}}) : Promise<Response> {
     const rawResponse = await fetch(`${this.userUrl}/${app.currentUser.userId}/words/${wordId}`, {
       method: 'PUT',
       headers: {
@@ -58,7 +58,7 @@ export default class wordsController {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({difficulty, optional})
+      body: JSON.stringify(word)
     });
     return rawResponse.json();
   };

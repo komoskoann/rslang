@@ -13,8 +13,11 @@ export interface IWordCard {
   transcription: string;
   word: string;
   wordTranslate: string;
+  _id? : string;
 }
 
+
+  //let uimodel = {... apimodel, id: apimodel._id}
 
 export interface IAggregatedWords {
   [x: string]: any;
@@ -35,4 +38,6 @@ export interface IAggregatedWords {
   wordId : string,
   difficulty : string,
   optional : {},
+  fromJSON() : void;
 }
+

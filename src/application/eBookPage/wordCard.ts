@@ -145,13 +145,13 @@ export default class WordCard extends Control {
     console.log(wordsAgr[0])
   }
 
-  async createUserWord(wordId : string, difficulty : string, optional : {} ): Promise<void> {
-    const wordsAgr = await this.service.createUserWord(wordId, difficulty, optional);
+  async createUserWord(wordId : string, word : {difficulty : string, optional : {}} ): Promise<void> {
+    const wordsAgr = await this.service.createUserWord(wordId, word);
 
   }
 
-  async updateUserWord(wordId : string, difficulty : string, optional : {} ): Promise<void> {
-    const wordsAgr = await this.service.changeUserWord(wordId, difficulty, optional);
+  async updateUserWord(wordId : string, word: {difficulty : string, optional : {}} ): Promise<void> {
+    const wordsAgr = await this.service.changeUserWord(wordId, word);
   }
 
   async agregUserWord(wordId : string ): Promise<void> {
@@ -166,12 +166,14 @@ export default class WordCard extends Control {
     this.agregUserWord(cardId);
     if (!this.isDifficult) {
       this.isDifficult = true;
+      this.node.querySelector('.difficult-word-button').innerHTML = 'Простое';
       this.node.classList.add(this.difficultWordClassName);
-      this.createUserWord(cardId, "hard", {isDifficult : true, group : 6, word: this.wordCardInfo.word});
+      this.createUserWord(cardId, {difficulty : "hard", optional : {isDifficult : true, word: this.wordCardInfo.word}});
     } else if (this.isDifficult) {
       this.node.classList.remove(this.difficultWordClassName);
+      this.node.querySelector('.difficult-word-button').innerHTML = 'Сложное';
       this.isDifficult = false;
-      this.updateUserWord(cardId, "easy", {isDifficult : false, group : 6});
+      this.updateUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, word: this.wordCardInfo.word}});
     }
     this.getUserWords(); 
   }
