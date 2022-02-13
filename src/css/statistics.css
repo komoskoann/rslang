@@ -53,7 +53,11 @@
 }
 
 .words-stats,
-.pie-stats {
+.pie-stats,
+.words-stats-sprint,
+.pie-stats-sprint,
+.words-stats-audio,
+.pie-stats-audio {
   display: flex;
   align-items: center;
   flex-direction: column;

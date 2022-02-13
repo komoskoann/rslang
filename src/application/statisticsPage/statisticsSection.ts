@@ -1,14 +1,9 @@
 import Control from '../../controls/control';
 import html from './statistics.html';
 import '../../css/statistics.css';
-import GeneralStatisticsCard from './generalStatisticsCard';
-import GameStatisticsCard from './gameStatisticsCard';
+import StatisticsCard from './StatisticsCard';
 
 export default class StatisticsSection extends Control {
-  private generalStatisticsCard: GeneralStatisticsCard;
-
-  private gameStatisticsCard: GameStatisticsCard;
-
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'statistics-section');
     this.render();
@@ -32,19 +27,17 @@ export default class StatisticsSection extends Control {
 
   renderGeneralStatsWrapper(): void {
     const generalStatsWrapper = this.node.querySelector('#general-stats') as HTMLElement;
-    new GeneralStatisticsCard(generalStatsWrapper).render();
+    new StatisticsCard(generalStatsWrapper, 10, 18, 3, 7, 'words-stats', 'pie-stats').render();
   }
 
   renderSprintStatsWrapper(): void {
     const sprintStatsWrapper = this.node.querySelector('#sprint-stats') as HTMLElement;
-    console.log(sprintStatsWrapper)
-    new GameStatisticsCard(sprintStatsWrapper).render();
+    new StatisticsCard(sprintStatsWrapper, 5, 8, 3, 7, 'words-stats-sprint', 'pie-stats-sprint').render();
   }
 
   renderAudioChallengeStatsWrapper(): void {
     const audioChallengeStatsWrapper = this.node.querySelector('#audioChallenge-stats') as HTMLElement;
-    console.log(audioChallengeStatsWrapper)
-    new GameStatisticsCard(audioChallengeStatsWrapper).render();
+    new StatisticsCard(audioChallengeStatsWrapper, 9, 15, 40, 33, 'words-stats-audio', 'pie-stats-audio').render();
   }
 
   navTabs(): void {

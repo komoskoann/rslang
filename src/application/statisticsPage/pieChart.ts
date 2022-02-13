@@ -44,7 +44,7 @@ export default class PieChart {
       .attr("text-anchor", "middle")
       .attr("dy", "0.3em")
       .attr("font-size", "5rem");
-    text.text(`${correctAnswersPercent}%`);
+    text.text(`${Math.floor(correctAnswersPercent)}%`);
 
   }
 
