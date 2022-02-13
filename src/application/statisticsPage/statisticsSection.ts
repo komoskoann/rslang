@@ -2,41 +2,54 @@ import Control from '../../controls/control';
 import html from './statistics.html';
 import '../../css/statistics.css';
 import GeneralStatisticsCard from './generalStatisticsCard';
-import PieChart from './pieChart';
-import BarChart from './barChart';
+import GameStatisticsCard from './gameStatisticsCard';
 
 export default class StatisticsSection extends Control {
-  generalStatisticsCard: GeneralStatisticsCard;
+  private generalStatisticsCard: GeneralStatisticsCard;
 
-  pieChart: PieChart;
-
-  barChart: BarChart;
+  private gameStatisticsCard: GameStatisticsCard;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'statistics-section');
-    const pageTitleWrapper = new Control(this.node, 'div', 'book-text');
-    new Control(pageTitleWrapper.node, 'h2', '', 'Статистика');
-    new Control(pageTitleWrapper.node, 'h5', '', 'Ваша статистика за сегодня');
-    const statisticsWrapper = new Control(this.node, 'div', 'statistics-wrapper');
-    statisticsWrapper.node.innerHTML = html;
-    this.renderGeneralStatsWrapper();
+    this.render();
     this.navTabs();
   }
 
-  renderGeneralStatsWrapper() {
+  render(): void {
+    this.renderPageTitleWrapper();
+    const statisticsWrapper = new Control(this.node, 'div', 'statistics-wrapper');
+    statisticsWrapper.node.innerHTML = html;
+    this.renderGeneralStatsWrapper();
+    this.renderSprintStatsWrapper();
+    this.renderAudioChallengeStatsWrapper();
+  }
+
+  renderPageTitleWrapper(): void {
+    const pageTitleWrapper = new Control(this.node, 'div', 'book-text');
+    new Control(pageTitleWrapper.node, 'h2', '', 'Статистика');
+    new Control(pageTitleWrapper.node, 'h5', '', 'Ваша статистика за сегодня');
+  }
+
+  renderGeneralStatsWrapper(): void {
     const generalStatsWrapper = this.node.querySelector('#general-stats') as HTMLElement;
     new GeneralStatisticsCard(generalStatsWrapper).render();
-    this.pieChart = new PieChart();
-    this.pieChart.createSVG('.pie-stats');
-    this.barChart = new BarChart();
-    this.barChart.createSVG('.words-stats');
+  }
 
+  renderSprintStatsWrapper(): void {
+    const sprintStatsWrapper = this.node.querySelector('#sprint-stats') as HTMLElement;
+    console.log(sprintStatsWrapper)
+    new GameStatisticsCard(sprintStatsWrapper).render();
+  }
+
+  renderAudioChallengeStatsWrapper(): void {
+    const audioChallengeStatsWrapper = this.node.querySelector('#audioChallenge-stats') as HTMLElement;
+    console.log(audioChallengeStatsWrapper)
+    new GameStatisticsCard(audioChallengeStatsWrapper).render();
   }
 
   navTabs(): void {
     const tabs = this.node.querySelectorAll("ul.nav-tabs > li > a");
     const panes = this.node.querySelectorAll(".tab-pane");
-    console.log(tabs,panes)
     Object.keys(tabs).map((tab) => {
       tabs[+tab].addEventListener("click", (e: Event)=> {
         this.makeInactive(tabs);

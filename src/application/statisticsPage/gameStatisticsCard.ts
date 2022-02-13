@@ -5,14 +5,14 @@ import BarChart from './barChart';
 import { IPieData } from './IPieData';
 import { IBarData } from './IBarData';
 
-export default class GeneralStatisticsCard extends Control {
+export default class GameStatisticsCard extends Control {
   private pieChart: PieChart;
 
   private barChart: BarChart;
 
-  private correctAnswers: number = 25;
+  private correctAnswers: number = 60;
 
-  private totalAnswers: number = 60;
+  private totalAnswers: number = 70;
 
   private pieData: IPieData[] = [
     { label: 'Правильные ответы', count: this.correctAnswers },
@@ -20,8 +20,8 @@ export default class GeneralStatisticsCard extends Control {
   ];
 
   private barData: IBarData[] = [
-    { name: "Новые слова", value: 7 },
-    { name: "Изученные слова", value: 19 }
+    { name: "Новые слова", value: 10 },
+    { name: "самая длинная серия правильных ответов", value: 8 }
   ]
 
   constructor(parentNode: HTMLElement) {
