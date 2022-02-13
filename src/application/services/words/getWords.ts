@@ -36,7 +36,7 @@ export default class wordsController {
       },
       body: JSON.stringify(word)
     });
-    return rawResponse.json();
+    return rawResponse;
   };
 
   async getUserWord(wordId : string) : Promise<IAggregatedWords[]> {
@@ -49,7 +49,7 @@ export default class wordsController {
     });
     return rawResponse.json();
   };
-  
+
   async changeUserWord(wordId : string, word: {difficulty : string, optional : {}}) : Promise<Response> {
     const rawResponse = await fetch(`${this.userUrl}/${app.currentUser.userId}/words/${wordId}`, {
       method: 'PUT',

@@ -44,13 +44,13 @@ export default class WordCard extends Control {
   constructor(parentNode: HTMLElement, wordCardInfo: IWordCard) {
     super(parentNode, 'div', 'word-card-wrapper', '');
     this.container = new Control(this.node, 'div');
-    this.isDifficult = false;
+    this.isDifficult = !!wordCardInfo.userWord?.optional?.isDifficult;
     this.isLearnt = false;
     this.wordCardInfo = wordCardInfo;
   }
 
   render(): void {
-    this.node.id = this.wordCardInfo.id;
+    this.node.id = this.getId();
     this.renderCardNameWrapper();
     this.renderCardImage();
     this.renderCardInfoWrapper();
@@ -58,6 +58,10 @@ export default class WordCard extends Control {
     this.renderCardExampleWrapper();
     this.renderControlButtons();
     this.listenEvents();
+  }
+
+  private getId() {
+    return this.wordCardInfo.id || this.wordCardInfo._id;
   }
 
   private renderCardNameWrapper(): void {
@@ -141,28 +145,26 @@ export default class WordCard extends Control {
   }
 
   async getUserWords(): Promise<void> {
-    const wordsAgr = await this.service.getUserWords();
-    console.log(wordsAgr[0])
+    await this.service.getUserWords();
   }
 
   async createUserWord(wordId : string, word : {difficulty : string, optional : {}} ): Promise<void> {
-    const wordsAgr = await this.service.createUserWord(wordId, word);
-
+    const createdUserWordResponse = await this.service.createUserWord(wordId, word);
+    if (createdUserWordResponse.status === 417) {
+      this.updateUserWord(wordId, word);
+    }
   }
 
   async updateUserWord(wordId : string, word: {difficulty : string, optional : {}} ): Promise<void> {
-    const wordsAgr = await this.service.changeUserWord(wordId, word);
+    await this.service.changeUserWord(wordId, word);
   }
 
   async agregUserWord(wordId : string ): Promise<void> {
-    const wordsAgr = await this.service.getUserAgrWord(wordId);
-    console.log(wordsAgr[0]._id)
+    await this.service.getUserAgrWord(wordId);
   }
 
-
   private toggleToDifficult(): void {
-    const cardId = this.wordCardInfo.id;
-    console.log(cardId)
+    const cardId = this.getId();
     this.agregUserWord(cardId);
     if (!this.isDifficult) {
       this.isDifficult = true;
@@ -175,7 +177,7 @@ export default class WordCard extends Control {
       this.isDifficult = false;
       this.updateUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, word: this.wordCardInfo.word}});
     }
-    this.getUserWords(); 
+    this.getUserWords();
   }
 
   private toggleToLearnt(): void {
