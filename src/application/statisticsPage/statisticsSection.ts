@@ -2,12 +2,24 @@ import Control from '../../controls/control';
 import html from './statistics.html';
 import '../../css/statistics.css';
 import StatisticsCard from './StatisticsCard';
+import { IStatistics } from './IStatistics';
+import Statistics from '../services/statistics/statistics';
 
 export default class StatisticsSection extends Control {
+  private statisticsService: Statistics = new Statistics();
+
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'statistics-section');
     this.render();
     this.navTabs();
+  }
+
+  private getUserId(): string {
+    return JSON.parse(localStorage.getItem('currentUser')).userId;
+  }
+
+  private getUserToken(): string {
+    return JSON.parse(localStorage.getItem('currentUser')).token;
   }
 
   render(): void {
@@ -25,8 +37,31 @@ export default class StatisticsSection extends Control {
     new Control(pageTitleWrapper.node, 'h5', '', 'Ваша статистика за сегодня');
   }
 
-  renderGeneralStatsWrapper(): void {
+  async renderGeneralStatsWrapper(): Promise<void> {
     const generalStatsWrapper = this.node.querySelector('#general-stats') as HTMLElement;
+    const statisticsData = {
+      learnedWords: 10,
+      optional: {
+        gameStatistics: {
+          sprint: {
+            newWords: 5,
+            learnedWords: 7,
+            correctAnswers: 6,
+            wrongAnswers: 1,
+            longestSeries: 4,
+          },
+          audioChallenge: {
+            newWords: 8,
+            learnedWords: 3,
+            correctAnswers: 9,
+            wrongAnswers: 4,
+            longestSeries: 6,
+          },
+        },
+      },
+    }
+    await this.statisticsService.putStatistics(this.getUserId(), this.getUserToken(), statisticsData);
+    const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
     new StatisticsCard(generalStatsWrapper, 10, 18, 3, 7, 'words-stats', 'pie-stats').render();
   }
 
