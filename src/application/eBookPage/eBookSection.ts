@@ -8,16 +8,6 @@ import GetWords from '../services/words/getWords';
 import LocalStorage from '../services/words/localStorage';
 import '../../css/preloader.css';
 import preloadHtml from './preloader.html';
-import tableHeader from './tableHeader.html';
-import '../../css/tableEbook.css';
-import GetUserWords from '../services/users/userWords';
-import { app } from '../..';
-
-interface IWord {
-  wordId: string,
-  id: string,
-  difficulty: string
-}
 
 export default class EBookSection extends Control {
   wordCards: WordCard[];
@@ -40,10 +30,6 @@ export default class EBookSection extends Control {
 
   private paginationWrapper: WordsPagination;
 
-  private tableHardWords: HTMLTableSectionElement;
-
-  servicewords: GetUserWords = new GetUserWords();
-
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
     this.node.innerHTML = eBook;
@@ -60,76 +46,15 @@ export default class EBookSection extends Control {
     this.paginationWrapper.changePageNumber(this.node);
   }
 
-  private async renderHardWordsDictionary(words: IWordCard[]) {
-    /* console.log(words) */
-    if (words.length) {
-      this.wordCardsWrapper.node.innerHTML = tableHeader;
-      this.tableHardWords = document.getElementById('tableHardWordsBody') as HTMLTableSectionElement;
-      for (let i = 0; i < words.length; i++) {
-        /* console.log(words[i]) */
-        const row = this.tableHardWords.insertRow();
-        const rowNumberCell = row.insertCell();
-        const rowWordCell = row.insertCell();
-        const rowTranscriptionCell = row.insertCell();
-        const rowTranslateCell = row.insertCell();
-        const rowButtonAboutCell = row.insertCell();
-        const rowButtonDeleteCell = row.insertCell();
-        row.classList.add('table-row');
-        rowNumberCell.className = 'cell-center col1-point';
-        rowWordCell.classList.add('cell-center');
-        rowTranscriptionCell.classList.add('cell-center');
-        rowTranslateCell.classList.add('cell-center');
-        const buttonDelete = document.createElement('button');
-        const buttonAbout = document.createElement('button');
-        buttonDelete.className = 'table-button table-button__delete';
-        buttonAbout.className = 'table-button table-button__about';
-        rowButtonDeleteCell.className = 'button-container col-button-delete';
-        rowButtonAboutCell.className = 'button-container col-button-about';
-        rowNumberCell.textContent = String(i+1);
-        rowWordCell.textContent = words[i].word.slice(0,1).toUpperCase() + words[i].word.slice(1);
-        rowTranscriptionCell.textContent = words[i].transcription;
-        rowTranslateCell.textContent = words[i].wordTranslate.slice(0,1).toUpperCase() + words[i].wordTranslate.slice(1);
-        rowButtonDeleteCell.appendChild(buttonDelete);
-        rowButtonAboutCell.appendChild(buttonAbout);
-        buttonDelete.addEventListener('click', this.toggleHardWeakWord);
-      }
-    }
-  }
-
-  private async toggleHardWeakWord() {
-    console.log(this);
-    console.log(this.node)
-/*     if (this.node.closest('.table-row').classList.contains('.weak')) {
-      this.node.closest('.table-row').classList.remove('weak');
-      this.node.style.backgroundImage = '../assets/ebook-page/delete-button.png';
-    } else {
-      this.node.closest('.table-row').classList.add('weak');
-      this.node.style.backgroundImage = '../assets/ebook-page/revert-button.png';
-    } */
-  }
-
   private async getWords(page: number, group: number): Promise<void> {
     const preloader = document.createElement('div');
     preloader.className = 'loader-wrapper';
     preloader.innerHTML = preloadHtml;
     this.wordCardsWrapper.node.append(preloader as HTMLElement);
-    if (group === 6) {
-      const array: [] = await this.servicewords.getUserWords(app.currentUser);
-      let words: IWordCard[] = [];
-      this.paginationWrapper.node.style.opacity = '0';
-      if (array.length) {
-        for (let i = 0; i < array.length; i++) {
-          let x = await this.service.getWord((array[i] as IWord).wordId);
-          words.push(x);
-        }
-        this.renderHardWordsDictionary(words);
-      }
-    } else {
-      const words: IWordCard[] = await this.service.getWords(page, group);
-      this.wordCardsWrapper.node.lastElementChild.remove();
-      this.wordCards = words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word));
-      this.wordCards.forEach((word) => word.render());
-    }
+    const words: IWordCard[] = await this.service.getWords(page, group);
+    this.wordCardsWrapper.node.lastElementChild.remove();
+    this.wordCards = words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word));
+    this.wordCards.forEach((word) => word.render());
   }
 
   private navLevels(): void {
@@ -164,6 +89,7 @@ export default class EBookSection extends Control {
           } else if (nav.getAttribute('data-nav') === instance.paginationWrapper.prevButtonDataAttr) {
             instance.currentWordsPage = instance.paginationWrapper.goToPrevPage();
           }
+          instance.sourceEnglishLevel = null;
           instance.update();
         }.bind(null, this),
       );
