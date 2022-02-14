@@ -11,6 +11,7 @@
   flex: 1 1 auto;
   min-height: 100%;
   max-width: 1850px;
+  width: 100%;
 }
 
 .word-card-wrapper {

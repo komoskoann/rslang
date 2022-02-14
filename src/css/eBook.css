@@ -14,7 +14,6 @@
   min-height: 100%;
 }
 .levels {
-  cursor: pointer;
   margin: auto;
   width: 720px;
   gap: 30px 40px;
@@ -24,6 +23,7 @@
 }
 .level-cont,
 .hard-word-cont {
+  cursor: pointer;
   padding: 5px;
   height: 50px;
   width: 210px;
@@ -42,7 +42,8 @@
   padding-left: 40px;
   font-size: 1.2rem;
 }
-.level-cont:hover {
+.level-cont:hover,
+.hard-word-cont:hover {
   transform: scale(1.1);
   transition: 0.5s ease-in-out;
 }
