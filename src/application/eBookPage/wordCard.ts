@@ -1,7 +1,7 @@
 import Control from '../../controls/control';
 import '../../css/word.css';
 import { IWordCard } from './IWordCard';
-import wordsController from '../services/words/getWords';
+import WordsController from '../services/words/getWords';
 
 export interface IPlayList {
   title: string;
@@ -11,7 +11,7 @@ export interface IPlayList {
 export default class WordCard extends Control {
   private cardInfoWrapper: Control<HTMLElement>;
 
-  service: wordsController = new wordsController();
+  service: WordsController = new WordsController();
 
   private audio: HTMLAudioElement;
 
@@ -148,18 +148,18 @@ export default class WordCard extends Control {
     await this.service.getUserWords();
   }
 
-  async createUserWord(wordId : string, word : {difficulty : string, optional : {}} ): Promise<void> {
+  async createUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<void> {
     const createdUserWordResponse = await this.service.createUserWord(wordId, word);
     if (createdUserWordResponse.status === 417) {
       this.updateUserWord(wordId, word);
     }
   }
 
-  async updateUserWord(wordId : string, word: {difficulty : string, optional : {}} ): Promise<void> {
+  async updateUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<void> {
     await this.service.changeUserWord(wordId, word);
   }
 
-  async agregUserWord(wordId : string ): Promise<void> {
+  async agregUserWord(wordId: string): Promise<void> {
     await this.service.getUserAgrWord(wordId);
   }
 
@@ -170,12 +170,12 @@ export default class WordCard extends Control {
       this.isDifficult = true;
       this.node.querySelector('.difficult-word-button').innerHTML = 'Легкое';
       this.node.classList.add(this.difficultWordClassName);
-      this.createUserWord(cardId, {difficulty : "hard", optional : {isDifficult : true, isLearnt : false}});
+      this.createUserWord(cardId, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false } });
     } else if (this.isDifficult) {
       this.node.classList.remove(this.difficultWordClassName);
       this.node.querySelector('.difficult-word-button').innerHTML = 'Сложное';
       this.isDifficult = false;
-      this.updateUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, isLearnt : false}});
+      this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false } });
     }
     this.getUserWords();
   }
@@ -186,15 +186,15 @@ export default class WordCard extends Control {
     if (!this.isLearnt) {
       this.isLearnt = true;
       this.node.classList.add(this.learntWordClassName);
-      this.createUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, isLearnt : true}});
-      this.updateUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, isLearnt : true}});
+      this.createUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: true } });
+      this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: true } });
     } else if (this.isLearnt) {
       this.node.classList.remove(this.learntWordClassName);
       this.isLearnt = false;
-      if (this.isDifficult){
-        this.updateUserWord(cardId, {difficulty : "hard", optional : {isDifficult : true, isLearnt : false}});
+      if (this.isDifficult) {
+        this.updateUserWord(cardId, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false } });
       } else {
-        this.updateUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, isLearnt : false}});
+        this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false } });
       }
     }
   }
