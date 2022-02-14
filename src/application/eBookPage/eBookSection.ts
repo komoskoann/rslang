@@ -2,7 +2,7 @@ import Control from '../../controls/control';
 import WordCard from './wordCard';
 import eBook from './eBook.html';
 import '../../css/eBook.css';
-import { IWordCard, IAggregatedWords } from './IWordCard';
+import { IWordCard } from './IWordCard';
 import WordsPagination from './wordsPagination';
 import wordsController from '../services/words/getWords';
 import LocalStorage from '../services/words/localStorage';
@@ -40,7 +40,6 @@ export default class EBookSection extends Control {
     this.getWords(this.currentWordsPage, this.currentEnglishLevel);
     this.navLevels();
     this.navPages();
-    this.hardLevel();
     this.enterUserPage();
     this.paginationWrapper.changePageNumber(this.node);
   }
@@ -112,45 +111,5 @@ export default class EBookSection extends Control {
     this.paginationWrapper.changePageNumber(this.node);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentPageLSName, `${this.currentWordsPage}`);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${this.currentEnglishLevel}`);
-  }
-
-  private async hardWords(): Promise<void> {
-    const preloader = document.createElement('div');
-    preloader.className = 'loader-wrapper';
-    preloader.innerHTML = preloadHtml;
-    this.wordCardsWrapper.node.append(preloader as HTMLElement);
-    const words: IAggregatedWords[] = await this.service.getUserWords();
-    console.log(words)
-    this.wordCards = words[0].paginatedResults.map((word: IAggregatedWords) => new WordCard(this.wordCardsWrapper.node, word));
-    this.wordCards.forEach((word) => word.render());
-  }
-
-  private updateHard(): void {
-    this.paginationWrapper.blockButtons(this.node);
-    this.wordCardsWrapper.node.innerHTML = '';
-    this.hardWords();
-  }
-
-  private hardLevel(): void {
-    this.node.querySelector('[data-level="6"]').addEventListener(
-        'click',
-        function (instance: EBookSection) {
-          instance.wordCardsWrapper.node.classList.add('hardWordLevel');
-          instance.updateHard();
-          instance.udateCardsAfterDeleteFromHard();
-        }.bind(null, this),
-     );
-  }
-
-  private udateCardsAfterDeleteFromHard(): void{
-    if (this.wordCardsWrapper.node.classList.contains('hardWordLevel')){
-      this.node.querySelectorAll(".difficult-word-button").forEach(item => {
-        item.addEventListener('click', function (instance: EBookSection){
-          instance.wordCardsWrapper.node.innerHTML = '';
-          instance.hardWords();
-        }.bind(null, this),
-        );
-      })
-    }
   }
 }

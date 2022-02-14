@@ -1,4 +1,4 @@
-import { IWordCard, IAggregatedWords } from '../../eBookPage/IWordCard';
+import { IWordCard} from '../../eBookPage/IWordCard';
 import { app } from '../../..';
 
 export default class wordsController {
@@ -15,8 +15,8 @@ export default class wordsController {
     return rawResponse.json();
   }
 
-  async getUserWords(): Promise<IAggregatedWords[]> {
-    const rawResponse = await fetch(`${this.userUrl}/${app.currentUser.userId}/aggregatedWords?filter={"userWord.difficulty":"hard"}`,{
+  async getUserWords(): Promise<IWordCard[]> {
+    const rawResponse = await fetch(`${this.userUrl}/${app.currentUser.userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`,{
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${app.currentUser.token}`,
@@ -39,7 +39,7 @@ export default class wordsController {
     return rawResponse;
   };
 
-  async getUserWord(wordId : string) : Promise<IAggregatedWords[]> {
+  async getUserWord(wordId : string) : Promise<IWordCard[]> {
     const rawResponse = await fetch(`${this.userUrl}/${app.currentUser.userId}/words/${wordId}`, {
       method: 'GET',
       headers: {
@@ -63,7 +63,7 @@ export default class wordsController {
     return rawResponse.json();
   };
 
-  async getUserAgrWord(wordId : string) : Promise<IAggregatedWords[]> {
+  async getUserAgrWord(wordId : string) : Promise<IWordCard[]> {
     const rawResponse = await fetch(`${this.userUrl}/${app.currentUser.userId}/aggregatedWords/${wordId}`, {
       method: 'GET',
       headers: {

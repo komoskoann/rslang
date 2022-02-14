@@ -1,6 +1,6 @@
 import Control from '../../controls/control';
 import '../../css/word.css';
-import { IWordCard, IAggregatedWords } from './IWordCard';
+import { IWordCard } from './IWordCard';
 import wordsController from '../services/words/getWords';
 
 export interface IPlayList {
@@ -168,25 +168,34 @@ export default class WordCard extends Control {
     this.agregUserWord(cardId);
     if (!this.isDifficult) {
       this.isDifficult = true;
-      this.node.querySelector('.difficult-word-button').innerHTML = 'Простое';
+      this.node.querySelector('.difficult-word-button').innerHTML = 'Легкое';
       this.node.classList.add(this.difficultWordClassName);
-      this.createUserWord(cardId, {difficulty : "hard", optional : {isDifficult : true, word: this.wordCardInfo.word}});
+      this.createUserWord(cardId, {difficulty : "hard", optional : {isDifficult : true, isLearnt : false}});
     } else if (this.isDifficult) {
       this.node.classList.remove(this.difficultWordClassName);
       this.node.querySelector('.difficult-word-button').innerHTML = 'Сложное';
       this.isDifficult = false;
-      this.updateUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, word: this.wordCardInfo.word}});
+      this.updateUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, isLearnt : false}});
     }
     this.getUserWords();
   }
 
   private toggleToLearnt(): void {
+    const cardId = this.getId();
+    this.agregUserWord(cardId);
     if (!this.isLearnt) {
       this.isLearnt = true;
       this.node.classList.add(this.learntWordClassName);
+      this.createUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, isLearnt : true}});
+      this.updateUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, isLearnt : true}});
     } else if (this.isLearnt) {
       this.node.classList.remove(this.learntWordClassName);
       this.isLearnt = false;
+      if (this.isDifficult){
+        this.updateUserWord(cardId, {difficulty : "hard", optional : {isDifficult : true, isLearnt : false}});
+      } else {
+        this.updateUserWord(cardId, {difficulty : "easy", optional : {isDifficult : false, isLearnt : false}});
+      }
     }
   }
 
