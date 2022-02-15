@@ -1,9 +1,6 @@
 .alert {
-    position: relative;
-    padding: 1rem 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid transparent;
-    border-radius: 0.25rem;
-    bottom: 50%;
-    left: 0;
+    position: fixed;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
 }

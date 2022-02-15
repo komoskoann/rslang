@@ -139,7 +139,8 @@ export default class WordCard extends Control {
   }
 
   private toggleToDifficult(): void {
-    const popupsContainer = new Control(this.cardInfoWrapper.node, 'div', 'alert alert-info');
+    const popupsContainer = new Control(document.body, 'div', 'alert alert-info');
+    console.log(this.node)
     if (!this.isDifficult) {
       this.isDifficult = true;
       this.node.classList.add(this.difficultWordClassName);
