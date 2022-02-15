@@ -16,7 +16,7 @@ export default class WordsController {
     return rawResponse.json();
   }
 
-  async getUserWords(): Promise<IWordCard[]> {
+  async getHardUserWords(): Promise<IWordCard[]> {
     const rawResponse = await fetch(
       `${this.userUrl}/${app.currentUser.userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`,
       {
@@ -27,7 +27,7 @@ export default class WordsController {
         },
       },
     );
-    return rawResponse.json();
+    return rawResponse.json().then(item => item[0].paginatedResults.map((i : IWordCard) => ({...i, id: i._id})));
   }
 
   async createUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<Response> {
@@ -51,7 +51,7 @@ export default class WordsController {
         Accept: 'application/json',
       },
     });
-    return rawResponse.json();
+    return rawResponse.json().then(item => item[0].paginatedResults.map((i : IWordCard) => ({...i, id : i._id})));
   }
 
   async changeUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<Response> {

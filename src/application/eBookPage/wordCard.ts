@@ -1,7 +1,7 @@
 import Control from '../../controls/control';
 import '../../css/word.css';
 import { IWordCard } from './IWordCard';
-import WordsController from '../services/words/getWords';
+import WordsController from '../services/words/wordsController';
 
 export interface IPlayList {
   title: string;
@@ -145,7 +145,8 @@ export default class WordCard extends Control {
   }
 
   async getUserWords(): Promise<void> {
-    await this.service.getUserWords();
+    let arr = await this.service.getHardUserWords();
+    console.log(arr)
   }
 
   async createUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<void> {

@@ -15,5 +15,4 @@ export interface IWordCard {
   word: string;
   wordTranslate: string;
   _id?: string;
-  [x: string]: any;
 }
