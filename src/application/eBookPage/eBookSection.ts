@@ -2,7 +2,7 @@ import Control from '../../controls/control';
 import WordCard from './wordCard';
 import eBook from './eBook.html';
 import '../../css/eBook.css';
-import { IWordCard } from './IWordCard';
+import { IWordCard } from './ebookInterface';
 import WordsPagination from './wordsPagination';
 import WordsController from '../services/words/wordsController';
 import LocalStorage from '../services/words/localStorage';

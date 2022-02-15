@@ -1,4 +1,4 @@
-import { IWordCard, IResponseWord } from '../../eBookPage/IWordCard';
+import { IWordCard, IResponseWord } from '../../eBookPage/ebookInterface';
 import { app } from '../../..';
 
 export default class WordsController {

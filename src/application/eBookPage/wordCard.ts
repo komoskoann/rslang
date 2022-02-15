@@ -1,6 +1,6 @@
 import Control from '../../controls/control';
 import '../../css/word.css';
-import { IWordCard } from './IWordCard';
+import { IWordCard } from './ebookInterface';
 import WordsController from '../services/words/wordsController';
 
 export interface IPlayList {
