@@ -17,35 +17,35 @@ export default class PieChart {
     this.pieRadius = Math.min(this.pieWidth, this.pieHeight) / 2 - this.pieMargin;
   }
 
-  createSVG(parentElementClassListName: string, dataset: IPieData[]) {
-    const svg = d3.select(parentElementClassListName)
-      .append("svg")
-      .attr("width", this.pieWidth)
-      .attr("height", this.pieHeight)
-      .append("g")
-      .attr("transform", "translate(" + this.pieWidth / 2 + "," + this.pieHeight / 2 + ")");
+  createSVG(parentElementClassListName: string, dataset: IPieData[]): void {
+    const svg = d3
+      .select(parentElementClassListName)
+      .append('svg')
+      .attr('width', this.pieWidth)
+      .attr('height', this.pieHeight)
+      .append('g')
+      .attr('transform', 'translate(' + this.pieWidth / 2 + ',' + this.pieHeight / 2 + ')');
 
-    const arc = d3.arc<d3.PieArcDatum<IPieData> >()
+    const arc = d3
+      .arc<d3.PieArcDatum<IPieData>>()
       .innerRadius(this.pieRadius - this.pieDonutWidth)
       .outerRadius(this.pieRadius);
 
-    const pie = d3.pie<IPieData>()
+    const pie = d3
+      .pie<IPieData>()
       .value((d: IPieData) => d.count)
       .sort(null);
-    let path = svg.selectAll('path')
+
+    svg
+      .selectAll('path')
       .data(pie(dataset))
       .enter()
       .append('path')
       .attr('d', arc)
-      .attr('class', (d, i) => "color" + i);
+      .attr('class', (d, i) => 'color' + i);
 
-    const correctAnswersPercent = dataset[0].count / (dataset[0].count + dataset[1].count) * 100;
-    const text = svg.append("text")
-      .attr("text-anchor", "middle")
-      .attr("dy", "0.3em")
-      .attr("font-size", "5rem");
+    const correctAnswersPercent = (dataset[0].count / (dataset[0].count + dataset[1].count)) * 100;
+    const text = svg.append('text').attr('text-anchor', 'middle').attr('dy', '0.3em').attr('font-size', '5rem');
     text.text(`${Math.floor(correctAnswersPercent)}%`);
-
   }
-
 }

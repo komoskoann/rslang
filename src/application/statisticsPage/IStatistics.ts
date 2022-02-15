@@ -1,17 +1,17 @@
 export interface IStatistics {
-  learnedWords: number,
+  learnedWords: number;
   optional: {
     gameStatistics: {
-      sprint: IGameStatistics,
-      audioChallenge: IGameStatistics,
-    }
-  }
+      sprint: IGameStatistics;
+      audioChallenge: IGameStatistics;
+    };
+  };
 }
 
 export interface IGameStatistics {
-  newWords: number,
-  learnedWords: number,
-  correctAnswers: number,
-  wrongAnswers: number,
-  longestSeries: number,
+  newWords: number;
+  learnedWords: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  longestSeries: number;
 }

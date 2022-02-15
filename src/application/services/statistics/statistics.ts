@@ -7,23 +7,23 @@ export default class Statistics {
     const rawResponse = await fetch(`${this.url}/${userID}/statistics`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-      }
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
     });
     return rawResponse.json();
   }
 
   async putStatistics(userID: string, token: string, statistics: IStatistics): Promise<IStatistics> {
-    console.log(statistics)
+    console.log(statistics);
     const rawResponse = await fetch(`${this.url}/${userID}/statistics`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(statistics)
+      body: JSON.stringify(statistics),
     });
     return rawResponse.json();
   }

@@ -45,12 +45,23 @@ export default class StatisticsSection extends Control {
   private async renderGeneralStatsWrapper(): Promise<void> {
     const generalStatsWrapper = this.node.querySelector('#general-stats') as HTMLElement;
     const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
-    const newWords = stats.optional.gameStatistics.audioChallenge.newWords + stats.optional.gameStatistics.sprint.newWords;
+    const newWords =
+      stats.optional.gameStatistics.audioChallenge.newWords + stats.optional.gameStatistics.sprint.newWords;
     const learnedWords = stats.learnedWords;
-    const wrongAnswers = stats.optional.gameStatistics.audioChallenge.wrongAnswers + stats.optional.gameStatistics.sprint.wrongAnswers;
-    const correctAnswers = stats.optional.gameStatistics.audioChallenge.correctAnswers + stats.optional.gameStatistics.sprint.correctAnswers;
+    const wrongAnswers =
+      stats.optional.gameStatistics.audioChallenge.wrongAnswers + stats.optional.gameStatistics.sprint.wrongAnswers;
+    const correctAnswers =
+      stats.optional.gameStatistics.audioChallenge.correctAnswers + stats.optional.gameStatistics.sprint.correctAnswers;
     const totalAnswers = wrongAnswers + correctAnswers;
-    new StatisticsCard(generalStatsWrapper, correctAnswers, totalAnswers, newWords, learnedWords, 'words-stats', 'pie-stats').render();
+    new StatisticsCard(
+      generalStatsWrapper,
+      correctAnswers,
+      totalAnswers,
+      newWords,
+      learnedWords,
+      'words-stats',
+      'pie-stats',
+    ).render();
     this.node.querySelector('.bar-legend').textContent = 'Изученные слова';
   }
 
@@ -62,7 +73,15 @@ export default class StatisticsSection extends Control {
     const correctAnswers = stats.optional.gameStatistics.sprint.correctAnswers;
     const totalAnswers = wrongAnswers + correctAnswers;
     const sprintStatsWrapper = this.node.querySelector('#sprint-stats') as HTMLElement;
-    new StatisticsCard(sprintStatsWrapper, correctAnswers, totalAnswers, newWords, longestSeries, 'words-stats-sprint', 'pie-stats-sprint').render();
+    new StatisticsCard(
+      sprintStatsWrapper,
+      correctAnswers,
+      totalAnswers,
+      newWords,
+      longestSeries,
+      'words-stats-sprint',
+      'pie-stats-sprint',
+    ).render();
   }
 
   private async renderAudioChallengeStatsWrapper(): Promise<void> {
@@ -73,14 +92,22 @@ export default class StatisticsSection extends Control {
     const correctAnswers = stats.optional.gameStatistics.audioChallenge.correctAnswers;
     const totalAnswers = wrongAnswers + correctAnswers;
     const audioChallengeStatsWrapper = this.node.querySelector('#audioChallenge-stats') as HTMLElement;
-    new StatisticsCard(audioChallengeStatsWrapper, correctAnswers, totalAnswers, newWords, longestSeries, 'words-stats-audio', 'pie-stats-audio').render();
+    new StatisticsCard(
+      audioChallengeStatsWrapper,
+      correctAnswers,
+      totalAnswers,
+      newWords,
+      longestSeries,
+      'words-stats-audio',
+      'pie-stats-audio',
+    ).render();
   }
 
   private navTabs(): void {
-    const tabs = this.node.querySelectorAll("ul.nav-tabs > li > a");
-    const panes = this.node.querySelectorAll(".tab-pane");
+    const tabs = this.node.querySelectorAll('ul.nav-tabs > li > a');
+    const panes = this.node.querySelectorAll('.tab-pane');
     Object.keys(tabs).map((tab) => {
-      tabs[+tab].addEventListener("click", (e: Event)=> {
+      tabs[+tab].addEventListener('click', (e: Event) => {
         this.makeInactive(tabs);
         this.activateTab(e);
         this.makeInactive(panes);
@@ -91,21 +118,20 @@ export default class StatisticsSection extends Control {
   }
 
   private makeInactive(items: NodeListOf<Element>): void {
-    Object.keys(items).map((item)=> {
-      items[+item].classList.remove("active");
+    Object.keys(items).map((item) => {
+      items[+item].classList.remove('active');
     });
   }
 
   private activateTab(e: Event): void {
     const clickedTab = e.currentTarget as HTMLElement;
-    clickedTab.classList.add("active");
+    clickedTab.classList.add('active');
   }
 
   private activateTabContent(e: Event): void {
     const anchorReference = e.target as HTMLElement;
-    const activePaneID = anchorReference.getAttribute("href");
+    const activePaneID = anchorReference.getAttribute('href');
     const activePane = this.node.querySelector(activePaneID);
-    activePane.classList.add("active");
+    activePane.classList.add('active');
   }
-
 }

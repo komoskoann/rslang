@@ -26,7 +26,15 @@ export default class StatisticsCard extends Control {
 
   private pieChartClassName: string;
 
-  constructor(parentNode: HTMLElement, correctAnswers: number, totalAnswers: number, newWords: number, secondBarChartParameter: number, barChartClassName: string, pieChartClassName: string) {
+  constructor(
+    parentNode: HTMLElement,
+    correctAnswers: number,
+    totalAnswers: number,
+    newWords: number,
+    secondBarChartParameter: number,
+    barChartClassName: string,
+    pieChartClassName: string,
+  ) {
     super(parentNode, 'div', 'statistics-card-wrapper');
     this.correctAnswers = correctAnswers;
     this.totalAnswers = totalAnswers;
@@ -39,8 +47,8 @@ export default class StatisticsCard extends Control {
       { label: 'Неправильные ответы', count: this.totalAnswers - this.correctAnswers },
     ];
     this.barData = [
-      { name: "Новые слова", value: this.newWords },
-      { name: "Самая длинная серия правильных ответов", value: this.secondBarChartParameter }
+      { name: 'Новые слова', value: this.newWords },
+      { name: 'Самая длинная серия правильных ответов', value: this.secondBarChartParameter },
     ];
   }
 
@@ -49,14 +57,14 @@ export default class StatisticsCard extends Control {
     this.renderPieChartWrapper();
   }
 
-  renderBarChartWrapper(): void {
+  private renderBarChartWrapper(): void {
     const wordsStatsWrapper = new Control(this.node, 'div', this.barChartClassName);
     wordsStatsWrapper.node.innerHTML = html;
     this.barChart = new BarChart();
     this.barChart.createSVG(`.${this.barChartClassName}`, this.barData);
   }
 
-  renderPieChartWrapper(): void {
+  private renderPieChartWrapper(): void {
     const wrapper = new Control(this.node, 'div', this.pieChartClassName);
     new Control(wrapper.node, 'div', 'pie-stats-title', 'Правильные ответы');
     this.pieChart = new PieChart();
