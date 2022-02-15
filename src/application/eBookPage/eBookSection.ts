@@ -20,6 +20,8 @@ export default class EBookSection extends Control {
 
   private currentEnglishLevel: number;
 
+  private sourceEnglishLevel: number;
+
   private defaultWordsPage: number = 0;
 
   private currentWordsPage: number;
@@ -60,6 +62,7 @@ export default class EBookSection extends Control {
       level.addEventListener(
         'click',
         function (instance: EBookSection) {
+          instance.sourceEnglishLevel = instance.currentEnglishLevel;
           instance.currentEnglishLevel = +level.getAttribute('data-level');
           instance.currentWordsPage = instance.defaultWordsPage;
           instance.paginationWrapper.currentPage = instance.defaultWordsPage;
@@ -86,6 +89,7 @@ export default class EBookSection extends Control {
           } else if (nav.getAttribute('data-nav') === instance.paginationWrapper.prevButtonDataAttr) {
             instance.currentWordsPage = instance.paginationWrapper.goToPrevPage();
           }
+          instance.sourceEnglishLevel = null;
           instance.update();
         }.bind(null, this),
       );
@@ -104,12 +108,31 @@ export default class EBookSection extends Control {
     );
   }
 
-  private update(): void {
+  private async update(): Promise<void> {
     this.paginationWrapper.blockButtons(this.node);
+    const oldWindowPageYBottom =
+      document.body.clientHeight - (window.pageYOffset + document.documentElement.clientHeight);
+    this.node.style.minHeight = getComputedStyle(this.node).height;
     this.wordCardsWrapper.node.innerHTML = '';
-    this.getWords(this.currentWordsPage, this.currentEnglishLevel);
+    await this.getWords(this.currentWordsPage, this.currentEnglishLevel);
     this.paginationWrapper.changePageNumber(this.node);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentPageLSName, `${this.currentWordsPage}`);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${this.currentEnglishLevel}`);
+    this.node.style.removeProperty('min-height');
+    this.paginationWrapper.node.style.opacity = this.currentEnglishLevel === 6 ? '0' : '1';
+    if (this.currentEnglishLevel !== 6 && this.sourceEnglishLevel !== 6) {
+      this.scrollWindow(oldWindowPageYBottom);
+    }
+  }
+
+  private scrollWindow(oldWindowPageYBottom: number): void {
+    let scroolYValue =
+      oldWindowPageYBottom < document.querySelector('.footer').clientHeight + document.querySelector('.pagination-wrapper').clientHeight
+        ? document.body.clientHeight - oldWindowPageYBottom - document.documentElement.clientHeight
+        : window.pageYOffset;
+    window.scrollTo({
+      top: scroolYValue,
+      behavior: 'auto',
+    });
   }
 }

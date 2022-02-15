@@ -40,6 +40,16 @@ export default class AuthorizationForm extends Control {
     this.autorizationComponent = autorizationHTML;
     this.registrationComponent = registrationHTML;
     this.autorizationService = new AutorizationService();
+    this.addAvatar();
+  }
+
+  private addAvatar() {
+    if (JSON.parse(localStorage.getItem('currentUser')) && !document.querySelector('.avatar-img')) {
+      this.avatar = new Avatar(
+        document.querySelector('.authorizationWrapper'),
+        JSON.parse(localStorage.getItem('currentUser'))?.name[0],
+      );
+    }
   }
 
   private searchOpenAuthorizationButton = (): HTMLButtonElement => document.querySelector('.login');
@@ -156,13 +166,16 @@ export default class AuthorizationForm extends Control {
       ] = [content.message === 'Authenticated', content.token, content.refreshToken, content.userId, content.name];
       this.closeAuthorizationForm();
       console.log(content);
+      this.addAvatar();
     }
-    this.avatar = new Avatar(document.querySelector('.authorizationWrapper'), app.currentUser.name[0]);
   };
 
   private signUpAction = async (e: Event): Promise<void> => {
     e.preventDefault();
-    const name = (document.getElementById('authorizationFormInputName') as HTMLInputElement).value;
+    let name = (document.getElementById('authorizationFormInputName') as HTMLInputElement).value
+      .split(' ')
+      .map((item) => item.slice(0, 1).toUpperCase() + item.slice(1))
+      .join(' ');
     const email = (document.getElementById('authorizationFormInputEmail') as HTMLInputElement).value;
     const password = (document.getElementById('authorizationFormInputPassword') as HTMLInputElement).value;
     const response = await this.autorizationService.signUp({ email, password, name });
