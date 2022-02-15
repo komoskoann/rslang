@@ -22,60 +22,61 @@ export default class StatisticsSection extends Control {
     return JSON.parse(localStorage.getItem('currentUser')).token;
   }
 
-  render(): void {
+  private render(): void {
     this.renderPageTitleWrapper();
     const statisticsWrapper = new Control(this.node, 'div', 'statistics-wrapper');
-    statisticsWrapper.node.innerHTML = html;
-    this.renderGeneralStatsWrapper();
-    this.renderSprintStatsWrapper();
-    this.renderAudioChallengeStatsWrapper();
+    if (!JSON.parse(localStorage.getItem('currentUser'))) {
+      statisticsWrapper.node.innerHTML = 'Только авторизированные пользователи могут просматривать статистику!';
+      statisticsWrapper.node.classList.add('statistics-warning');
+    } else {
+      statisticsWrapper.node.innerHTML = html;
+      this.renderGeneralStatsWrapper();
+      this.renderSprintStatsWrapper();
+      this.renderAudioChallengeStatsWrapper();
+    }
   }
 
-  renderPageTitleWrapper(): void {
+  private renderPageTitleWrapper(): void {
     const pageTitleWrapper = new Control(this.node, 'div', 'book-text');
     new Control(pageTitleWrapper.node, 'h2', '', 'Статистика');
     new Control(pageTitleWrapper.node, 'h5', '', 'Ваша статистика за сегодня');
   }
 
-  async renderGeneralStatsWrapper(): Promise<void> {
+  private async renderGeneralStatsWrapper(): Promise<void> {
     const generalStatsWrapper = this.node.querySelector('#general-stats') as HTMLElement;
-    const statisticsData = {
-      learnedWords: 10,
-      optional: {
-        gameStatistics: {
-          sprint: {
-            newWords: 5,
-            learnedWords: 7,
-            correctAnswers: 6,
-            wrongAnswers: 1,
-            longestSeries: 4,
-          },
-          audioChallenge: {
-            newWords: 8,
-            learnedWords: 3,
-            correctAnswers: 9,
-            wrongAnswers: 4,
-            longestSeries: 6,
-          },
-        },
-      },
-    }
-    await this.statisticsService.putStatistics(this.getUserId(), this.getUserToken(), statisticsData);
     const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
-    new StatisticsCard(generalStatsWrapper, 10, 18, 3, 7, 'words-stats', 'pie-stats').render();
+    const newWords = stats.optional.gameStatistics.audioChallenge.newWords + stats.optional.gameStatistics.sprint.newWords;
+    const learnedWords = stats.learnedWords;
+    const wrongAnswers = stats.optional.gameStatistics.audioChallenge.wrongAnswers + stats.optional.gameStatistics.sprint.wrongAnswers;
+    const correctAnswers = stats.optional.gameStatistics.audioChallenge.correctAnswers + stats.optional.gameStatistics.sprint.correctAnswers;
+    const totalAnswers = wrongAnswers + correctAnswers;
+    new StatisticsCard(generalStatsWrapper, correctAnswers, totalAnswers, newWords, learnedWords, 'words-stats', 'pie-stats').render();
+    this.node.querySelector('.bar-legend').textContent = 'Изученные слова';
   }
 
-  renderSprintStatsWrapper(): void {
+  private async renderSprintStatsWrapper(): Promise<void> {
+    const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
+    const newWords = stats.optional.gameStatistics.sprint.newWords;
+    const longestSeries = stats.optional.gameStatistics.sprint.longestSeries;
+    const wrongAnswers = stats.optional.gameStatistics.sprint.wrongAnswers;
+    const correctAnswers = stats.optional.gameStatistics.sprint.correctAnswers;
+    const totalAnswers = wrongAnswers + correctAnswers;
     const sprintStatsWrapper = this.node.querySelector('#sprint-stats') as HTMLElement;
-    new StatisticsCard(sprintStatsWrapper, 5, 8, 3, 7, 'words-stats-sprint', 'pie-stats-sprint').render();
+    new StatisticsCard(sprintStatsWrapper, correctAnswers, totalAnswers, newWords, longestSeries, 'words-stats-sprint', 'pie-stats-sprint').render();
   }
 
-  renderAudioChallengeStatsWrapper(): void {
+  private async renderAudioChallengeStatsWrapper(): Promise<void> {
+    const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
+    const newWords = stats.optional.gameStatistics.audioChallenge.newWords;
+    const longestSeries = stats.optional.gameStatistics.audioChallenge.longestSeries;
+    const wrongAnswers = stats.optional.gameStatistics.audioChallenge.wrongAnswers;
+    const correctAnswers = stats.optional.gameStatistics.audioChallenge.correctAnswers;
+    const totalAnswers = wrongAnswers + correctAnswers;
     const audioChallengeStatsWrapper = this.node.querySelector('#audioChallenge-stats') as HTMLElement;
-    new StatisticsCard(audioChallengeStatsWrapper, 9, 15, 40, 33, 'words-stats-audio', 'pie-stats-audio').render();
+    new StatisticsCard(audioChallengeStatsWrapper, correctAnswers, totalAnswers, newWords, longestSeries, 'words-stats-audio', 'pie-stats-audio').render();
   }
 
-  navTabs(): void {
+  private navTabs(): void {
     const tabs = this.node.querySelectorAll("ul.nav-tabs > li > a");
     const panes = this.node.querySelectorAll(".tab-pane");
     Object.keys(tabs).map((tab) => {
@@ -89,18 +90,18 @@ export default class StatisticsSection extends Control {
     });
   }
 
-  makeInactive(items: NodeListOf<Element>): void {
+  private makeInactive(items: NodeListOf<Element>): void {
     Object.keys(items).map((item)=> {
       items[+item].classList.remove("active");
     });
   }
 
-  activateTab(e: Event): void {
+  private activateTab(e: Event): void {
     const clickedTab = e.currentTarget as HTMLElement;
     clickedTab.classList.add("active");
   }
 
-  activateTabContent(e: Event): void {
+  private activateTabContent(e: Event): void {
     const anchorReference = e.target as HTMLElement;
     const activePaneID = anchorReference.getAttribute("href");
     const activePane = this.node.querySelector(activePaneID);
