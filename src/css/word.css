@@ -8,11 +8,14 @@
   flex-wrap: wrap;
   justify-content: space-around;
   gap: 20px 10px;
+  flex: 1 1 auto;
+  min-height: 100%;
+  max-width: 1850px;
+  width: 100%;
 }
 
 .word-card-wrapper {
   padding: 10px 5px;
-  height: 700px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
