@@ -1,6 +1,7 @@
 import Control from '../../controls/control';
 import '../../css/word.css';
 import { IWordCard } from './IWordCard';
+import '../../css/popUp.css';
 
 export interface IPlayList {
   title: string;
@@ -138,22 +139,41 @@ export default class WordCard extends Control {
   }
 
   private toggleToDifficult(): void {
+    const popupsContainer = new Control(this.cardInfoWrapper.node, 'div', 'alert alert-info');
     if (!this.isDifficult) {
       this.isDifficult = true;
       this.node.classList.add(this.difficultWordClassName);
+      popupsContainer.node.innerHTML = 'Добавлено в сложные слова';
+      this.hideAlert(popupsContainer);
     } else if (this.isDifficult) {
       this.node.classList.remove(this.difficultWordClassName);
       this.isDifficult = false;
+      popupsContainer.node.innerHTML = 'Удалено из сложных слов';
+      this.hideAlert(popupsContainer);
     }
   }
 
+  hideAlert(currentNode: Control<HTMLElement>) {
+    setTimeout(function(){
+        currentNode.node.remove();
+      }, 1000);
+  }
+
+
+
+
   private toggleToLearnt(): void {
+    const popupsContainer = new Control(this.node, 'div', 'alert alert-info');
     if (!this.isLearnt) {
       this.isLearnt = true;
       this.node.classList.add(this.learntWordClassName);
+      popupsContainer.node.innerHTML = 'Добавлено в изученные слова';
+      this.hideAlert(popupsContainer);
     } else if (this.isLearnt) {
       this.node.classList.remove(this.learntWordClassName);
       this.isLearnt = false;
+      popupsContainer.node.innerHTML = 'Удалено из изученных слов';
+      this.hideAlert(popupsContainer);
     }
   }
 
