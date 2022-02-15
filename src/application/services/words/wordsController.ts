@@ -1,4 +1,4 @@
-import { IWordCard } from '../../eBookPage/IWordCard';
+import { IWordCard, IResponseWord } from '../../eBookPage/IWordCard';
 import { app } from '../../..';
 
 export default class WordsController {
@@ -27,7 +27,7 @@ export default class WordsController {
         },
       },
     );
-    return rawResponse.json().then(item => item[0].paginatedResults.map((i : IWordCard) => ({...i, id: i._id})));
+    return rawResponse.json().then((item) => item[0].paginatedResults.map((i: IResponseWord) => ({ ...i, id: i._id })));
   }
 
   async createUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<Response> {
@@ -51,7 +51,7 @@ export default class WordsController {
         Accept: 'application/json',
       },
     });
-    return rawResponse.json().then(item => item[0].paginatedResults.map((i : IWordCard) => ({...i, id : i._id})));
+    return rawResponse.json().then((item) => item[0].paginatedResults.map((i: IResponseWord) => ({ ...i, id: i._id })));
   }
 
   async changeUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<Response> {

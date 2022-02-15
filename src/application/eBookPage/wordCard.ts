@@ -61,7 +61,7 @@ export default class WordCard extends Control {
   }
 
   private getId() {
-    return this.wordCardInfo.id || this.wordCardInfo._id;
+    return this.wordCardInfo.id;
   }
 
   private renderCardNameWrapper(): void {
@@ -145,8 +145,7 @@ export default class WordCard extends Control {
   }
 
   async getUserWords(): Promise<void> {
-    let arr = await this.service.getHardUserWords();
-    console.log(arr)
+    await this.service.getHardUserWords();
   }
 
   async createUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<void> {
