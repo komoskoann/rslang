@@ -44,63 +44,76 @@ export default class StatisticsSection extends Control {
 
   private async renderGeneralStatsWrapper(): Promise<void> {
     const generalStatsWrapper = this.node.querySelector('#general-stats') as HTMLElement;
-    const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
-    const newWords =
-      stats.optional.gameStatistics.audioChallenge.newWords + stats.optional.gameStatistics.sprint.newWords;
-    const learnedWords = stats.learnedWords;
-    const wrongAnswers =
-      stats.optional.gameStatistics.audioChallenge.wrongAnswers + stats.optional.gameStatistics.sprint.wrongAnswers;
-    const correctAnswers =
-      stats.optional.gameStatistics.audioChallenge.correctAnswers + stats.optional.gameStatistics.sprint.correctAnswers;
-    const totalAnswers = wrongAnswers + correctAnswers;
-    new StatisticsCard(
-      generalStatsWrapper,
-      correctAnswers,
-      totalAnswers,
-      newWords,
-      learnedWords,
-      'words-stats',
-      'pie-stats',
-    ).render();
+    try {
+      const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
+      const newWords =
+        stats.optional.gameStatistics.audioChallenge.newWords + stats.optional.gameStatistics.sprint.newWords;
+      const learnedWords = stats.learnedWords;
+      const wrongAnswers =
+        stats.optional.gameStatistics.audioChallenge.wrongAnswers + stats.optional.gameStatistics.sprint.wrongAnswers;
+      const correctAnswers =
+        stats.optional.gameStatistics.audioChallenge.correctAnswers +
+        stats.optional.gameStatistics.sprint.correctAnswers;
+      const totalAnswers = wrongAnswers + correctAnswers;
+      new StatisticsCard(
+        generalStatsWrapper,
+        correctAnswers,
+        totalAnswers,
+        newWords,
+        learnedWords,
+        'words-stats',
+        'pie-stats',
+      ).render();
+    } catch {
+      new StatisticsCard(generalStatsWrapper, 0, 1, 0, 0, 'words-stats', 'pie-stats').render();
+    }
     this.node.querySelector('.bar-legend').textContent = 'Изученные слова';
   }
 
   private async renderSprintStatsWrapper(): Promise<void> {
-    const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
-    const newWords = stats.optional.gameStatistics.sprint.newWords;
-    const longestSeries = stats.optional.gameStatistics.sprint.longestSeries;
-    const wrongAnswers = stats.optional.gameStatistics.sprint.wrongAnswers;
-    const correctAnswers = stats.optional.gameStatistics.sprint.correctAnswers;
-    const totalAnswers = wrongAnswers + correctAnswers;
     const sprintStatsWrapper = this.node.querySelector('#sprint-stats') as HTMLElement;
-    new StatisticsCard(
-      sprintStatsWrapper,
-      correctAnswers,
-      totalAnswers,
-      newWords,
-      longestSeries,
-      'words-stats-sprint',
-      'pie-stats-sprint',
-    ).render();
+    try {
+      const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
+      const newWords = stats.optional.gameStatistics.sprint.newWords;
+      const longestSeries = stats.optional.gameStatistics.sprint.longestSeries;
+      const wrongAnswers = stats.optional.gameStatistics.sprint.wrongAnswers;
+      const correctAnswers = stats.optional.gameStatistics.sprint.correctAnswers;
+      const totalAnswers = wrongAnswers + correctAnswers;
+      new StatisticsCard(
+        sprintStatsWrapper,
+        correctAnswers,
+        totalAnswers,
+        newWords,
+        longestSeries,
+        'words-stats-sprint',
+        'pie-stats-sprint',
+      ).render();
+    } catch {
+      new StatisticsCard(sprintStatsWrapper, 0, 1, 0, 0, 'words-stats-sprint', 'pie-stats-sprint').render();
+    }
   }
 
   private async renderAudioChallengeStatsWrapper(): Promise<void> {
-    const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
-    const newWords = stats.optional.gameStatistics.audioChallenge.newWords;
-    const longestSeries = stats.optional.gameStatistics.audioChallenge.longestSeries;
-    const wrongAnswers = stats.optional.gameStatistics.audioChallenge.wrongAnswers;
-    const correctAnswers = stats.optional.gameStatistics.audioChallenge.correctAnswers;
-    const totalAnswers = wrongAnswers + correctAnswers;
     const audioChallengeStatsWrapper = this.node.querySelector('#audioChallenge-stats') as HTMLElement;
-    new StatisticsCard(
-      audioChallengeStatsWrapper,
-      correctAnswers,
-      totalAnswers,
-      newWords,
-      longestSeries,
-      'words-stats-audio',
-      'pie-stats-audio',
-    ).render();
+    try {
+      const stats: IStatistics = await this.statisticsService.getStatistics(this.getUserId(), this.getUserToken());
+      const newWords = stats.optional.gameStatistics.audioChallenge.newWords;
+      const longestSeries = stats.optional.gameStatistics.audioChallenge.longestSeries;
+      const wrongAnswers = stats.optional.gameStatistics.audioChallenge.wrongAnswers;
+      const correctAnswers = stats.optional.gameStatistics.audioChallenge.correctAnswers;
+      const totalAnswers = wrongAnswers + correctAnswers;
+      new StatisticsCard(
+        audioChallengeStatsWrapper,
+        correctAnswers,
+        totalAnswers,
+        newWords,
+        longestSeries,
+        'words-stats-audio',
+        'pie-stats-audio',
+      ).render();
+    } catch {
+      new StatisticsCard(audioChallengeStatsWrapper, 0, 1, 0, 0, 'words-stats-audio', 'pie-stats-audio').render();
+    }
   }
 
   private navTabs(): void {
