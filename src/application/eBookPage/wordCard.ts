@@ -71,7 +71,22 @@ export default class WordCard extends Control {
     new Control(cardTitle.node, 'span', 'word-name', this.wordCardInfo.word);
     const cardName = new Control(cardNameWrapper.node, 'div', 'card-name');
     new Control(cardName.node, 'span', 'word-transcription', `${this.wordCardInfo.transcription}`);
-    new Control(cardName.node, 'span', 'word-translation', `${this.wordCardInfo.wordTranslate}`);
+    const translation = new Control(cardName.node, 'span', 'word-translation', `${this.wordCardInfo.wordTranslate}`);
+    this.scaleSpan(cardNameWrapper, translation);
+  }
+
+  // Внимание! Увага! Alert! Аttention! Аchtung! Этот метод адаптирует font-size!
+  private scaleSpan(container: Control<HTMLElement>, span: Control<HTMLElement>): void {
+    const widthContainer = parseInt(getComputedStyle(container.node).width);
+    let widthSpan = parseInt(getComputedStyle(span.node).width);
+    let currentFontSize = parseFloat(getComputedStyle(span.node).fontSize);
+    if (widthContainer < widthSpan) {
+      while (widthContainer < widthSpan) {
+        --currentFontSize;
+        span.node.style.fontSize = `${currentFontSize}px`;
+        widthSpan = parseInt(getComputedStyle(span.node).width);
+      }
+    }
   }
 
   private renderCardImage(): void {
