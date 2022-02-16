@@ -1,0 +1,35 @@
+export interface IWordCard {
+  readonly id: string;
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: number;
+  image: string;
+  page: number;
+  textExample: string;
+  userWord?: { difficulty: string; optional?: { isDifficult: boolean; word: string } };
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
+}
+
+export interface IResponseWord {
+  id: string;
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: number;
+  image: string;
+  page: number;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
+  textExample: string;
+  _id?: string;
+}

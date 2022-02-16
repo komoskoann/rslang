@@ -1,7 +1,9 @@
 import Control from '../../controls/control';
 import '../../css/word.css';
-import { IWordCard } from './IWordCard';
 import '../../css/popUp.css';
+import { IWordCard } from './ebookInterface';
+import WordsController from '../services/words/wordsController';
+
 
 export interface IPlayList {
   title: string;
@@ -10,6 +12,8 @@ export interface IPlayList {
 
 export default class WordCard extends Control {
   private cardInfoWrapper: Control<HTMLElement>;
+
+  service: WordsController = new WordsController();
 
   private audio: HTMLAudioElement;
 
@@ -42,13 +46,13 @@ export default class WordCard extends Control {
   constructor(parentNode: HTMLElement, wordCardInfo: IWordCard) {
     super(parentNode, 'div', 'word-card-wrapper', '');
     this.container = new Control(this.node, 'div');
-    this.isDifficult = false;
+    this.isDifficult = !!wordCardInfo.userWord?.optional?.isDifficult;
     this.isLearnt = false;
     this.wordCardInfo = wordCardInfo;
   }
 
   render(): void {
-    this.node.id = this.wordCardInfo.id;
+    this.node.id = this.getId();
     this.renderCardNameWrapper();
     this.renderCardImage();
     this.renderCardInfoWrapper();
@@ -56,6 +60,10 @@ export default class WordCard extends Control {
     this.renderCardExampleWrapper();
     this.renderControlButtons();
     this.listenEvents();
+  }
+
+  private getId() {
+    return this.wordCardInfo.id;
   }
 
   private renderCardNameWrapper(): void {
@@ -138,20 +146,46 @@ export default class WordCard extends Control {
     }
   }
 
+  async getUserWords(): Promise<void> {
+    await this.service.getHardUserWords();
+  }
+
+  async createUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<void> {
+    const createdUserWordResponse = await this.service.createUserWord(wordId, word);
+    if (createdUserWordResponse.status === 417) {
+      this.updateUserWord(wordId, word);
+    }
+  }
+
+  async updateUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<void> {
+    await this.service.changeUserWord(wordId, word);
+  }
+
+  async agregUserWord(wordId: string): Promise<void> {
+    await this.service.getUserAgrWord(wordId);
+  }
+
   private toggleToDifficult(): void {
     const popupsContainer = new Control(document.body, 'div', 'alert alert-info');
     console.log(this.node)
+    const cardId = this.getId();
+    this.agregUserWord(cardId);
     if (!this.isDifficult) {
       this.isDifficult = true;
+      this.node.querySelector('.difficult-word-button').innerHTML = 'Легкое';
       this.node.classList.add(this.difficultWordClassName);
       popupsContainer.node.innerHTML = 'Добавлено в сложные слова';
       this.hideAlert(popupsContainer);
+      this.createUserWord(cardId, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false } });
     } else if (this.isDifficult) {
       this.node.classList.remove(this.difficultWordClassName);
+      this.node.querySelector('.difficult-word-button').innerHTML = 'Сложное';
       this.isDifficult = false;
       popupsContainer.node.innerHTML = 'Удалено из сложных слов';
       this.hideAlert(popupsContainer);
+      this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false } });
     }
+    this.getUserWords();
   }
 
   hideAlert(currentNode: Control<HTMLElement>) {
@@ -160,14 +194,15 @@ export default class WordCard extends Control {
       }, 1000);
   }
 
-
-
-
   private toggleToLearnt(): void {
+    const cardId = this.getId();
+    this.agregUserWord(cardId);
     const popupsContainer = new Control(this.node, 'div', 'alert alert-info');
     if (!this.isLearnt) {
       this.isLearnt = true;
       this.node.classList.add(this.learntWordClassName);
+      this.createUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: true } });
+      this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: true } });
       popupsContainer.node.innerHTML = 'Добавлено в изученные слова';
       this.hideAlert(popupsContainer);
     } else if (this.isLearnt) {
@@ -175,6 +210,11 @@ export default class WordCard extends Control {
       this.isLearnt = false;
       popupsContainer.node.innerHTML = 'Удалено из изученных слов';
       this.hideAlert(popupsContainer);
+      if (this.isDifficult) {
+        this.updateUserWord(cardId, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false } });
+      } else {
+        this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false } });
+      }
     }
   }
 

@@ -2,9 +2,9 @@ import Control from '../../controls/control';
 import WordCard from './wordCard';
 import eBook from './eBook.html';
 import '../../css/eBook.css';
-import { IWordCard } from './IWordCard';
+import { IWordCard } from './ebookInterface';
 import WordsPagination from './wordsPagination';
-import GetWords from '../services/words/getWords';
+import WordsController from '../services/words/wordsController';
 import LocalStorage from '../services/words/localStorage';
 import '../../css/preloader.css';
 import preloadHtml from './preloader.html';
@@ -12,7 +12,7 @@ import preloadHtml from './preloader.html';
 export default class EBookSection extends Control {
   wordCards: WordCard[];
 
-  service: GetWords = new GetWords();
+  service: WordsController = new WordsController();
 
   localStorage: LocalStorage = new LocalStorage();
 
