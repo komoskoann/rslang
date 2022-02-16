@@ -44,7 +44,9 @@
   font-size: 1.2rem;
 }
 .level-cont:hover,
-.hard-word-cont:hover {
+.hard-word-cont:hover,
+.to-sprint:hover,
+.to-chalenge:hover {
   transform: scale(1.1);
   transition: 0.5s ease-in-out;
 }
@@ -96,6 +98,7 @@
   align-items: center;
   border: var(--main-border);
   border-radius: 10px;
+  cursor: pointer;
 }
 .to-sprint img,
 .to-chalenge img {

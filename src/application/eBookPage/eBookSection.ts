@@ -46,6 +46,11 @@ export default class EBookSection extends Control {
     this.enterUserPage();
     this.paginationWrapper.changePageNumber(this.node);
     this.renderHardWordsButton();
+    this.highlightСurrentEnglishLevel();
+  }
+
+  private highlightСurrentEnglishLevel() {
+    this.node.querySelector(`[data-level="${this.currentEnglishLevel}"]`).setAttribute('style', 'background-color: var(--main-color-rgba-50);');
   }
 
   private async getWords(page: number, group: number): Promise<void> {
@@ -64,21 +69,16 @@ export default class EBookSection extends Control {
       level.addEventListener(
         'click',
         function (instance: EBookSection) {
+          instance.node.querySelector(`[data-level="${instance.currentEnglishLevel}"]`).removeAttribute('style');
           instance.sourceEnglishLevel = instance.currentEnglishLevel;
           instance.currentEnglishLevel = +level.getAttribute('data-level');
           instance.currentWordsPage = instance.defaultWordsPage;
           instance.paginationWrapper.currentPage = instance.defaultWordsPage;
           instance.update();
-
-          level.setAttribute('style', 'background-color: rgba(255, 193, 7, 0.8);')
+          instance.highlightСurrentEnglishLevel();
         }.bind(null, this),
       );
     });
-  }
-
-  changeColorActiveLevel(e: Event) {
-    const level = e.target;
-    console.log(e, e.target);
   }
 
   private navPages(): void {
