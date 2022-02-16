@@ -75,4 +75,15 @@ export default class WordsController {
     });
     return rawResponse.json();
   }
+
+  async getUserAgrWords(page: number, group: number): Promise<IWordCard[]> {
+    const rawResponse = await fetch(`${this.url}/users/${app.currentUser.userId}/aggregatedWords?page=${page}&group=${group}&wordsPerPage=20`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${app.currentUser.token}`,
+        Accept: 'application/json',
+      },
+    });
+    return rawResponse.json().then((item) => item[0].paginatedResults.map((i: IResponseWord) => ({ ...i, id: i._id })));
+  }
 }

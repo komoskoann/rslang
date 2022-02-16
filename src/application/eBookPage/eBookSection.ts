@@ -31,6 +31,8 @@ export default class EBookSection extends Control {
 
   private paginationWrapper: WordsPagination;
 
+  words: IWordCard[];
+
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
     this.node.innerHTML = eBook;
@@ -58,9 +60,14 @@ export default class EBookSection extends Control {
     preloader.className = 'loader-wrapper';
     preloader.innerHTML = preloadHtml;
     this.wordCardsWrapper.node.append(preloader as HTMLElement);
-    const words: IWordCard[] = await this.service.getWords(page, group);
+    if(app.currentUser.isAuthenticated) {
+      this.words = await this.service.getUserAgrWords(page, group);
+    } else {
+      this.words = await this.service.getWords(page, group);
+    }
     this.wordCardsWrapper.node.lastElementChild.remove();
-    this.wordCards = words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word));
+    this.wordCards = this.words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word));
+
     this.wordCards.forEach((word) => word.render());
   }
 
