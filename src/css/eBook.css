@@ -38,6 +38,7 @@
   width: 830px;
 }
 .hard-word-cont {
+  display: none;
   width: 300px;
   padding-left: 40px;
   font-size: 1.2rem;
@@ -99,11 +100,14 @@
 .to-sprint img,
 .to-chalenge img {
   margin: 10px;
-  width: 120px; 
+  width: 120px;
   height: 80px;
 }
 .sprint-descript {
   margin: 5px 10px;
+}
+.selected-level {
+  background-color: rgba(255, 193, 7, 0.8);
 }
 @media (max-width: 860px) {
   .ebook-hard-cont{

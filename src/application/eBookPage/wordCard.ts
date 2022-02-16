@@ -3,6 +3,7 @@ import '../../css/word.css';
 import '../../css/popUp.css';
 import { IWordCard } from './ebookInterface';
 import WordsController from '../services/words/wordsController';
+import { app } from '../..';
 
 export interface IPlayList {
   title: string;
@@ -61,6 +62,7 @@ export default class WordCard extends Control {
     this.renderCardExampleWrapper();
     this.renderControlButtons();
     this.listenEvents();
+    this.renderToggleButtons();
   }
 
   private getId() {
@@ -215,6 +217,12 @@ export default class WordCard extends Control {
       } else {
         this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false } });
       }
+    }
+  }
+
+  private renderToggleButtons() {
+    if(app.currentUser.isAuthenticated) {
+      this.controlButtonsWrapper.node.style.display = 'flex';
     }
   }
 

@@ -8,6 +8,7 @@ import WordsController from '../services/words/wordsController';
 import LocalStorage from '../services/words/localStorage';
 import '../../css/preloader.css';
 import preloadHtml from './preloader.html';
+import { app } from '../..';
 
 export default class EBookSection extends Control {
   wordCards: WordCard[];
@@ -44,6 +45,7 @@ export default class EBookSection extends Control {
     this.navPages();
     this.enterUserPage();
     this.paginationWrapper.changePageNumber(this.node);
+    this.renderHardWordsButton();
   }
 
   private async getWords(page: number, group: number): Promise<void> {
@@ -67,9 +69,16 @@ export default class EBookSection extends Control {
           instance.currentWordsPage = instance.defaultWordsPage;
           instance.paginationWrapper.currentPage = instance.defaultWordsPage;
           instance.update();
+
+          level.setAttribute('style', 'background-color: rgba(255, 193, 7, 0.8);')
         }.bind(null, this),
       );
     });
+  }
+
+  changeColorActiveLevel(e: Event) {
+    const level = e.target;
+    console.log(e, e.target);
   }
 
   private navPages(): void {
@@ -134,5 +143,11 @@ export default class EBookSection extends Control {
       top: scroolYValue,
       behavior: 'auto',
     });
+  }
+
+  private renderHardWordsButton() {
+    if(app.currentUser.isAuthenticated) {
+      document.querySelector('.hard-word-cont').setAttribute('style', 'display: flex');
+    }
   }
 }

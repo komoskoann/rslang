@@ -63,8 +63,8 @@ export default class AuthorizationForm extends Control {
       app.currentUser.signOut();
       this.openAuthorizationButton.textContent = 'Войти';
       this.avatar.destroy();
-      document.querySelectorAll('.control-buttons-wrapper').forEach(button => button.setAttribute('style', 'display: none'));
       this.showSignOutAlert();
+      this.hideOptionsFromUnauthorized();
       return;
     }
     this.closeAutorizationButton = this.searchCloseAuthorizationButton();
@@ -169,7 +169,7 @@ export default class AuthorizationForm extends Control {
       this.closeAuthorizationForm();
       console.log(content);
       this.addAvatar();
-      document.querySelectorAll('.control-buttons-wrapper').forEach(button => button.setAttribute('style', 'display: flex'));
+      this.showOptionsForAuthorized();
       this.showSignInAlert();
     }
   };
@@ -206,4 +206,13 @@ export default class AuthorizationForm extends Control {
       }, 1300);
   }
 
+  private hideOptionsFromUnauthorized() {
+    document.querySelectorAll('.control-buttons-wrapper').forEach(button => button.setAttribute('style', 'display: none'));
+    document.querySelector('.hard-word-cont')?.setAttribute('style', 'display: none');
+  }
+
+  private showOptionsForAuthorized() {
+    document.querySelectorAll('.control-buttons-wrapper').forEach(button => button.setAttribute('style', 'display: flex'));
+    document.querySelector('.hard-word-cont')?.setAttribute('style', 'display: flex');
+  }
 }
