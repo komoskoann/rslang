@@ -63,6 +63,8 @@ export default class AuthorizationForm extends Control {
       app.currentUser.signOut();
       this.openAuthorizationButton.textContent = 'Войти';
       this.avatar.destroy();
+      document.querySelectorAll('.control-buttons-wrapper').forEach(button => button.setAttribute('style', 'display: none'));
+      this.showSignOutAlert();
       return;
     }
     this.closeAutorizationButton = this.searchCloseAuthorizationButton();
@@ -167,6 +169,8 @@ export default class AuthorizationForm extends Control {
       this.closeAuthorizationForm();
       console.log(content);
       this.addAvatar();
+      document.querySelectorAll('.control-buttons-wrapper').forEach(button => button.setAttribute('style', 'display: flex'));
+      this.showSignInAlert();
     }
   };
 
@@ -185,4 +189,21 @@ export default class AuthorizationForm extends Control {
       this.signInAction(e);
     }
   };
+
+  private showSignInAlert() {
+    const popupsContainer = new Control(document.body, 'div', 'alert alert-info');
+    popupsContainer.node.innerHTML = 'Авторизация прошла успешно';
+    setTimeout(function(){
+        popupsContainer.node.remove();
+      }, 1300);
+  }
+
+  private showSignOutAlert() {
+    const popupsContainer = new Control(document.body, 'div', 'alert alert-info');
+    popupsContainer.node.innerHTML = 'Вы больше не авторизованы';
+    setTimeout(function(){
+        popupsContainer.node.remove();
+      }, 1300);
+  }
+
 }

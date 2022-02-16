@@ -4,7 +4,6 @@ import '../../css/popUp.css';
 import { IWordCard } from './ebookInterface';
 import WordsController from '../services/words/wordsController';
 
-
 export interface IPlayList {
   title: string;
   src: string;
@@ -42,6 +41,8 @@ export default class WordCard extends Control {
   private difficultWordClassName: string = 'difficult-word-card';
 
   private learntWordClassName: string = 'learnt-word-card';
+
+  private controlButtonsWrapper: Control<HTMLElement>;
 
   constructor(parentNode: HTMLElement, wordCardInfo: IWordCard) {
     super(parentNode, 'div', 'word-card-wrapper', '');
@@ -100,9 +101,9 @@ export default class WordCard extends Control {
   }
 
   private renderControlButtons(): void {
-    const controlButtonsWrapper = new Control(this.node, 'div', 'control-buttons-wrapper');
-    this.difficultWordButton = new Control(controlButtonsWrapper.node, 'button', 'difficult-word-button', 'Сложное');
-    this.learntWordButton = new Control(controlButtonsWrapper.node, 'button', 'delete-word-button', 'Изученное');
+    this.controlButtonsWrapper = new Control(this.node, 'div', 'control-buttons-wrapper');
+    this.difficultWordButton = new Control(this.controlButtonsWrapper.node, 'button', 'difficult-word-button', 'Сложное');
+    this.learntWordButton = new Control(this.controlButtonsWrapper.node, 'button', 'delete-word-button', 'Изученное');
   }
 
   private playAudio(): void {
@@ -167,7 +168,6 @@ export default class WordCard extends Control {
 
   private toggleToDifficult(): void {
     const popupsContainer = new Control(document.body, 'div', 'alert alert-info');
-    console.log(this.node)
     const cardId = this.getId();
     this.agregUserWord(cardId);
     if (!this.isDifficult) {

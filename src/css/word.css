@@ -121,7 +121,7 @@
 }
 
 .control-buttons-wrapper {
-  display: flex;
+  display: none;
   justify-content: space-evenly;
   margin-bottom: 15px;
 }
