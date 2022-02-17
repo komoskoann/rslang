@@ -115,6 +115,7 @@
 .page-learnt {
   background-image: url(../assets/eBookPage/background.png);
   background-repeat: repeat;
+  background-size: 800px;
 }
 @media (max-width: 860px) {
   .ebook-hard-cont{
