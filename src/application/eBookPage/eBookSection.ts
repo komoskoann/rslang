@@ -53,11 +53,12 @@ export default class EBookSection extends Control {
     this.paginationWrapper.changePageNumber(this.node);
     this.renderHardWordsButton();
     this.highlightCurrentEnglishLevel();
-
   }
 
   private highlightCurrentEnglishLevel() {
-    this.node.querySelector(`[data-level="${this.currentEnglishLevel}"]`).setAttribute('style', 'background-color: var(--main-color-rgba-50);');
+    this.node
+      .querySelector(`[data-level="${this.currentEnglishLevel}"]`)
+      .setAttribute('style', 'background-color: var(--main-color-rgba-50);');
   }
 
   private async getWords(page: number, group: number): Promise<void> {
@@ -65,16 +66,18 @@ export default class EBookSection extends Control {
     preloader.className = 'loader-wrapper';
     preloader.innerHTML = preloadHtml;
     this.wordCardsWrapper.node.append(preloader as HTMLElement);
-    if(getAuthorizedUser()) {
+    if (getAuthorizedUser()) {
       this.words = await this.service.getUserAgrWords(page, group);
     } else {
       this.words = await this.service.getWords(page, group);
     }
     this.wordCardsWrapper.node.lastElementChild.remove();
-    this.wordCards = this.words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word, this.updateTotalCounter.bind(this)));
+    this.wordCards = this.words.map(
+      (word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word, this.updateTotalCounter.bind(this)),
+    );
     this.wordCards.forEach((word) => word.render());
-    this.difficultWordsAmount = this.words.filter(word => word.userWord?.optional?.isDifficult).length;
-    this.learntWordsAmount = this.words.filter(word => word.userWord?.optional?.isLearnt).length;
+    this.difficultWordsAmount = this.words.filter((word) => word.userWord?.optional?.isDifficult).length;
+    this.learntWordsAmount = this.words.filter((word) => word.userWord?.optional?.isLearnt).length;
     this.highlightLearntPage();
   }
 
@@ -151,7 +154,8 @@ export default class EBookSection extends Control {
 
   private scrollWindow(oldWindowPageYBottom: number): void {
     let scrollYValue =
-      oldWindowPageYBottom < document.querySelector('.footer').clientHeight + document.querySelector('.pagination-wrapper').clientHeight
+      oldWindowPageYBottom <
+      document.querySelector('.footer').clientHeight + document.querySelector('.pagination-wrapper').clientHeight
         ? document.body.clientHeight - oldWindowPageYBottom - document.documentElement.clientHeight
         : window.pageYOffset;
     window.scrollTo({
@@ -161,23 +165,31 @@ export default class EBookSection extends Control {
   }
 
   private renderHardWordsButton() {
-    if(JSON.parse(localStorage.getItem('currentUser'))) {
+    if (JSON.parse(localStorage.getItem('currentUser'))) {
       document.querySelector('.hard-word-cont').setAttribute('style', 'display: flex');
     }
   }
 
   updateTotalCounter(counterChanged: string, operator: string) {
     if (counterChanged === 'difficult') {
-      operator === '+' ? this.difficultWordsAmount += 1 : this.difficultWordsAmount -= 1;
+      if (operator === '+') {
+        this.difficultWordsAmount += 1;
+      } else {
+        this.difficultWordsAmount -= 1;
+      }
     }
     if (counterChanged === 'learnt') {
-      operator === '+' ? this.learntWordsAmount += 1 : this.learntWordsAmount -= 1;
+      if (operator === '+') {
+        this.learntWordsAmount += 1;
+      } else {
+        this.learntWordsAmount -= 1;
+      }
     }
-    this.highlightLearntPage()
+    this.highlightLearntPage();
   }
 
   highlightLearntPage() {
-    if (this.learntWordsAmount === 20 || (this.difficultWordsAmount + this.learntWordsAmount) === 20) {
+    if (this.learntWordsAmount === 20 || this.difficultWordsAmount + this.learntWordsAmount === 20) {
       this.wordCardsWrapper.node.classList.add('page-learnt');
       document.querySelector('.choose-page-number').classList.add('learnt-page-number');
       document.querySelector('.games-nav').setAttribute('style', 'pointer-events: none');

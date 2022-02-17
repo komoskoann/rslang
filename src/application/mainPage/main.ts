@@ -27,6 +27,6 @@ export default class Main extends Control {
   private navigateApp() {
     window.onpopstate = () => {
       this.resolvePaths(location.hash.split('/')[1]);
-    }
+    };
   }
 }

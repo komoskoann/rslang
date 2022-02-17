@@ -16,7 +16,9 @@ export default class WordsController {
 
   async getHardUserWords(): Promise<IWordCard[]> {
     const rawResponse = await fetch(
-      `${this.url}/users/${getAuthorizedUser().userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`,
+      `${this.url}/users/${
+        getAuthorizedUser().userId
+      }/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`,
       {
         method: 'GET',
         headers: {
@@ -77,13 +79,16 @@ export default class WordsController {
   }
 
   async getUserAgrWords(page: number, group: number): Promise<IWordCard[]> {
-    const rawResponse = await fetch(`${this.url}/users/${getAuthorizedUser().userId}/aggregatedWords?page=${page}&group=${group}&wordsPerPage=20`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${getAuthorizedUser().token}`,
-        Accept: 'application/json',
+    const rawResponse = await fetch(
+      `${this.url}/users/${getAuthorizedUser().userId}/aggregatedWords?page=${page}&group=${group}&wordsPerPage=20`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${getAuthorizedUser().token}`,
+          Accept: 'application/json',
+        },
       },
-    });
+    );
     return rawResponse.json().then((item) => item[0].paginatedResults.map((i: IResponseWord) => ({ ...i, id: i._id })));
   }
 }

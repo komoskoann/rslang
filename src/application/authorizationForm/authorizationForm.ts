@@ -193,28 +193,32 @@ export default class AuthorizationForm extends Control {
   private showSignInAlert() {
     const popupsContainer = new Control(document.body, 'div', 'alert alert-info');
     popupsContainer.node.innerHTML = 'Авторизация прошла успешно';
-    setTimeout(function(){
-        popupsContainer.node.remove();
-      }, 1300);
+    setTimeout(function () {
+      popupsContainer.node.remove();
+    }, 1300);
     location.reload();
   }
 
   private showSignOutAlert() {
     const popupsContainer = new Control(document.body, 'div', 'alert alert-info');
     popupsContainer.node.innerHTML = 'Вы больше не авторизованы';
-    setTimeout(function(){
-        popupsContainer.node.remove();
-      }, 1300);
+    setTimeout(function () {
+      popupsContainer.node.remove();
+    }, 1300);
     location.reload();
   }
 
   private hideOptionsFromUnauthorized() {
-    document.querySelectorAll('.control-buttons-wrapper').forEach(button => button.setAttribute('style', 'display: none'));
+    document
+      .querySelectorAll('.control-buttons-wrapper')
+      .forEach((button) => button.setAttribute('style', 'display: none'));
     document.querySelector('.hard-word-cont')?.setAttribute('style', 'display: none');
   }
 
   private showOptionsForAuthorized() {
-    document.querySelectorAll('.control-buttons-wrapper').forEach(button => button.setAttribute('style', 'display: flex'));
+    document
+      .querySelectorAll('.control-buttons-wrapper')
+      .forEach((button) => button.setAttribute('style', 'display: flex'));
     document.querySelector('.hard-word-cont')?.setAttribute('style', 'display: flex');
   }
 }

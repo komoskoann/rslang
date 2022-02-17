@@ -6,4 +6,4 @@ export const getAuthorizedUser = () => {
   } else {
     return JSON.parse(localStorage.getItem('currentUser'));
   }
-}
+};
