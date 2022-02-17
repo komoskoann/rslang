@@ -31,6 +31,10 @@ export default class EBookSection extends Control {
 
   private paginationWrapper: WordsPagination;
 
+  private difficultWordsAmount: number;
+
+  private learntWordsAmount: number;
+
   words: IWordCard[];
 
   constructor(parentNode: HTMLElement) {
@@ -49,6 +53,7 @@ export default class EBookSection extends Control {
     this.paginationWrapper.changePageNumber(this.node);
     this.renderHardWordsButton();
     this.highlightCurrentEnglishLevel();
+
   }
 
   private highlightCurrentEnglishLevel() {
@@ -68,7 +73,9 @@ export default class EBookSection extends Control {
     this.wordCardsWrapper.node.lastElementChild.remove();
     this.wordCards = this.words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word));
     this.wordCards.forEach((word) => word.render());
-    console.log(this.words)
+    this.difficultWordsAmount = this.words.filter(word => word.userWord?.optional?.isDifficult).length;
+    this.learntWordsAmount = this.words.filter(word => word.userWord?.optional?.isLearnt).length;
+    this.highlightLearntPage();
   }
 
   private navLevels(): void {
@@ -139,6 +146,7 @@ export default class EBookSection extends Control {
     if (this.currentEnglishLevel !== 6 && this.sourceEnglishLevel !== 6) {
       this.scrollWindow(oldWindowPageYBottom);
     }
+    this.highlightLearntPage();
   }
 
   private scrollWindow(oldWindowPageYBottom: number): void {
@@ -155,6 +163,18 @@ export default class EBookSection extends Control {
   private renderHardWordsButton() {
     if(JSON.parse(localStorage.getItem('currentUser'))) {
       document.querySelector('.hard-word-cont').setAttribute('style', 'display: flex');
+    }
+  }
+
+  private highlightLearntPage() {
+    if (this.learntWordsAmount === 20 || (this.difficultWordsAmount + this.learntWordsAmount) === 20) {
+      this.wordCardsWrapper.node.classList.add('page-learnt');
+      document.querySelector('.choose-page-number').classList.add('learnt-page-number');
+      document.querySelector('.games-nav').setAttribute('style', 'pointer-events: none');
+    } else {
+      this.wordCardsWrapper.node.classList.remove('page-learnt');
+      document.querySelector('.choose-page-number').classList.remove('learnt-page-number');
+      document.querySelector('.games-nav').setAttribute('style', 'pointer-events: auto');
     }
   }
 }
