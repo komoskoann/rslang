@@ -76,10 +76,11 @@ export default class EBookSection extends Control {
         buttonAbout.className = 'table-button table-button__about';
         rowButtonDeleteCell.className = 'button-container col-button-delete';
         rowButtonAboutCell.className = 'button-container col-button-about';
-        rowNumberCell.textContent = String(i+1);
-        rowWordCell.textContent = words[i].word.slice(0,1).toUpperCase() + words[i].word.slice(1);
+        rowNumberCell.textContent = String(i + 1);
+        rowWordCell.textContent = words[i].word.slice(0, 1).toUpperCase() + words[i].word.slice(1);
         rowTranscriptionCell.textContent = words[i].transcription;
-        rowTranslateCell.textContent = words[i].wordTranslate.slice(0,1).toUpperCase() + words[i].wordTranslate.slice(1);
+        rowTranslateCell.textContent =
+          words[i].wordTranslate.slice(0, 1).toUpperCase() + words[i].wordTranslate.slice(1);
         rowButtonDeleteCell.appendChild(buttonDelete);
         rowButtonAboutCell.appendChild(buttonAbout);
       }
@@ -100,7 +101,7 @@ export default class EBookSection extends Control {
       setTimeout(() => dictionaryCard.node.classList.add('dictionary__card_active'), 0);
       setTimeout(() => window.addEventListener('click', this.closeWordCard), 0);
     }
-  }
+  };
 
   private closeWordCard = (): void => {
     const closeButton = (event.target as Element).closest('.dictionary-card-close-button') as HTMLButtonElement;
@@ -112,7 +113,7 @@ export default class EBookSection extends Control {
       }
       window.removeEventListener('click', this.closeWordCard);
     }
-  }
+  };
 
   private toggleHardWord = async (event: MouseEvent): Promise<void> => {
     const target = (event.target as Element).closest('.table-button__delete') as HTMLButtonElement;
@@ -122,19 +123,31 @@ export default class EBookSection extends Control {
     } else return;
     const index = +target.closest('.table-row').querySelector('.col1-point').innerHTML - 1;
     if (row.classList.contains('removed')) {
-      await this.service.changeUserWord(this.hardWordsDictionary[index].id, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false }});
+      await this.service.changeUserWord(this.hardWordsDictionary[index].id, {
+        difficulty: 'hard',
+        optional: { isDifficult: true, isLearnt: false },
+      });
       row.classList.remove('removed');
       row.style.setProperty('color', 'var(--text-color)');
-      row.querySelectorAll('.table-button').forEach(item => (item as HTMLButtonElement).style.setProperty('filter', ''));
-      target.style.backgroundImage = 'url(\'../assets/ebook-page/delete-button.png\')';
+      row
+        .querySelectorAll('.table-button')
+        .forEach((item) => (item as HTMLButtonElement).style.setProperty('filter', ''));
+      target.style.backgroundImage = "url('../assets/ebook-page/delete-button.png')";
     } else {
-      await this.service.changeUserWord(this.hardWordsDictionary[index].id, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false }});
+      await this.service.changeUserWord(this.hardWordsDictionary[index].id, {
+        difficulty: 'easy',
+        optional: { isDifficult: false, isLearnt: false },
+      });
       row.style.setProperty('color', 'var(--autorization-border-color)');
-      row.querySelectorAll('.table-button').forEach(item => (item as HTMLButtonElement).style.setProperty('filter', 'var(--dictionary-table-button-filter-color-hover)'));
+      row
+        .querySelectorAll('.table-button')
+        .forEach((item) =>
+          (item as HTMLButtonElement).style.setProperty('filter', 'var(--dictionary-table-button-filter-color-hover)'),
+        );
       row.classList.add('removed');
-      target.style.backgroundImage = 'url(\'../assets/ebook-page/revert-button.png\')';
+      target.style.backgroundImage = "url('../assets/ebook-page/revert-button.png')";
     }
-  }
+  };
 
   private async getWords(page: number, group: number): Promise<void> {
     const preloader = document.createElement('div');
@@ -236,7 +249,8 @@ export default class EBookSection extends Control {
 
   private scrollWindow(oldWindowPageYBottom: number): void {
     let scroolYValue =
-      oldWindowPageYBottom < document.querySelector('.footer').clientHeight + document.querySelector('.pagination-wrapper').clientHeight
+      oldWindowPageYBottom <
+      document.querySelector('.footer').clientHeight + document.querySelector('.pagination-wrapper').clientHeight
         ? document.body.clientHeight - oldWindowPageYBottom - document.documentElement.clientHeight
         : window.pageYOffset;
     window.scrollTo({
