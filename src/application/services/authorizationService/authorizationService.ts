@@ -1,11 +1,11 @@
-interface IAuthirozationRequestInfo {
+interface IAuthorizationRequestInfo {
   email: string;
   password: string;
   name?: string;
 }
 
-export default class AutorizationService {
-  async signIn(user: IAuthirozationRequestInfo): Promise<Response> {
+export default class AuthorizationService {
+  async signIn(user: IAuthorizationRequestInfo): Promise<Response> {
     return fetch('https://rslangapplication.herokuapp.com/signin', {
       method: 'POST',
       headers: {
@@ -16,7 +16,7 @@ export default class AutorizationService {
     });
   }
 
-  async signUp(user: IAuthirozationRequestInfo): Promise<Response> {
+  async signUp(user: IAuthorizationRequestInfo): Promise<Response> {
     return fetch('https://rslangapplication.herokuapp.com/users', {
       method: 'POST',
       headers: {

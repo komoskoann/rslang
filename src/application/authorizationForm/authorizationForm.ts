@@ -1,24 +1,24 @@
 import Control from '../../controls/control';
-import AutorizationService from '../services/autorizationService/autorizationService/autorizationService';
-import autorizationFormHTML from './autorizationForm.html';
-import autorizationHTML from './autorizationComponent.html';
+import AuthorizationService from '../services/authorizationService/authorizationService';
+import authorizationFormHTML from './authorizationForm.html';
+import authorizationHTML from './authorizationComponent.html';
 import registrationHTML from './registrationComponent.html';
 import Avatar from '../mainPage/avatar';
-import '../../css/autorizationForm.css';
+import '../../css/authorizationForm.css';
 import { app } from '../..';
 
 export default class AuthorizationForm extends Control {
-  private autorizationService: AutorizationService;
+  private authorizationService: AuthorizationService;
 
   private openAuthorizationButton: HTMLButtonElement;
 
-  private closeAutorizationButton: HTMLButtonElement;
+  private closeAuthorizationButton: HTMLButtonElement;
 
   private submitButton: HTMLButtonElement;
 
   private changeComponentButton: HTMLButtonElement;
 
-  private autorizationComponent: string;
+  private authorizationComponent: string;
 
   private registrationComponent: string;
 
@@ -36,10 +36,10 @@ export default class AuthorizationForm extends Control {
     this.openAuthorizationButton.textContent =
       JSON.parse(localStorage.getItem('currentUser'))?.message === 'Authenticated' ? 'Выйти' : 'Войти';
     this.openAuthorizationButton.addEventListener('click', this.openAuthorizationForm);
-    this.node.innerHTML = autorizationFormHTML;
-    this.autorizationComponent = autorizationHTML;
+    this.node.innerHTML = authorizationFormHTML;
+    this.authorizationComponent = authorizationHTML;
     this.registrationComponent = registrationHTML;
-    this.autorizationService = new AutorizationService();
+    this.authorizationService = new AuthorizationService();
     this.addAvatar();
   }
 
@@ -67,9 +67,9 @@ export default class AuthorizationForm extends Control {
       this.hideOptionsFromUnauthorized();
       return;
     }
-    this.closeAutorizationButton = this.searchCloseAuthorizationButton();
+    this.closeAuthorizationButton = this.searchCloseAuthorizationButton();
     this.node.classList.add('active');
-    window.addEventListener('click', this.checkMouseclick);
+    window.addEventListener('click', this.checkMouseClick);
     this.openAuthorizationComponent();
   };
 
@@ -108,20 +108,20 @@ export default class AuthorizationForm extends Control {
 
   private closeAuthorizationForm(): void {
     this.node.classList.remove('active');
-    window.removeEventListener('click', this.checkMouseclick);
+    window.removeEventListener('click', this.checkMouseClick);
   }
 
-  private checkMouseclick = (e: MouseEvent): void => {
+  private checkMouseClick = (e: MouseEvent): void => {
     const item = e.target as HTMLElement;
     if (
-      item == this.closeAutorizationButton ||
+      item == this.closeAuthorizationButton ||
       (!item.closest('.authorizationForm') && !item.closest('.login') && !item.closest('.button-changeComponent'))
     ) {
       this.closeAuthorizationForm();
     }
   };
 
-  private openRegistationComponent = (e: Event): void => {
+  private openRegistrationComponent = (e: Event): void => {
     e.preventDefault();
     const form = document.querySelector('.authorizationForm') as HTMLElement;
     form.firstElementChild.firstElementChild.innerHTML = this.registrationComponent;
@@ -139,11 +139,11 @@ export default class AuthorizationForm extends Control {
 
   private openAuthorizationComponent = (e?: Event): void => {
     e?.preventDefault();
-    this.node.firstElementChild.firstElementChild.innerHTML = this.autorizationComponent;
+    this.node.firstElementChild.firstElementChild.innerHTML = this.authorizationComponent;
     this.submitButton = this.node.querySelector('.button-signin');
     this.changeComponentButton = this.node.querySelector('.button-changeComponent');
     this.submitButton.addEventListener('click', this.signInAction);
-    this.changeComponentButton.addEventListener('click', this.openRegistationComponent);
+    this.changeComponentButton.addEventListener('click', this.openRegistrationComponent);
     this.inputEmail = document.getElementById('authorizationFormInputEmail') as HTMLInputElement;
     this.inputPassword = document.getElementById('authorizationFormInputPassword') as HTMLInputElement;
     this.inputEmail.addEventListener('input', this.activateSubmitButton);
@@ -154,7 +154,7 @@ export default class AuthorizationForm extends Control {
     e.preventDefault();
     const email = (document.getElementById('authorizationFormInputEmail') as HTMLInputElement).value;
     const password = (document.getElementById('authorizationFormInputPassword') as HTMLInputElement).value;
-    const response = await this.autorizationService.signIn({ email, password });
+    const response = await this.authorizationService.signIn({ email, password });
     if (response.status === 200) {
       this.openAuthorizationButton.innerHTML = 'Выйти';
       const content = await response.json();
@@ -182,7 +182,7 @@ export default class AuthorizationForm extends Control {
       .join(' ');
     const email = (document.getElementById('authorizationFormInputEmail') as HTMLInputElement).value;
     const password = (document.getElementById('authorizationFormInputPassword') as HTMLInputElement).value;
-    const response = await this.autorizationService.signUp({ email, password, name });
+    const response = await this.authorizationService.signUp({ email, password, name });
     if (response.status === 200) {
       const content = await response.json();
       console.log(content);
@@ -196,6 +196,7 @@ export default class AuthorizationForm extends Control {
     setTimeout(function(){
         popupsContainer.node.remove();
       }, 1300);
+    location.reload();
   }
 
   private showSignOutAlert() {
@@ -204,6 +205,7 @@ export default class AuthorizationForm extends Control {
     setTimeout(function(){
         popupsContainer.node.remove();
       }, 1300);
+    location.reload();
   }
 
   private hideOptionsFromUnauthorized() {

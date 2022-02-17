@@ -23,9 +23,9 @@ export default class Router {
   private aboutTeam: string = 'aboutTeam';
 
   resolve(path?: string) {
-    this.path = path || this.defaultPath;
+    this.path = path || location.hash.split('/')[1] || this.defaultPath;
     let resolved;
-    switch (path) {
+    switch (this.path) {
       case this.main:
         resolved = MainSection;
         break;

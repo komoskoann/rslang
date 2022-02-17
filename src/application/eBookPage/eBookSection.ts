@@ -8,7 +8,7 @@ import WordsController from '../services/words/wordsController';
 import LocalStorage from '../services/words/localStorage';
 import '../../css/preloader.css';
 import preloadHtml from './preloader.html';
-import { app } from '../..';
+import { app } from '../../';
 
 export default class EBookSection extends Control {
   wordCards: WordCard[];
@@ -48,10 +48,10 @@ export default class EBookSection extends Control {
     this.enterUserPage();
     this.paginationWrapper.changePageNumber(this.node);
     this.renderHardWordsButton();
-    this.highlightСurrentEnglishLevel();
+    this.highlightCurrentEnglishLevel();
   }
 
-  private highlightСurrentEnglishLevel() {
+  private highlightCurrentEnglishLevel() {
     this.node.querySelector(`[data-level="${this.currentEnglishLevel}"]`).setAttribute('style', 'background-color: var(--main-color-rgba-50);');
   }
 
@@ -60,7 +60,7 @@ export default class EBookSection extends Control {
     preloader.className = 'loader-wrapper';
     preloader.innerHTML = preloadHtml;
     this.wordCardsWrapper.node.append(preloader as HTMLElement);
-    if(app.currentUser.isAuthenticated) {
+    if(app?.currentUser?.isAuthenticated) {
       this.words = await this.service.getUserAgrWords(page, group);
     } else {
       this.words = await this.service.getWords(page, group);
@@ -82,7 +82,7 @@ export default class EBookSection extends Control {
           instance.currentWordsPage = instance.defaultWordsPage;
           instance.paginationWrapper.currentPage = instance.defaultWordsPage;
           instance.update();
-          instance.highlightСurrentEnglishLevel();
+          instance.highlightCurrentEnglishLevel();
         }.bind(null, this),
       );
     });
@@ -142,18 +142,18 @@ export default class EBookSection extends Control {
   }
 
   private scrollWindow(oldWindowPageYBottom: number): void {
-    let scroolYValue =
+    let scrollYValue =
       oldWindowPageYBottom < document.querySelector('.footer').clientHeight + document.querySelector('.pagination-wrapper').clientHeight
         ? document.body.clientHeight - oldWindowPageYBottom - document.documentElement.clientHeight
         : window.pageYOffset;
     window.scrollTo({
-      top: scroolYValue,
+      top: scrollYValue,
       behavior: 'auto',
     });
   }
 
   private renderHardWordsButton() {
-    if(app.currentUser.isAuthenticated) {
+    if(app?.currentUser?.isAuthenticated) {
       document.querySelector('.hard-word-cont').setAttribute('style', 'display: flex');
     }
   }

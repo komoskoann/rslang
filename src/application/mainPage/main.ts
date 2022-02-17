@@ -3,17 +3,14 @@ import Navbar from '../mainPage/navbar';
 import Router from '../router';
 
 export default class Main extends Control {
-  navbar: Navbar;
-
   router: Router = new Router();
 
   section: Control<HTMLElement>;
 
   navButtons: NodeListOf<ChildNode>;
 
-  constructor(parentNode: HTMLElement, navButtons: NodeListOf<ChildNode>) {
+  constructor(parentNode: HTMLElement) {
     super(parentNode, 'main', 'main', '');
-    this.navButtons = navButtons;
   }
 
   call() {
@@ -31,13 +28,8 @@ export default class Main extends Control {
   }
 
   private navigateApp() {
-    this.navButtons.forEach((navButton) => {
-      navButton.addEventListener(
-        'click',
-        function (mainInstance: Main) {
-          mainInstance.resolvePaths((navButton as HTMLElement).id);
-        }.bind(null, this),
-      );
-    });
+    window.onpopstate = () => {
+      this.resolvePaths(location.hash.split('/')[1]);
+    }
   }
 }
