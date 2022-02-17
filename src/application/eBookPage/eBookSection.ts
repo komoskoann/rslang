@@ -68,6 +68,7 @@ export default class EBookSection extends Control {
     this.wordCardsWrapper.node.lastElementChild.remove();
     this.wordCards = this.words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word));
     this.wordCards.forEach((word) => word.render());
+    console.log(this.words)
   }
 
   private navLevels(): void {

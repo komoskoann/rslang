@@ -50,10 +50,14 @@ export default class WordCard extends Control {
     this.container = new Control(this.node, 'div');
     this.isDifficult = !!wordCardInfo.userWord?.optional?.isDifficult;
     if(this.isDifficult) {
-      this.node.classList.add(this.difficultWordClassName)
+      this.node.classList.add(this.difficultWordClassName);
     }
-    this.isLearnt = false;
+    this.isLearnt = !!wordCardInfo.userWord?.optional?.isLearnt;
+    if(this.isLearnt) {
+      this.node.classList.add(this.learntWordClassName);
+    }
     this.wordCardInfo = wordCardInfo;
+
   }
 
   render(): void {
