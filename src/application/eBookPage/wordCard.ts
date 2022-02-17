@@ -45,7 +45,9 @@ export default class WordCard extends Control {
 
   private controlButtonsWrapper: Control<HTMLElement>;
 
-  constructor(parentNode: HTMLElement, wordCardInfo: IWordCard) {
+  callBack: (a: string, b: string) => void;
+
+  constructor(parentNode: HTMLElement, wordCardInfo: IWordCard, callBack: (a: string, b: string) => void) {
     super(parentNode, 'div', 'word-card-wrapper', '');
     this.container = new Control(this.node, 'div');
     this.isDifficult = !!wordCardInfo.userWord?.optional?.isDifficult;
@@ -57,7 +59,7 @@ export default class WordCard extends Control {
       this.node.classList.add(this.learntWordClassName);
     }
     this.wordCardInfo = wordCardInfo;
-
+    this.callBack = callBack;
   }
 
   render(): void {
@@ -186,6 +188,7 @@ export default class WordCard extends Control {
       popupsContainer.node.innerHTML = 'Добавлено в сложные слова';
       this.hideAlert(popupsContainer);
       this.createUserWord(cardId, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false } });
+      this.callBack('difficult', '+');
     } else if (this.isDifficult) {
       this.node.classList.remove(this.difficultWordClassName);
       this.node.querySelector('.difficult-word-button').innerHTML = 'Сложное';
@@ -193,7 +196,9 @@ export default class WordCard extends Control {
       popupsContainer.node.innerHTML = 'Удалено из сложных слов';
       this.hideAlert(popupsContainer);
       this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false } });
+      this.callBack('difficult', '-');
     }
+
     this.getUserWords();
   }
 
@@ -214,11 +219,13 @@ export default class WordCard extends Control {
       this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: true } });
       popupsContainer.node.innerHTML = 'Добавлено в изученные слова';
       this.hideAlert(popupsContainer);
+      this.callBack('learnt', '+');
     } else if (this.isLearnt) {
       this.node.classList.remove(this.learntWordClassName);
       this.isLearnt = false;
       popupsContainer.node.innerHTML = 'Удалено из изученных слов';
       this.hideAlert(popupsContainer);
+      this.callBack('learnt', '-');
       if (this.isDifficult) {
         this.updateUserWord(cardId, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false } });
       } else {

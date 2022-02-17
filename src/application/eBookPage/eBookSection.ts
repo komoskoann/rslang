@@ -71,7 +71,7 @@ export default class EBookSection extends Control {
       this.words = await this.service.getWords(page, group);
     }
     this.wordCardsWrapper.node.lastElementChild.remove();
-    this.wordCards = this.words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word));
+    this.wordCards = this.words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word, this.updateTotalCounter.bind(this)));
     this.wordCards.forEach((word) => word.render());
     this.difficultWordsAmount = this.words.filter(word => word.userWord?.optional?.isDifficult).length;
     this.learntWordsAmount = this.words.filter(word => word.userWord?.optional?.isLearnt).length;
@@ -166,7 +166,17 @@ export default class EBookSection extends Control {
     }
   }
 
-  private highlightLearntPage() {
+  updateTotalCounter(counterChanged: string, operator: string) {
+    if (counterChanged === 'difficult') {
+      operator === '+' ? this.difficultWordsAmount += 1 : this.difficultWordsAmount -= 1;
+    }
+    if (counterChanged === 'learnt') {
+      operator === '+' ? this.learntWordsAmount += 1 : this.learntWordsAmount -= 1;
+    }
+    this.highlightLearntPage()
+  }
+
+  highlightLearntPage() {
     if (this.learntWordsAmount === 20 || (this.difficultWordsAmount + this.learntWordsAmount) === 20) {
       this.wordCardsWrapper.node.classList.add('page-learnt');
       document.querySelector('.choose-page-number').classList.add('learnt-page-number');
