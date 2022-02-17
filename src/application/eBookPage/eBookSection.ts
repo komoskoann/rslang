@@ -8,7 +8,7 @@ import WordsController from '../services/words/wordsController';
 import LocalStorage from '../services/words/localStorage';
 import '../../css/preloader.css';
 import preloadHtml from './preloader.html';
-import { app } from '../../';
+import { getAuthorizedUser } from '../services/authorizationService/authorizedUser';
 
 export default class EBookSection extends Control {
   wordCards: WordCard[];
@@ -60,14 +60,13 @@ export default class EBookSection extends Control {
     preloader.className = 'loader-wrapper';
     preloader.innerHTML = preloadHtml;
     this.wordCardsWrapper.node.append(preloader as HTMLElement);
-    if(app?.currentUser?.isAuthenticated) {
+    if(getAuthorizedUser()) {
       this.words = await this.service.getUserAgrWords(page, group);
     } else {
       this.words = await this.service.getWords(page, group);
     }
     this.wordCardsWrapper.node.lastElementChild.remove();
     this.wordCards = this.words.map((word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word));
-
     this.wordCards.forEach((word) => word.render());
   }
 
@@ -153,7 +152,7 @@ export default class EBookSection extends Control {
   }
 
   private renderHardWordsButton() {
-    if(app?.currentUser?.isAuthenticated) {
+    if(JSON.parse(localStorage.getItem('currentUser'))) {
       document.querySelector('.hard-word-cont').setAttribute('style', 'display: flex');
     }
   }

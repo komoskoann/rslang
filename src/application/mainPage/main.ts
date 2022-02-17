@@ -1,13 +1,10 @@
 import Control from '../../controls/control';
-import Navbar from '../mainPage/navbar';
 import Router from '../router';
 
 export default class Main extends Control {
   router: Router = new Router();
 
   section: Control<HTMLElement>;
-
-  navButtons: NodeListOf<ChildNode>;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'main', 'main', '');

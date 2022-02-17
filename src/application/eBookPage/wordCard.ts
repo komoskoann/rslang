@@ -49,6 +49,9 @@ export default class WordCard extends Control {
     super(parentNode, 'div', 'word-card-wrapper', '');
     this.container = new Control(this.node, 'div');
     this.isDifficult = !!wordCardInfo.userWord?.optional?.isDifficult;
+    if(this.isDifficult) {
+      this.node.classList.add(this.difficultWordClassName)
+    }
     this.isLearnt = false;
     this.wordCardInfo = wordCardInfo;
   }
@@ -104,7 +107,7 @@ export default class WordCard extends Control {
 
   private renderControlButtons(): void {
     this.controlButtonsWrapper = new Control(this.node, 'div', 'control-buttons-wrapper');
-    this.difficultWordButton = new Control(this.controlButtonsWrapper.node, 'button', 'difficult-word-button', 'Сложное');
+    this.difficultWordButton = new Control(this.controlButtonsWrapper.node, 'button', 'difficult-word-button', this.isDifficult ? 'Легкое' : 'Сложное');
     this.learntWordButton = new Control(this.controlButtonsWrapper.node, 'button', 'delete-word-button', 'Изученное');
   }
 
