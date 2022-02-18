@@ -24,7 +24,7 @@ export default class EBookSection extends Control {
 
   private defaultEnglishLevel: number = 0;
 
-  private currentEnglishLevel: number;
+  static currentEnglishLevel: number;
 
   private sourceEnglishLevel: number;
 
@@ -51,9 +51,9 @@ export default class EBookSection extends Control {
     this.paginationWrapper = new WordsPagination(this.node);
     this.currentWordsPage =
       +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName) || this.defaultWordsPage;
-    this.currentEnglishLevel =
+    EBookSection.currentEnglishLevel =
       +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentLevelLSName) || this.defaultEnglishLevel;
-    this.getWords(this.currentWordsPage, this.currentEnglishLevel);
+    this.getWords(this.currentWordsPage, EBookSection.currentEnglishLevel);
     this.navLevels();
     this.navPages();
     this.enterUserPage();
@@ -64,7 +64,7 @@ export default class EBookSection extends Control {
 
   private highlightCurrentEnglishLevel() {
     this.node
-      .querySelector(`[data-level="${this.currentEnglishLevel}"]`)
+      .querySelector(`[data-level="${EBookSection.currentEnglishLevel}"]`)
       .setAttribute('style', 'background-color: var(--main-color-rgba-50);');
   }
 
@@ -192,6 +192,7 @@ export default class EBookSection extends Control {
       } else {
         this.words = await this.service.getWords(page, group);
       }
+    this.wordCardsWrapper.node.lastElementChild.remove();
     this.wordCards = this.words.map(
       (word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word, this.updateTotalCounter.bind(this)),
     );
@@ -207,9 +208,9 @@ export default class EBookSection extends Control {
       level.addEventListener(
         'click',
         function (instance: EBookSection) {
-          instance.node.querySelector(`[data-level="${instance.currentEnglishLevel}"]`).removeAttribute('style');
-          instance.sourceEnglishLevel = instance.currentEnglishLevel;
-          instance.currentEnglishLevel = +level.getAttribute('data-level');
+          instance.node.querySelector(`[data-level="${EBookSection.currentEnglishLevel}"]`).removeAttribute('style');
+          instance.sourceEnglishLevel = EBookSection.currentEnglishLevel;
+          EBookSection.currentEnglishLevel = +level.getAttribute('data-level');
           instance.currentWordsPage = instance.defaultWordsPage;
           instance.paginationWrapper.currentPage = instance.defaultWordsPage;
           instance.update();
@@ -261,13 +262,13 @@ export default class EBookSection extends Control {
       document.body.clientHeight - (window.pageYOffset + document.documentElement.clientHeight);
     this.node.style.minHeight = getComputedStyle(this.node).height;
     this.wordCardsWrapper.node.innerHTML = '';
-    await this.getWords(this.currentWordsPage, this.currentEnglishLevel);
+    await this.getWords(this.currentWordsPage, EBookSection.currentEnglishLevel);
     this.paginationWrapper.changePageNumber(this.node);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentPageLSName, `${this.currentWordsPage}`);
-    this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${this.currentEnglishLevel}`);
+    this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${EBookSection.currentEnglishLevel}`);
     this.node.style.removeProperty('min-height');
-    this.paginationWrapper.node.style.opacity = this.currentEnglishLevel === 6 ? '0' : '1';
-    if (this.currentEnglishLevel !== 6 && this.sourceEnglishLevel !== 6) {
+    this.paginationWrapper.node.style.opacity = EBookSection.currentEnglishLevel === 6 ? '0' : '1';
+    if (EBookSection.currentEnglishLevel !== 6 && this.sourceEnglishLevel !== 6) {
       this.scrollWindow(oldWindowPageYBottom);
     }
     this.highlightLearntPage();
@@ -286,12 +287,12 @@ export default class EBookSection extends Control {
   }
 
   private renderHardWordsButton() {
-    if (JSON.parse(localStorage.getItem('currentUser'))) {
-      document.querySelector('.hard-word-cont').setAttribute('style', 'display: flex');
-    }
+  //   if (JSON.parse(localStorage.getItem('currentUser'))) {
+  //     document.querySelector('.hard-word-cont').setAttribute('style', 'display: flex');
+  //   }
   }
 
-  updateTotalCounter(counterChanged: string, operator: string) {
+  private updateTotalCounter(counterChanged: string, operator: string) {
     if (counterChanged === 'difficult') {
       if (operator === '+') {
         this.difficultWordsAmount += 1;
@@ -309,7 +310,7 @@ export default class EBookSection extends Control {
     this.highlightLearntPage();
   }
 
-  highlightLearntPage() {
+  private highlightLearntPage() {
     if (this.learntWordsAmount === 20 || this.difficultWordsAmount + this.learntWordsAmount === 20) {
       this.wordCardsWrapper.node.classList.add('page-learnt');
       document.querySelector('.choose-page-number').classList.add('learnt-page-number');

@@ -24,6 +24,7 @@
   border-radius: 5px;
   transition: 0.5s ease-out;
   max-width: 362px;
+  position: relative;
 }
 
 .card-image-wrapper {
@@ -158,6 +159,13 @@
 
 .learnt-word-card {
   background-color: rgba(0, 186, 0, 0.1);
+}
+
+.eng-level-mark {
+  position: absolute;
+  right: -5%;
+  top: -3%;
+  z-index: 10;
 }
 @media (max-width: 370px) {
 

@@ -4,6 +4,7 @@ import '../../css/popUp.css';
 import { IWordCard } from './ebookInterface';
 import WordsController from '../services/words/wordsController';
 import { app } from '../..';
+import EBookSection from './eBookSection';
 
 export interface IPlayList {
   title: string;
@@ -72,6 +73,7 @@ export default class WordCard extends Control {
     this.renderControlButtons();
     this.listenEvents();
     this.renderToggleButtons();
+    this.renderEngLevelMark();
   }
 
   private getId() {
@@ -135,6 +137,35 @@ export default class WordCard extends Control {
       this.isDifficult ? 'Легкое' : 'Сложное',
     );
     this.learntWordButton = new Control(this.controlButtonsWrapper.node, 'button', 'delete-word-button', 'Изученное');
+  }
+
+  private renderEngLevelMark() {
+    const engLevelMark = new Control(this.node, 'div', 'eng-level-mark lev-desig');
+    switch (EBookSection.currentEnglishLevel) {
+      case 0:
+        engLevelMark.node.innerHTML = 'A1';
+        break;
+      case 1:
+        engLevelMark.node.innerHTML = 'A2';
+        engLevelMark.node.classList.add('red');
+        break;
+      case 2:
+        engLevelMark.node.innerHTML = 'B1';
+        engLevelMark.node.classList.add('purple');
+        break;
+      case 3:
+        engLevelMark.node.innerHTML = 'B2';
+        engLevelMark.node.classList.add('deep-blue');
+        break;
+      case 4:
+        engLevelMark.node.innerHTML = 'C1';
+        engLevelMark.node.classList.add('green');
+        break;
+      case 5:
+        engLevelMark.node.innerHTML = 'C2';
+        engLevelMark.node.classList.add('blue');
+        break;
+    }
   }
 
   private playAudio(): void {
@@ -218,7 +249,6 @@ export default class WordCard extends Control {
       this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false } });
       this.callBack('difficult', '-');
     }
-
     this.getUserWords();
   }
 
