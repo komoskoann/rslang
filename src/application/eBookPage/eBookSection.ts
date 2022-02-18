@@ -9,9 +9,14 @@ import LocalStorage from '../services/words/localStorage';
 import '../../css/preloader.css';
 import preloadHtml from './preloader.html';
 import { getAuthorizedUser } from '../services/authorizationService/authorizedUser';
+import tableHeader from './tableHeader.html';
+import '../../css/tableEbook.css';
+
 
 export default class EBookSection extends Control {
   wordCards: WordCard[];
+
+  hardWordsDictionary: IWordCard[] = [];
 
   service: WordsController = new WordsController();
 
@@ -37,6 +42,8 @@ export default class EBookSection extends Control {
 
   words: IWordCard[];
 
+  private tableHardWords: HTMLTableSectionElement;
+
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
     this.node.innerHTML = eBook;
@@ -61,17 +68,130 @@ export default class EBookSection extends Control {
       .setAttribute('style', 'background-color: var(--main-color-rgba-50);');
   }
 
+  private renderHardWordsDictionary(words: IWordCard[]): void {
+    if (words.length) {
+      this.wordCardsWrapper.node.innerHTML = tableHeader;
+      this.tableHardWords = document.getElementById('tableHardWordsBody') as HTMLTableSectionElement;
+      for (let i = 0; i < words.length; i++) {
+        const row = this.tableHardWords.insertRow();
+        const rowNumberCell = row.insertCell();
+        const rowWordCell = row.insertCell();
+        const rowTranscriptionCell = row.insertCell();
+        const rowTranslateCell = row.insertCell();
+        const rowButtonAboutCell = row.insertCell();
+        const rowButtonDeleteCell = row.insertCell();
+        row.classList.add('table-row');
+        rowNumberCell.className = 'cell-center col1-point';
+        rowWordCell.classList.add('cell-center');
+        rowTranscriptionCell.classList.add('cell-center');
+        rowTranslateCell.classList.add('cell-center');
+        const buttonDelete = document.createElement('button');
+        const buttonAbout = document.createElement('button');
+        buttonDelete.className = 'table-button table-button__delete';
+        buttonAbout.className = 'table-button table-button__about';
+        rowButtonDeleteCell.className = 'button-container col-button-delete';
+        rowButtonAboutCell.className = 'button-container col-button-about';
+        rowNumberCell.textContent = String(i + 1);
+        rowWordCell.textContent = words[i].word.slice(0, 1).toUpperCase() + words[i].word.slice(1);
+        rowTranscriptionCell.textContent = words[i].transcription;
+        rowTranslateCell.textContent =
+          words[i].wordTranslate.slice(0, 1).toUpperCase() + words[i].wordTranslate.slice(1);
+        rowButtonDeleteCell.appendChild(buttonDelete);
+        rowButtonAboutCell.appendChild(buttonAbout);
+      }
+      this.wordCardsWrapper.node.addEventListener('click', this.createWordCard);
+      this.wordCardsWrapper.node.addEventListener('click', this.toggleHardWord);
+    }
+  }
+
+  private createWordCard = (): void => {
+    const target = (event.target as Element).closest('.table-button__about') as HTMLButtonElement;
+    if (target) {
+      const index = +target.closest('.table-row').querySelector('.col1-point').innerHTML - 1;
+      const dictionaryCard = new WordCard(document.body, this.hardWordsDictionary[index], this.updateTotalCounter.bind(this));
+      new Control(dictionaryCard.node, 'button', 'dictionary-card-close-button');
+      dictionaryCard.node.classList.add('dictionary__card');
+      dictionaryCard.render();
+      (dictionaryCard.node.querySelector('.control-buttons-wrapper') as HTMLElement).style.display = 'none';
+      setTimeout(() => dictionaryCard.node.classList.add('dictionary__card_active'), 0);
+      setTimeout(() => window.addEventListener('click', this.closeWordCard), 0);
+    }
+  };
+
+  private closeWordCard = (): void => {
+    const closeButton = (event.target as Element).closest('.dictionary-card-close-button') as HTMLButtonElement;
+    if (closeButton || !(event.target as Element).closest('.dictionary__card_active')) {
+      const dictionaryCard = document.body.querySelector('.dictionary__card_active');
+      if (dictionaryCard) {
+        dictionaryCard.classList.remove('dictionary__card_active');
+        setTimeout(() => dictionaryCard.parentNode.removeChild(dictionaryCard), 300);
+      }
+      window.removeEventListener('click', this.closeWordCard);
+    }
+  };
+
+  private toggleHardWord = async (event: MouseEvent): Promise<void> => {
+    const target = (event.target as Element).closest('.table-button__delete') as HTMLButtonElement;
+    let row: HTMLElement;
+    if (target) {
+      row = target.closest('.table-row');
+    } else return;
+    const index = +target.closest('.table-row').querySelector('.col1-point').innerHTML - 1;
+    if (row.classList.contains('removed')) {
+      await this.service.changeUserWord(this.hardWordsDictionary[index].id, {
+        difficulty: 'hard',
+        optional: { isDifficult: true, isLearnt: false },
+      });
+      row.classList.remove('removed');
+      row.style.setProperty('color', 'var(--text-color)');
+      row
+        .querySelectorAll('.table-button')
+        .forEach((item) => (item as HTMLButtonElement).style.setProperty('filter', ''));
+      target.style.backgroundImage = "url('../assets/ebook-page/delete-button.png')";
+    } else {
+      await this.service.changeUserWord(this.hardWordsDictionary[index].id, {
+        difficulty: 'easy',
+        optional: { isDifficult: false, isLearnt: false },
+      });
+      row.style.setProperty('color', 'var(--autorization-border-color)');
+      row
+        .querySelectorAll('.table-button')
+        .forEach((item) =>
+          (item as HTMLButtonElement).style.setProperty('filter', 'var(--dictionary-table-button-filter-color-hover)'),
+        );
+      row.classList.add('removed');
+      target.style.backgroundImage = "url('../assets/ebook-page/revert-button.png')";
+    }
+  };
+
   private async getWords(page: number, group: number): Promise<void> {
     const preloader = document.createElement('div');
     preloader.className = 'loader-wrapper';
     preloader.innerHTML = preloadHtml;
     this.wordCardsWrapper.node.append(preloader as HTMLElement);
-    if (getAuthorizedUser()) {
-      this.words = await this.service.getUserAgrWords(page, group);
+    if (group === 6) {
+      const array: IWordCard[] = await this.service.getHardUserWords();
+      this.paginationWrapper.node.style.opacity = '0';
+      this.paginationWrapper.node.style.visibility = 'hidden';
+      if (array.length) {
+        this.hardWordsDictionary = array;
+        this.renderHardWordsDictionary(this.hardWordsDictionary);
+      } else {
+        this.wordCardsWrapper.node.lastElementChild.remove();
+        const textNotice = document.createElement('p');
+        textNotice.style.fontSize = '1.25rem';
+        textNotice.style.fontWeight = '500';
+        textNotice.textContent = `Привет, ${getAuthorizedUser().currentUser.name}! Ты пока не встретил сложных слов при изучении английского языка. Умница!`;
+        this.wordCardsWrapper.node.appendChild(textNotice);
+      }
     } else {
-      this.words = await this.service.getWords(page, group);
-    }
-    this.wordCardsWrapper.node.lastElementChild.remove();
+      this.paginationWrapper.node.style.opacity = '1';
+      this.paginationWrapper.node.style.visibility = 'visible';
+      if (getAuthorizedUser()) {
+        this.words = await this.service.getUserAgrWords(page, group);
+      } else {
+        this.words = await this.service.getWords(page, group);
+      }
     this.wordCards = this.words.map(
       (word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word, this.updateTotalCounter.bind(this)),
     );
@@ -79,6 +199,7 @@ export default class EBookSection extends Control {
     this.difficultWordsAmount = this.words.filter((word) => word.userWord?.optional?.isDifficult).length;
     this.learntWordsAmount = this.words.filter((word) => word.userWord?.optional?.isLearnt).length;
     this.highlightLearntPage();
+    }
   }
 
   private navLevels(): void {
