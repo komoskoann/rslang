@@ -10,7 +10,7 @@
   backdrop-filter: blur(5px);
   transition-property: opacity;
   transition-delay: 0s;
-  transition-duration: 0.3s;
+  transition: all 0.3s;
 }
 
 .pagination-container {

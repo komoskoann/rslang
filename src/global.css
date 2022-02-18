@@ -13,8 +13,8 @@
   --autorization-shadow-color: rgba(44, 44, 44, 0.4);
   --autorization-border-color: #bbb;
   --autorization-border-color-2: #888;
-  --dictionary-table-button-filter-color: invert(66%) sepia(65%) saturate(4667%) hue-rotate(21deg) brightness(99%) contrast(105%);
-  --dictionary-table-button-filter-color-hover: invert(85%) sepia(31%) saturate(4094%) hue-rotate(352deg) brightness(101%) contrast(103%);
+  --dictionary-table-button-filter-color: invert(12%) sepia(0%) saturate(2711%) hue-rotate(216deg) brightness(108%) contrast(81%);
+  --dictionary-table-button-filter-color-hover: invert(69%) sepia(3%) saturate(17%) hue-rotate(351deg) brightness(88%) contrast(94%);
 }
 html {
   height: 100%;
