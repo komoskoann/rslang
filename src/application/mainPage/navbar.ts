@@ -45,8 +45,7 @@ export default class Navbar extends Control {
     this.toEbookButton.node.innerHTML = '<a class="nav-book nav-link" href="#">Учебник</a>';
     this.toMiniGamesButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Mini Games');
     this.toMiniGamesButton.node.id = this.miniGames;
-    this.toMiniGamesButton.node.innerHTML = ` <a class="nav-link" href="#" id="navbarDropdown"
-    role="button" data-bs-toggle="dropdown" aria-expanded="false">Игры</a>`;
+    this.toMiniGamesButton.node.innerHTML = '<a class="nav-link" href="#">Игры</a>';
     this.toStatisticsButton = new Control(ulNavig.node, 'li', 'menu-list  nav-item', 'to Statistics');
     this.toStatisticsButton.node.id = this.statistics;
     this.toStatisticsButton.node.innerHTML = '<a class="nav-link" href="#">Статистика</a>';
