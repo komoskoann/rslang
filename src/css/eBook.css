@@ -99,6 +99,7 @@
   border: var(--main-border);
   border-radius: 10px;
   cursor: pointer;
+  position: relative;
 }
 .to-sprint img,
 .to-chalenge img {
@@ -117,6 +118,30 @@
   background-repeat: repeat;
   background-size: 800px;
 }
+.disable-game-buttons{
+  opacity: 0.65;
+  cursor: not-allowed;
+  background-color: var(--autorization-border-color);
+  border-color: var(--autorization-border-color);
+}
+.disable-game-buttons:hover{
+  transform: none;
+}
+.to-sprint.disable-game-buttons:hover .sprint-descript::after,
+.to-chalenge.disable-game-buttons:hover .sprint-descript::after {
+  content: 'Вы изучили все слова на этой странице!';
+  position: absolute;
+  width: 50%;
+  top: 30%;
+  left: 25%;
+  color: var(--text-color);
+  background-color: var(--main-color);
+  padding: 3px 10px;
+  border: var(--main-border);
+  border-radius: 5px;
+  text-align: center;
+}
+
 @media (max-width: 860px) {
   .ebook-hard-cont{
     width: 700px;

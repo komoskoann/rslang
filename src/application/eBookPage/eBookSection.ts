@@ -192,11 +192,13 @@ export default class EBookSection extends Control {
     if (this.learntWordsAmount === 20 || this.difficultWordsAmount + this.learntWordsAmount === 20) {
       this.wordCardsWrapper.node.classList.add('page-learnt');
       document.querySelector('.choose-page-number').classList.add('learnt-page-number');
-      document.querySelector('.games-nav').setAttribute('style', 'pointer-events: none');
+      document.querySelector('.to-sprint').classList.add('disable-game-buttons');
+      document.querySelector('.to-chalenge').classList.add('disable-game-buttons');
     } else {
       this.wordCardsWrapper.node.classList.remove('page-learnt');
       document.querySelector('.choose-page-number').classList.remove('learnt-page-number');
-      document.querySelector('.games-nav').setAttribute('style', 'pointer-events: auto');
+      document.querySelector('.to-sprint').classList.remove('disable-game-buttons');
+      document.querySelector('.to-chalenge').classList.remove('disable-game-buttons');
     }
   }
 }
