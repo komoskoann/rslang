@@ -195,8 +195,9 @@ export default class AuthorizationForm extends Control {
     popupsContainer.node.innerHTML = 'Авторизация прошла успешно';
     setTimeout(function () {
       popupsContainer.node.remove();
+      location.reload();
     }, 1300);
-    location.reload();
+
   }
 
   private showSignOutAlert() {
@@ -204,8 +205,9 @@ export default class AuthorizationForm extends Control {
     popupsContainer.node.innerHTML = 'Вы больше не авторизованы';
     setTimeout(function () {
       popupsContainer.node.remove();
+      location.reload();
     }, 1300);
-    location.reload();
+
   }
 
   private hideOptionsFromUnauthorized() {
