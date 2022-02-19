@@ -52,9 +52,8 @@ export default class EBookSection extends Control {
     this.paginationWrapper = new WordsPagination(this.node);
     this.currentWordsPage =
       +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName) || this.defaultWordsPage;
-    EBookSection.currentEnglishLevel =
-      +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentLevelLSName) || this.defaultEnglishLevel;
-    this.isHard = this.localStorage.getFromLocalStorage('isHard') === 'true';
+    EBookSection.currentEnglishLevel = this.resolveCurrentLevel();
+    this.isHard = !!getAuthorizedUser() && this.localStorage.getFromLocalStorage('isHard') === 'true';
     this.getWords(this.currentWordsPage, EBookSection.currentEnglishLevel, this.isHard);
     this.navLevels();
     this.navPages();
@@ -63,10 +62,23 @@ export default class EBookSection extends Control {
     this.highlightCurrentEnglishLevel();
   }
 
+  private resolveCurrentLevel() {
+    let levelFromStorage = +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentLevelLSName);
+    if (!getAuthorizedUser() && levelFromStorage === 6) {
+      levelFromStorage = this.defaultEnglishLevel;
+    }
+    return levelFromStorage || this.defaultEnglishLevel;
+  }
+
   private highlightCurrentEnglishLevel() {
-    this.node
+    if (!this.isHard) {
+      this.node
       .querySelector(`[data-level="${EBookSection.currentEnglishLevel}"]`)
       .setAttribute('style', 'background-color: var(--main-color-rgba-50);');
+    } else {
+      this.node.querySelector('[data-level="6"]')
+      .setAttribute('style', 'background-color: var(--main-color-rgba-50);');
+    }
   }
 
   private renderHardWordsDictionary(words: IWordCard[]): void {
@@ -230,6 +242,7 @@ export default class EBookSection extends Control {
         'click',
         function (instance: EBookSection) {
           instance.node.querySelector(`[data-level="${EBookSection.currentEnglishLevel}"]`).removeAttribute('style');
+          instance.node.querySelector('[data-level="6"]').removeAttribute('style');
           const selectedLevel = +level.getAttribute('data-level');
           if (selectedLevel === 6) {
             location.replace('#/eBook/hardWords')
