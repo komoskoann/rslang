@@ -207,7 +207,6 @@ export default class AuthorizationForm extends Control {
       popupsContainer.node.remove();
       location.reload();
     }, 1300);
-
   }
 
   private hideOptionsFromUnauthorized() {

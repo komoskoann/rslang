@@ -165,7 +165,6 @@
   position: absolute;
   right: -5%;
   top: -3%;
-  z-index: 10;
 }
 @media (max-width: 370px) {
 

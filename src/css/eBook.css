@@ -38,7 +38,7 @@
   width: 830px;
 }
 .hard-word-cont {
-  /* display: none; */
+  display: flex;
   width: 300px;
   padding-left: 40px;
   font-size: 1.2rem;
@@ -114,9 +114,9 @@
   background-color: rgba(255, 193, 7, 0.8);
 }
 .page-learnt {
-  background-image: url(../assets/eBookPage/background.png);
+  background-image: url(../assets/eBookPage/background3.png);
   background-repeat: repeat;
-  background-size: 800px;
+  background-size: 700px;
 }
 .disable-game-buttons{
   opacity: 0.65;
@@ -129,7 +129,7 @@
 }
 .to-sprint.disable-game-buttons:hover .sprint-descript::after,
 .to-chalenge.disable-game-buttons:hover .sprint-descript::after {
-  content: 'Вы изучили все слова на этой странице!';
+  content: 'На данной странице игра недоступна';
   position: absolute;
   width: 50%;
   top: 30%;

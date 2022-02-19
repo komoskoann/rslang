@@ -2,7 +2,6 @@ import MainSection from '../application/mainPage/mainSection';
 import EBookSection from '../application/eBookPage/eBookSection';
 import MiniGamesSection from '../application/gamesPage/miniGamesSection';
 import StatisticsSection from '../application/statisticsPage/statisticsSection';
-import DictionarySection from '../application/dictionaryPage/dictionarySection';
 import AboutTeamSection from '../application/aboutTeamPage/aboutTeamSection';
 
 export default class Router {
@@ -18,16 +17,20 @@ export default class Router {
 
   private statistics: string = 'statistics';
 
-  private dictionary: string = 'dictionary';
-
   private aboutTeam: string = 'aboutTeam';
 
+  private hardWords: string = 'hardWords';
+
   resolve(path?: string) {
-    this.path = path || location.hash.split('/')[1] || this.defaultPath;
+    this.path = path || location.hash.split('/')?.pop() || this.defaultPath;
     let resolved;
     switch (this.path) {
       case this.main:
         resolved = MainSection;
+        break;
+      case this.hardWords:
+        localStorage.setItem('isHard', 'true');
+        resolved = EBookSection;
         break;
       case this.eBook:
         resolved = EBookSection;
@@ -37,9 +40,6 @@ export default class Router {
         break;
       case this.statistics:
         resolved = StatisticsSection;
-        break;
-      case this.dictionary:
-        resolved = DictionarySection;
         break;
       case this.aboutTeam:
         resolved = AboutTeamSection;

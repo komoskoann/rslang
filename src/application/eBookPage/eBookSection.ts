@@ -12,7 +12,6 @@ import { getAuthorizedUser } from '../services/authorizationService/authorizedUs
 import tableHeader from './tableHeader.html';
 import '../../css/tableEbook.css';
 
-
 export default class EBookSection extends Control {
   wordCards: WordCard[];
 
@@ -38,6 +37,8 @@ export default class EBookSection extends Control {
 
   private difficultWordsAmount: number;
 
+  private isHard: boolean;
+
   private learntWordsAmount: number;
 
   words: IWordCard[];
@@ -53,12 +54,12 @@ export default class EBookSection extends Control {
       +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName) || this.defaultWordsPage;
     EBookSection.currentEnglishLevel =
       +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentLevelLSName) || this.defaultEnglishLevel;
-    this.getWords(this.currentWordsPage, EBookSection.currentEnglishLevel);
+    this.isHard = this.localStorage.getFromLocalStorage('isHard') === 'true';
+    this.getWords(this.currentWordsPage, EBookSection.currentEnglishLevel, this.isHard);
     this.navLevels();
     this.navPages();
     this.enterUserPage();
     this.paginationWrapper.changePageNumber(this.node);
-    this.renderHardWordsButton();
     this.highlightCurrentEnglishLevel();
   }
 
@@ -164,43 +165,63 @@ export default class EBookSection extends Control {
     }
   };
 
-  private async getWords(page: number, group: number): Promise<void> {
-    const preloader = document.createElement('div');
-    preloader.className = 'loader-wrapper';
-    preloader.innerHTML = preloadHtml;
-    this.wordCardsWrapper.node.append(preloader as HTMLElement);
-    if (group === 6) {
+  private async getWords(page: number, group: number, isHard: boolean): Promise<void> {
+    this.renderPreloader();
+    if (isHard) {
       const array: IWordCard[] = await this.service.getHardUserWords();
-      this.paginationWrapper.node.style.opacity = '0';
-      this.paginationWrapper.node.style.visibility = 'hidden';
+      this.changeDesignHardWordsSection();
       if (array.length) {
         this.hardWordsDictionary = array;
         this.renderHardWordsDictionary(this.hardWordsDictionary);
       } else {
-        this.wordCardsWrapper.node.lastElementChild.remove();
-        const textNotice = document.createElement('p');
-        textNotice.style.fontSize = '1.25rem';
-        textNotice.style.fontWeight = '500';
-        textNotice.textContent = `Привет, ${getAuthorizedUser().currentUser.name}! Ты пока не встретил сложных слов при изучении английского языка. Умница!`;
-        this.wordCardsWrapper.node.appendChild(textNotice);
+        this.renderEmptyHardWordsDictionary();
       }
     } else {
-      this.paginationWrapper.node.style.opacity = '1';
-      this.paginationWrapper.node.style.visibility = 'visible';
+      this.renderPagination();
       if (getAuthorizedUser()) {
         this.words = await this.service.getUserAgrWords(page, group);
       } else {
+        document.querySelector('.hard-word-cont').setAttribute('style', 'display: none');
         this.words = await this.service.getWords(page, group);
       }
-    this.wordCardsWrapper.node.lastElementChild.remove();
-    this.wordCards = this.words.map(
-      (word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word, this.updateTotalCounter.bind(this)),
-    );
-    this.wordCards.forEach((word) => word.render());
-    this.difficultWordsAmount = this.words.filter((word) => word.userWord?.optional?.isDifficult).length;
-    this.learntWordsAmount = this.words.filter((word) => word.userWord?.optional?.isLearnt).length;
-    this.highlightLearntPage();
+      this.wordCardsWrapper.node.lastElementChild.remove();
+      this.wordCards = this.words.map(
+        (word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word, this.updateTotalCounter.bind(this)),
+      );
+      this.wordCards.forEach((word) => word.render());
+      this.difficultWordsAmount = this.words.filter((word) => word.userWord?.optional?.isDifficult).length;
+      this.learntWordsAmount = this.words.filter((word) => word.userWord?.optional?.isLearnt).length;
+      this.highlightLearntPage();
     }
+  }
+
+  private changeDesignHardWordsSection() {
+    document.querySelector('.choose-page-number').classList.remove('learnt-page-number');
+    document.querySelector('.to-sprint').classList.add('disable-game-buttons');
+    document.querySelector('.to-chalenge').classList.add('disable-game-buttons');
+    this.paginationWrapper.node.style.opacity = '0';
+    this.paginationWrapper.node.style.visibility = 'hidden';
+  }
+
+  private renderPreloader() {
+    const preloader = document.createElement('div');
+    preloader.className = 'loader-wrapper';
+    preloader.innerHTML = preloadHtml;
+    this.wordCardsWrapper.node.append(preloader as HTMLElement);
+  }
+
+  private renderEmptyHardWordsDictionary() {
+    this.wordCardsWrapper.node.lastElementChild.remove();
+    const textNotice = document.createElement('p');
+    textNotice.style.fontSize = '1.25rem';
+    textNotice.style.fontWeight = '500';
+    textNotice.textContent = `Привет, ${getAuthorizedUser().currentUser.name}! Ты пока не встретил сложных слов при изучении английского языка. Умница!`;
+    this.wordCardsWrapper.node.appendChild(textNotice);
+  }
+
+  private renderPagination() {
+    this.paginationWrapper.node.style.opacity = '1';
+    this.paginationWrapper.node.style.visibility = 'visible';
   }
 
   private navLevels(): void {
@@ -209,12 +230,26 @@ export default class EBookSection extends Control {
         'click',
         function (instance: EBookSection) {
           instance.node.querySelector(`[data-level="${EBookSection.currentEnglishLevel}"]`).removeAttribute('style');
+          const selectedLevel = +level.getAttribute('data-level');
+          if (selectedLevel === 6) {
+            location.replace('#/eBook/hardWords')
+            instance.localStorage.setToLocalStorage('isHard', 'true');
+            instance.isHard = true;
+          } else {
+            location.replace('#/eBook')
+            instance.localStorage.setToLocalStorage('isHard', 'false');
+            instance.isHard = false;
+          }
           instance.sourceEnglishLevel = EBookSection.currentEnglishLevel;
-          EBookSection.currentEnglishLevel = +level.getAttribute('data-level');
+          EBookSection.currentEnglishLevel = selectedLevel;
           instance.currentWordsPage = instance.defaultWordsPage;
           instance.paginationWrapper.currentPage = instance.defaultWordsPage;
           instance.update();
           instance.highlightCurrentEnglishLevel();
+          if (instance.isHard) {
+            instance.localStorage.setToLocalStorage(instance.paginationWrapper.currentLevelLSName, '6');
+            location.reload();
+          }
         }.bind(null, this),
       );
     });
@@ -262,7 +297,7 @@ export default class EBookSection extends Control {
       document.body.clientHeight - (window.pageYOffset + document.documentElement.clientHeight);
     this.node.style.minHeight = getComputedStyle(this.node).height;
     this.wordCardsWrapper.node.innerHTML = '';
-    await this.getWords(this.currentWordsPage, EBookSection.currentEnglishLevel);
+    await this.getWords(this.currentWordsPage, EBookSection.currentEnglishLevel, this.isHard);
     this.paginationWrapper.changePageNumber(this.node);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentPageLSName, `${this.currentWordsPage}`);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${EBookSection.currentEnglishLevel}`);
@@ -284,12 +319,6 @@ export default class EBookSection extends Control {
       top: scrollYValue,
       behavior: 'auto',
     });
-  }
-
-  private renderHardWordsButton() {
-  //   if (JSON.parse(localStorage.getItem('currentUser'))) {
-  //     document.querySelector('.hard-word-cont').setAttribute('style', 'display: flex');
-  //   }
   }
 
   private updateTotalCounter(counterChanged: string, operator: string) {
