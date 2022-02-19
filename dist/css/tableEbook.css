@@ -1,0 +1,118 @@
+.table {
+  margin: 0px 30px;
+  max-width: 1320px;
+  height: min-content;
+  margin-bottom: auto;
+}
+.table thead tr th:first-child {
+  border-radius: 8px 0 0 0; 
+}
+.table thead tr th:last-child {
+  border-radius: 0 8px 0 0; 
+}
+.cell-center {
+  text-align: center;
+}
+.col1-point {
+  min-width: 50px;
+  font-weight: 700;
+}
+.col2-word,
+.col3-transcription,
+.col4-translate {
+  width: 33.3%;
+}
+.col-button-about,
+.col-button-delete {
+  min-width: 40px;
+}
+.button-container {
+  margin: auto;
+}
+.table-row {
+  height: min-content;
+  vertical-align: middle;
+  transition: color 0.3s;
+}
+.table-head-color {
+  --bs-table-bg: var(--main-color);
+}
+.table-color {
+  --bs-table-striped-bg: #fcf3d7;
+  --bs-table-striped-color: var(--text-color);
+  --bs-table-hover-bg: #ffeeb5;
+  --bs-table-hover-color: var(--text-color);
+}
+.table-button {
+  display: block;
+  margin: auto;
+  filter: var(--dictionary-table-button-filter-color);
+  height: 18px;
+  width: 18px;
+  border: none;
+  outline: none;
+  transition: all 0.3s;
+}
+.table-button__delete {
+  background: no-repeat transparent;
+  background-position: center;
+  background-size: contain;
+  background-image: url("../assets/ebook-page/delete-button.png");
+}
+.table-button__about {
+  background: no-repeat transparent;
+  background-position: center;
+  background-size: contain;
+  background-image: url("../assets/ebook-page/about-button.png");
+}
+.table-button:hover {
+  filter: var(--dictionary-table-button-filter-color-hover);
+}
+.dictionary__card {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	visibility: hidden;
+  padding: 30px 20px;
+	-webkit-transform: translateX(-50%) translateY(-50%) scale(0.25);
+	-moz-transform: translateX(-50%) translateY(-50%) scale(0.25);
+	-ms-transform: translateX(-50%) translateY(-50%) scale(0.25);
+	transform: translateX(-50%) translateY(-50%) scale(0.25);
+  z-index: 666;
+  background-color: white;
+  -webkit-box-shadow: 0px 6px 12px 6px var(--autorization-shadow-color);
+  -moz-box-shadow: 0px 6px 12px 6px var(--autorization-shadow-color);
+  box-shadow: 0px 6px 12px 6px var(--autorization-shadow-color);
+  opacity: 0;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+  max-width: none;
+  border: 2px solid var(--main-color);
+}
+.dictionary__card.dictionary__card_active {
+  visibility: visible;
+	-webkit-transform: translateX(-50%) translateY(-50%) scale(1);
+	-moz-transform: translateX(-50%) translateY(-50%) scale(1);
+	-ms-transform: translateX(-50%) translateY(-50%) scale(1);
+	transform: translateX(-50%) translateY(-50%) scale(1);
+  opacity: 1;
+}
+.dictionary-card-close-button {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 15px;
+  top: 15px;
+  border: none;
+  background: transparent;
+  background-image: url("../assets/authorizationPage/close-icon.svg");
+  background-size: contain;
+  filter: var(--dictionary-table-button-filter-color);
+  transition: 0.3s;
+  outline: none;
+}
+.dictionary-card-close-button:hover {
+  transform: scale(1.2);
+  filter: var(--dictionary-table-button-filter-color-hover);
+}

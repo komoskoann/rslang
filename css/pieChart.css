@@ -1,0 +1,13 @@
+path.color0 {
+  fill: var(--color-c1);
+}
+
+path.color1 {
+  fill: var(--main-color);
+}
+
+text {
+  font-family: "RamaGothicM-Heavy",Impact,"Franklin Gothic Bold","Arial Black",sans-serif;
+  fill: var(--main-color);
+  line-height: 10rem;
+}

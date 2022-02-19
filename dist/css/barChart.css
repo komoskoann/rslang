@@ -1,0 +1,11 @@
+.numbers, .axis-text, .tick {
+	font-size: 20px;
+}
+
+.color0 {
+  fill: var(--color-b2);
+}
+
+.color1 {
+  fill: var(--color-b1);
+}
