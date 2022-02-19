@@ -6,7 +6,6 @@ import registrationHTML from './registrationComponent.html';
 import Avatar from '../mainPage/avatar';
 import '../../css/authorizationForm.css';
 import { app } from '../..';
-import EBookSection from '../eBookPage/eBookSection';
 
 export default class AuthorizationForm extends Control {
   private authorizationService: AuthorizationService;
@@ -198,7 +197,6 @@ export default class AuthorizationForm extends Control {
       popupsContainer.node.remove();
       location.reload();
     }, 1300);
-
   }
 
   private showSignOutAlert() {

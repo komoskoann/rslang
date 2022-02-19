@@ -73,11 +73,10 @@ export default class EBookSection extends Control {
   private highlightCurrentEnglishLevel() {
     if (!this.isHard) {
       this.node
-      .querySelector(`[data-level="${EBookSection.currentEnglishLevel}"]`)
-      .setAttribute('style', 'background-color: var(--main-color-rgba-50);');
+        .querySelector(`[data-level="${EBookSection.currentEnglishLevel}"]`)
+        .setAttribute('style', 'background-color: var(--main-color-rgba-50);');
     } else {
-      this.node.querySelector('[data-level="6"]')
-      .setAttribute('style', 'background-color: var(--main-color-rgba-50);');
+      this.node.querySelector('[data-level="6"]').setAttribute('style', 'background-color: var(--main-color-rgba-50);');
     }
   }
 
@@ -121,7 +120,11 @@ export default class EBookSection extends Control {
     const target = (event.target as Element).closest('.table-button__about') as HTMLButtonElement;
     if (target) {
       const index = +target.closest('.table-row').querySelector('.col1-point').innerHTML - 1;
-      const dictionaryCard = new WordCard(document.body, this.hardWordsDictionary[index], this.updateTotalCounter.bind(this));
+      const dictionaryCard = new WordCard(
+        document.body,
+        this.hardWordsDictionary[index],
+        this.updateTotalCounter.bind(this),
+      );
       new Control(dictionaryCard.node, 'button', 'dictionary-card-close-button');
       dictionaryCard.node.classList.add('dictionary__card');
       dictionaryCard.render();
@@ -227,7 +230,9 @@ export default class EBookSection extends Control {
     const textNotice = document.createElement('p');
     textNotice.style.fontSize = '1.25rem';
     textNotice.style.fontWeight = '500';
-    textNotice.textContent = `Привет, ${getAuthorizedUser().currentUser.name}! Ты пока не встретил сложных слов при изучении английского языка. Умница!`;
+    textNotice.textContent = `Привет, ${
+      getAuthorizedUser().currentUser.name
+    }! Ты пока не встретил сложных слов при изучении английского языка. Умница!`;
     this.wordCardsWrapper.node.appendChild(textNotice);
   }
 
@@ -245,11 +250,11 @@ export default class EBookSection extends Control {
           instance.node.querySelector('[data-level="6"]').removeAttribute('style');
           const selectedLevel = +level.getAttribute('data-level');
           if (selectedLevel === 6) {
-            location.replace('#/eBook/hardWords')
+            location.replace('#/eBook/hardWords');
             instance.localStorage.setToLocalStorage('isHard', 'true');
             instance.isHard = true;
           } else {
-            location.replace('#/eBook')
+            location.replace('#/eBook');
             instance.localStorage.setToLocalStorage('isHard', 'false');
             instance.isHard = false;
           }
@@ -313,7 +318,10 @@ export default class EBookSection extends Control {
     await this.getWords(this.currentWordsPage, EBookSection.currentEnglishLevel, this.isHard);
     this.paginationWrapper.changePageNumber(this.node);
     this.localStorage.setToLocalStorage(this.paginationWrapper.currentPageLSName, `${this.currentWordsPage}`);
-    this.localStorage.setToLocalStorage(this.paginationWrapper.currentLevelLSName, `${EBookSection.currentEnglishLevel}`);
+    this.localStorage.setToLocalStorage(
+      this.paginationWrapper.currentLevelLSName,
+      `${EBookSection.currentEnglishLevel}`,
+    );
     this.node.style.removeProperty('min-height');
     this.paginationWrapper.node.style.opacity = EBookSection.currentEnglishLevel === 6 ? '0' : '1';
     if (EBookSection.currentEnglishLevel !== 6 && this.sourceEnglishLevel !== 6) {
