@@ -24,7 +24,7 @@ export default class audioChallengeResultsPage extends Control {
         ++confirmAnswers;
       }
     }
-    message = confirmAnswers < 3 ? 'bad' : confirmAnswers < 6 ? 'not bad' : confirmAnswers < 8 ? 'normal' : confirmAnswers < 10 ? 'good' : 'perfectly';
+    message = confirmAnswers < 3 ? 'Снизу скоро постучат.' : confirmAnswers < 6 ? 'Неплохо-неплохо. Попробуй еще разок.' : confirmAnswers < 8 ? 'Ты можешь ещё лучше, я уверен.' : confirmAnswers < 10 ? 'А ты хорош.' : 'Ты великолепен.';
     textNode.textContent = message;
   }
   private renderResultsTable(results: roundResult[]): void {
