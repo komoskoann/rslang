@@ -7,7 +7,7 @@ export interface IWordCard {
   image: string;
   page: number;
   textExample: string;
-  userWord?: { difficulty: string; optional?: { isDifficult: boolean; word: string } };
+  userWord?: { difficulty: string; optional?: { isDifficult: boolean; isLearnt?: boolean } };
   textExampleTranslate: string;
   textMeaning: string;
   textMeaningTranslate: string;
@@ -17,7 +17,7 @@ export interface IWordCard {
 }
 
 export interface IResponseWord {
-  id: string;
+  readonly _id: string;
   audio: string;
   audioExample: string;
   audioMeaning: string;
@@ -31,5 +31,4 @@ export interface IResponseWord {
   word: string;
   wordTranslate: string;
   textExample: string;
-  _id?: string;
 }

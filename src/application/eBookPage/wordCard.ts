@@ -1,7 +1,10 @@
 import Control from '../../controls/control';
 import '../../css/word.css';
+import '../../css/popUp.css';
 import { IWordCard } from './ebookInterface';
 import WordsController from '../services/words/wordsController';
+import { app } from '../..';
+import EBookSection from './eBookSection';
 
 export interface IPlayList {
   title: string;
@@ -41,12 +44,23 @@ export default class WordCard extends Control {
 
   private learntWordClassName: string = 'learnt-word-card';
 
-  constructor(parentNode: HTMLElement, wordCardInfo: IWordCard) {
+  private controlButtonsWrapper: Control<HTMLElement>;
+
+  callBack: (a: string, b: string) => void;
+
+  constructor(parentNode: HTMLElement, wordCardInfo: IWordCard, callBack: (a: string, b: string) => void) {
     super(parentNode, 'div', 'word-card-wrapper', '');
     this.container = new Control(this.node, 'div');
     this.isDifficult = !!wordCardInfo.userWord?.optional?.isDifficult;
-    this.isLearnt = false;
+    if (this.isDifficult) {
+      this.node.classList.add(this.difficultWordClassName);
+    }
+    this.isLearnt = !!wordCardInfo.userWord?.optional?.isLearnt;
+    if (this.isLearnt) {
+      this.node.classList.add(this.learntWordClassName);
+    }
     this.wordCardInfo = wordCardInfo;
+    this.callBack = callBack;
   }
 
   render(): void {
@@ -58,6 +72,8 @@ export default class WordCard extends Control {
     this.renderCardExampleWrapper();
     this.renderControlButtons();
     this.listenEvents();
+    this.renderToggleButtons();
+    this.renderEngLevelMark();
   }
 
   private getId() {
@@ -113,9 +129,43 @@ export default class WordCard extends Control {
   }
 
   private renderControlButtons(): void {
-    const controlButtonsWrapper = new Control(this.node, 'div', 'control-buttons-wrapper');
-    this.difficultWordButton = new Control(controlButtonsWrapper.node, 'button', 'difficult-word-button', 'Сложное');
-    this.learntWordButton = new Control(controlButtonsWrapper.node, 'button', 'delete-word-button', 'Изученное');
+    this.controlButtonsWrapper = new Control(this.node, 'div', 'control-buttons-wrapper');
+    this.difficultWordButton = new Control(
+      this.controlButtonsWrapper.node,
+      'button',
+      'difficult-word-button',
+      this.isDifficult ? 'Легкое' : 'Сложное',
+    );
+    this.learntWordButton = new Control(this.controlButtonsWrapper.node, 'button', 'delete-word-button', 'Изученное');
+  }
+
+  private renderEngLevelMark() {
+    const engLevelMark = new Control(this.node, 'div', 'eng-level-mark lev-desig');
+    switch (EBookSection.currentEnglishLevel) {
+      case 0:
+        engLevelMark.node.innerHTML = 'A1';
+        break;
+      case 1:
+        engLevelMark.node.innerHTML = 'A2';
+        engLevelMark.node.classList.add('red');
+        break;
+      case 2:
+        engLevelMark.node.innerHTML = 'B1';
+        engLevelMark.node.classList.add('purple');
+        break;
+      case 3:
+        engLevelMark.node.innerHTML = 'B2';
+        engLevelMark.node.classList.add('deep-blue');
+        break;
+      case 4:
+        engLevelMark.node.innerHTML = 'C1';
+        engLevelMark.node.classList.add('green');
+        break;
+      case 5:
+        engLevelMark.node.innerHTML = 'C2';
+        engLevelMark.node.classList.add('blue');
+        break;
+    }
   }
 
   private playAudio(): void {
@@ -179,38 +229,64 @@ export default class WordCard extends Control {
   }
 
   private toggleToDifficult(): void {
+    const popupsContainer = new Control(document.body, 'div', 'alert alert-info');
     const cardId = this.getId();
     this.agregUserWord(cardId);
     if (!this.isDifficult) {
       this.isDifficult = true;
       this.node.querySelector('.difficult-word-button').innerHTML = 'Легкое';
       this.node.classList.add(this.difficultWordClassName);
+      popupsContainer.node.innerHTML = 'Добавлено в сложные слова';
+      this.hideAlert(popupsContainer);
       this.createUserWord(cardId, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false } });
+      this.callBack('difficult', '+');
     } else if (this.isDifficult) {
       this.node.classList.remove(this.difficultWordClassName);
       this.node.querySelector('.difficult-word-button').innerHTML = 'Сложное';
       this.isDifficult = false;
+      popupsContainer.node.innerHTML = 'Удалено из сложных слов';
+      this.hideAlert(popupsContainer);
       this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false } });
+      this.callBack('difficult', '-');
     }
     this.getUserWords();
+  }
+
+  hideAlert(currentNode: Control<HTMLElement>) {
+    setTimeout(function () {
+      currentNode.node.remove();
+    }, 1000);
   }
 
   private toggleToLearnt(): void {
     const cardId = this.getId();
     this.agregUserWord(cardId);
+    const popupsContainer = new Control(this.node, 'div', 'alert alert-info');
     if (!this.isLearnt) {
       this.isLearnt = true;
       this.node.classList.add(this.learntWordClassName);
       this.createUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: true } });
       this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: true } });
+      popupsContainer.node.innerHTML = 'Добавлено в изученные слова';
+      this.hideAlert(popupsContainer);
+      this.callBack('learnt', '+');
     } else if (this.isLearnt) {
       this.node.classList.remove(this.learntWordClassName);
       this.isLearnt = false;
+      popupsContainer.node.innerHTML = 'Удалено из изученных слов';
+      this.hideAlert(popupsContainer);
+      this.callBack('learnt', '-');
       if (this.isDifficult) {
         this.updateUserWord(cardId, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false } });
       } else {
         this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: false } });
       }
+    }
+  }
+
+  private renderToggleButtons() {
+    if (app.currentUser.isAuthenticated) {
+      this.controlButtonsWrapper.node.style.display = 'flex';
     }
   }
 

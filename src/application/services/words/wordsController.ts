@@ -1,5 +1,5 @@
 import { IWordCard, IResponseWord } from '../../eBookPage/ebookInterface';
-import { app } from '../../..';
+import { getAuthorizedUser } from '../authorizationService/authorizedUser';
 
 export default class WordsController {
   private url: string = 'https://rslangapplication.herokuapp.com';
@@ -16,11 +16,13 @@ export default class WordsController {
 
   async getHardUserWords(): Promise<IWordCard[]> {
     const rawResponse = await fetch(
-      `${this.url}/users/${app.currentUser.userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`,
+      `${this.url}/users/${
+        getAuthorizedUser().userId
+      }/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"hard"}`,
       {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${app.currentUser.token}`,
+          Authorization: `Bearer ${getAuthorizedUser().token}`,
           Accept: 'application/json',
         },
       },
@@ -29,10 +31,10 @@ export default class WordsController {
   }
 
   async createUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<Response> {
-    const rawResponse = await fetch(`${this.url}/users/${app.currentUser.userId}/words/${wordId}`, {
+    const rawResponse = await fetch(`${this.url}/users/${getAuthorizedUser().userId}/words/${wordId}`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${app.currentUser.token}`,
+        Authorization: `Bearer ${getAuthorizedUser().token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -42,10 +44,10 @@ export default class WordsController {
   }
 
   async getUserWord(wordId: string): Promise<IWordCard[]> {
-    const rawResponse = await fetch(`${this.url}/users/${app.currentUser.userId}/words/${wordId}`, {
+    const rawResponse = await fetch(`${this.url}/users/${getAuthorizedUser().userId}/words/${wordId}`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${app.currentUser.token}`,
+        Authorization: `Bearer ${getAuthorizedUser().token}`,
         Accept: 'application/json',
       },
     });
@@ -53,10 +55,10 @@ export default class WordsController {
   }
 
   async changeUserWord(wordId: string, word: { difficulty: string; optional: {} }): Promise<Response> {
-    const rawResponse = await fetch(`${this.url}/users/${app.currentUser.userId}/words/${wordId}`, {
+    const rawResponse = await fetch(`${this.url}/users/${getAuthorizedUser().userId}/words/${wordId}`, {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${app.currentUser.token}`,
+        Authorization: `Bearer ${getAuthorizedUser().token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -66,13 +68,27 @@ export default class WordsController {
   }
 
   async getUserAgrWord(wordId: string): Promise<IWordCard[]> {
-    const rawResponse = await fetch(`${this.url}/users/${app.currentUser.userId}/aggregatedWords/${wordId}`, {
+    const rawResponse = await fetch(`${this.url}/users/${getAuthorizedUser().userId}/aggregatedWords/${wordId}`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${app.currentUser.token}`,
+        Authorization: `Bearer ${getAuthorizedUser().token}`,
         Accept: 'application/json',
       },
     });
     return rawResponse.json();
+  }
+
+  async getUserAgrWords(page: number, group: number): Promise<IWordCard[]> {
+    const rawResponse = await fetch(
+      `${this.url}/users/${getAuthorizedUser().userId}/aggregatedWords?page=${page}&group=${group}&wordsPerPage=20`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${getAuthorizedUser().token}`,
+          Accept: 'application/json',
+        },
+      },
+    );
+    return rawResponse.json().then((item) => item[0].paginatedResults.map((i: IResponseWord) => ({ ...i, id: i._id })));
   }
 }

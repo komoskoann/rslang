@@ -56,7 +56,7 @@ export default class WordsPagination extends Control {
 
   goToUserPage(e: EventTarget): number {
     const userPageInput = +(e as HTMLInputElement).value;
-    if (userPageInput < this.lastPage + 1 && userPageInput > this.firstPage + 1) {
+    if (userPageInput <= this.lastPage + 1 && userPageInput >= this.firstPage + 1) {
       this.currentPage = userPageInput - 1;
     }
     return this.currentPage;
