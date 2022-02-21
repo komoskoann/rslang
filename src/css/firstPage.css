@@ -69,6 +69,19 @@
   height: 250px;
   margin-top: 5px;
 }
+.col-2:hover .card-hard-words::after {
+  content: 'Раздел доступен после авторизации!';
+  position: absolute;
+  width: 70%;
+  top: 30%;
+  left: 15%;
+  color: var(--text-color);
+  background-color: var(--main-color);
+  padding: 3px 10px;
+  border: var(--main-border);
+  border-radius: 5px;
+  text-align: center;
+}
 .footer-section {
   background: var(--main-color);
   display: flex;

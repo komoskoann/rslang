@@ -18,7 +18,7 @@ export class Application {
   constructor() {
     this.header = new Header(document.body);
     this.navbar = new Navbar(document.body);
-    this.main = new Main(document.body, this.navbar.navButtons);
+    this.main = new Main(document.body);
     this.main.call();
     this.footer = new Footer(document.body);
     this.currentUser = new CurrentUser();

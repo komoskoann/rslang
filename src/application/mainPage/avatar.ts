@@ -24,7 +24,7 @@ export default class Avatar extends Control {
     this.context = this.canvas.getContext('2d');
     this.context.fillStyle = this.backgroundColor;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.context.font = '6rem Sans-serif';
+    this.context.font = '100px Sans-serif';
     this.context.fillStyle = this.lettersColor;
     this.context.textAlign = 'center';
     this.context.textBaseline = 'middle';

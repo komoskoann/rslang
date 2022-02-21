@@ -1,6 +1,6 @@
 import Control from '../../controls/control';
 import '../../css/header.css';
-import AuthorizationForm from '../autorizationForm/autorizationForm';
+import AuthorizationForm from '../authorizationForm/authorizationForm';
 
 export default class Header extends Control {
   authorizationButton: Control<HTMLElement>;
