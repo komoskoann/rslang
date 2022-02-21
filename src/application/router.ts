@@ -3,6 +3,9 @@ import EBookSection from '../application/eBookPage/eBookSection';
 import MiniGamesSection from '../application/gamesPage/miniGamesSection';
 import StatisticsSection from '../application/statisticsPage/statisticsSection';
 import AboutTeamSection from '../application/aboutTeamPage/aboutTeamSection';
+import SprintGameSection from './gamesPage/sprintGame/sprintGameSection';
+import AudioCallGameSection from './gamesPage/audioChallenge/audioCallGameSection';
+import SprintGameCard from './gamesPage/sprintGame/sprintGameCard';
 
 export default class Router {
   private defaultPath = 'main';
@@ -21,6 +24,12 @@ export default class Router {
 
   private hardWords: string = 'hardWords';
 
+  private sprintGame: string = 'sprint';
+
+  private sprintGameStart: string = 'sprintStart';
+
+  private audioGame: string = 'audio';
+
   resolve(path?: string) {
     this.path = path || location.hash.split('/')?.pop() || this.defaultPath;
     let resolved;
@@ -31,6 +40,15 @@ export default class Router {
       case this.hardWords:
         localStorage.setItem('isHard', 'true');
         resolved = EBookSection;
+        break;
+      case this.sprintGame:
+        resolved = SprintGameSection;
+        break;
+        case this.sprintGameStart:
+          resolved = SprintGameCard;
+          break;  
+      case this.audioGame:
+        resolved = AudioCallGameSection;
         break;
       case this.eBook:
         resolved = EBookSection;
