@@ -1,4 +1,4 @@
-import SprintGameSection from './sprintGameSection';
+import SprintGameSection from './sprintGame/sprintGameSection';
 import AudioCallGameSection from './audioChallenge/audioCallGameSection';
 
 export default class MiniGamesRouter {

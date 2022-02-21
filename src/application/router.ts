@@ -3,8 +3,14 @@ import EBookSection from '../application/eBookPage/eBookSection';
 import MiniGamesSection from '../application/gamesPage/miniGamesSection';
 import StatisticsSection from '../application/statisticsPage/statisticsSection';
 import AboutTeamSection from '../application/aboutTeamPage/aboutTeamSection';
+<<<<<<< HEAD
 import SprintSection from '../application/gamesPage/sprintGameSection';
 import AudioSection from '../application/gamesPage/audioCallGameSection';
+=======
+import SprintGameSection from './gamesPage/sprintGame/sprintGameSection';
+import AudioCallGameSection from './gamesPage/audioChallenge/audioCallGameSection';
+import SprintGameCard from './gamesPage/sprintGame/sprintGameCard';
+>>>>>>> develop
 
 export default class Router {
   private defaultPath = 'main';
@@ -25,6 +31,11 @@ export default class Router {
 
   private sprintGame: string = 'sprint';
 
+<<<<<<< HEAD
+=======
+  private sprintGameStart: string = 'sprintStart';
+
+>>>>>>> develop
   private audioGame: string = 'audio';
 
   resolve(path?: string) {
@@ -39,10 +50,20 @@ export default class Router {
         resolved = EBookSection;
         break;
       case this.sprintGame:
+<<<<<<< HEAD
         resolved = SprintSection;
         break;
       case this.audioGame:
         resolved = AudioSection;
+=======
+        resolved = SprintGameSection;
+        break;
+        case this.sprintGameStart:
+          resolved = SprintGameCard;
+          break;  
+      case this.audioGame:
+        resolved = AudioCallGameSection;
+>>>>>>> develop
         break;
       case this.eBook:
         resolved = EBookSection;
