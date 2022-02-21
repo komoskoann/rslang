@@ -310,6 +310,9 @@
   background-position: center;
   background-size: cover;
 }
+.audio-challenge__skip-button:hover {
+  transform: scale(1.1);
+}
 .audio-challenge__skip-button_background {
   background-position: center;
   background-size: 25%;

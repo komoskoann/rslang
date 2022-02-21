@@ -5,8 +5,6 @@ import { roundResult } from './audioChallengeGamePage';
 export default class audioChallengeResultsPage extends Control {
   private audio: HTMLAudioElement;
   private serverURL = 'https://rslangapplication.herokuapp.com/';
-  /* words: IWordCard[];
-  answers: boolean[]; */
   isPlaying = false;
   results: roundResult[] = [];
   tableResults:  HTMLTableSectionElement;

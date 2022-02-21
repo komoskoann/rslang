@@ -20,12 +20,12 @@ export default class audioChallengeStartPage extends Control {
     this.page = page;
     this.navLevels();
     this.addEventListeners();
-    this.checkEbookLevel();
+    /* this.checkEbookLevel(); */
   }
   private checkEbookLevel = (): void => {
     if (this.group) {
-      this.node.querySelectorAll('.audio-game__level-button').forEach(button => {
-        if (+button.getAttribute('data-level') === this.group) {
+      this.node.querySelectorAll('.audio-challenge__level-button').forEach(button => {
+        if (+button.getAttribute('data-level') == this.group) {
           button.classList.add('active');
           this.startgameButton.disabled = false;
         }
