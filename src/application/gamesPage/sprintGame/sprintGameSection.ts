@@ -34,13 +34,13 @@ export default class SprintGameSection {
     this.section = new newSection(this.node);
   }
 
-  private navigateStart() {    
+  private navigateStart() {
     this.node.querySelector('.start-button').addEventListener(
-        'click',
-        function (instance: SprintGameSection) {
-          instance.resolvePath((instance.node.querySelector('.start-button') as HTMLElement).id);
-          instance.isReloadRequired = true;
+      'click',
+      function (instance: SprintGameSection) {
+        instance.resolvePath((instance.node.querySelector('.start-button') as HTMLElement).id);
+        instance.isReloadRequired = true;
       }.bind(null, this),
     );
-  };
+  }
 }
