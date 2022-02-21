@@ -18,6 +18,12 @@
   gap: 30px 40px;
   margin: 40px 60px;
 }
+.level-cont-sprint{
+  width: 60%;
+  gap: 20px 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
 .level {
   text-align: center;
   font-weight: 600;
@@ -172,7 +178,9 @@
   font-size: 3rem;
 }
 .true-button,
-.false-button{
+.false-button,
+.to-spint,
+.to-ebook{
   width: 120px;
   height: 40px;
   color: var(--text-color);
@@ -184,11 +192,17 @@
   margin-top: 40px;
   z-index: 10;
 }
-
+.to-spint,
+.to-ebook{
+  width: 200px;
+}
+.cont-buttons{
+  margin: auto;
+}
 .card-result-wrapper{  
   position: absolute;
   border-radius: 10px;
-  top: 13%;
+  top: 100px;
   left: 5%;
   width: 60%;
   display: none;
@@ -222,12 +236,31 @@
   font-size: 1.4rem;
   font-weight: 500;
 }
+@media (max-width:1200px) {
+  .sprint-cont {
+    display: flex;
+    flex-direction: column;
+  }
+  .sprint-text {
+    width: 100% !important;
+  }
+}
 @media (max-width:1090px) {
   .points-sprint {
     display: flex;
+    width: 300px;
+    gap: 20px;
+    z-index: 2;
+    margin-bottom: 20px;
+  }
+  .sprint-card-section .sprint-img {
+    top: 45%;
+    opacity: 0.5;
+  }
+  .card-sprint {
+    flex-direction: column-reverse;
     align-items: center;
-    justify-content: space-between;
-    width: 200px;
+
   }
   .sprint-line1{
     left: 35px;
@@ -236,5 +269,52 @@
   .sprint-line2{
     left: 50px;
     top: 25px;
+  }
+  .card-result-wrapper{ 
+    top: 250px;
+    left: 10%;
+    width: 80%;
+  }
+}
+@media (max-width:940px) {
+  .sprint-img{
+    opacity: 0.4;
+    top: 10%;
+  }
+  .main-sprint{
+    width: 100%;
+  }
+  .card-title-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+}
+@media (max-width:850px) {
+  .level-cont-sprint{
+    width: 300px;
+    margin-right: 50px;
+    gap: 20px 50px;
+  }
+}
+@media (max-width:768px) {
+  .level-cont-sprint{
+    width: 300px;
+    margin-right: 50px;
+    gap: 20px 50px;
+  }
+ 
+}
+@media (max-width:405px) {
+  .sprint-cont{
+    margin: 20px auto;
+  }
+  .level-cont-sprint{
+    width: 200px;
+  }
+  .choose-level {
+    font-size: 1.2rem;
+    font-weight: 700;
   }
 }

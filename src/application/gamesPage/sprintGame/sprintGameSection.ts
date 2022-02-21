@@ -34,7 +34,7 @@ export default class SprintGameSection {
     this.section = new newSection(this.node);
   }
 
-  private navigateStart() {
+  private navigateStart() {    
     this.node.querySelector('.start-button').addEventListener(
         'click',
         function (instance: SprintGameSection) {

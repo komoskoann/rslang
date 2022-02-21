@@ -14,7 +14,6 @@ export default class MiniGamesSection {
   constructor(parentNode: HTMLElement) {
     this.node = parentNode;
     this.section = new MiniGamesSelectorSection(parentNode);
-    this.navigateGames();
   }
 
   destroy() {

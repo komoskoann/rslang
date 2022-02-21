@@ -1,6 +1,6 @@
 import Control from '../../../controls/control';
 import sprintGameCard from './sprintGameCard.html';
-import { IWordCard } from '../../eBookPage/ebookInterface';
+import { ISprint } from './ISprint';
 import GetWordsToSprint from '../../services/sprintGame/getWordsToSprint';
 import MainSprintSection from './sprintMainSection';
 import LocalStorage from '../../services/words/localStorage';
@@ -15,6 +15,18 @@ export default class SprintGameCard extends Control {
   localStorage: LocalStorage = new LocalStorage();
 
   private  currentPage : number;
+
+  private stop: boolean;
+
+  private seriesAns : number;
+
+  private trueWord : ISprint[] = [];
+
+  private seriesArr : Array<number> = [];
+
+  private falseWord : ISprint[] = [];
+
+  private result : number = 0;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'sprint-card-section');
@@ -33,60 +45,68 @@ export default class SprintGameCard extends Control {
   }
 
   async getWords(group: number): Promise<void> {
-    let wordsOnPage: IWordCard[] = await this.service.getWordstoSprint(this.currentPage, group);
+    let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(this.currentPage, group);
     let shuffled = wordsOnPage.map((value) => ({value})).sort(() => Math.random() - 0.5).map(({value}) => value);
     this.node.querySelector('.word-translation').innerHTML = shuffled[0].wordTranslate;
     this.node.querySelector('.word-name').innerHTML = wordsOnPage[0].word;
-    let j = 1; let trueWord : IWordCard[] = [], falseWord : IWordCard[] = [], result = 0;
+    let j = 1;
     this.node.querySelectorAll('[word]').forEach((word) => {
       function createResult(instance: SprintGameCard, e: KeyboardEventInit) {
-        if (j < wordsOnPage.length) {
-          
+        if (j < wordsOnPage.length) {          
           instance.node.querySelector('.word-translation').innerHTML = shuffled[j].wordTranslate;
           instance.node.querySelector('.word-name').innerHTML = wordsOnPage[j].word;
           if (word.classList.contains('true-button') || e.key === 'ArrowRight'){
             if (wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
-              trueWord.push(wordsOnPage[j]);
+              instance.trueWord.push(wordsOnPage[j]);
               instance.colorIndicator(true);
-              result += 10;
+              instance.seriesAns +=1; 
+              (instance.seriesAns >= 4) ? instance.result += 20 : instance.result += 10; 
             }
-            result -= 10;
+            instance.result -= 10; instance.seriesAns = 0;
             instance.colorIndicator(false);
-            falseWord.push(wordsOnPage[j]);
+            instance.falseWord.push(wordsOnPage[j]);
           }
           if (word.classList.contains('false-button') || e.key === 'ArrowLeft'){
             if(wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
-              falseWord.push(wordsOnPage[j]);
+              instance.falseWord.push(wordsOnPage[j]);
               instance.colorIndicator(false);
-              result -= 10;
+              instance.result -= 10; instance.seriesAns = 0;
             } 
             instance.colorIndicator(true);
-            trueWord.push(wordsOnPage[j]); result += 10;
+            instance.trueWord.push(wordsOnPage[j]); 
+            (instance.seriesAns >= 4) ? instance.result += 20 : instance.result += 10; 
+            instance.seriesAns +=1;
           }
           if (j === wordsOnPage.length-1){
-          (instance.node.querySelector('.true-button') as HTMLButtonElement).disabled = true;
+          instance.stop = true;
         }
+        instance.seriesArr.push(instance.seriesAns);
+        //console.log(Math.max.apply(null, instance.seriesArr));
+        console.log(instance.seriesAns)
         } j += 1;
-        
-        instance.node.querySelector('.result').innerHTML = `${result}`;
-        instance.node.querySelector('.point-result').innerHTML = `${result}`;
-        instance.node.querySelector('.right-count').innerHTML = `${trueWord.length}`;
-        instance.node.querySelector('.right-cont').innerHTML ='';  
-        for (let i = 0; i<trueWord.length; i++) {
-          const rightWordCont = new Control(instance.node.querySelector('.right-cont'), 'div', 'word-cont');      
-          new Control(rightWordCont.node, 'div', 'word', `${trueWord[i].word} - `);
-          new Control(rightWordCont.node, 'div', 'translate', `${trueWord[i].wordTranslate}`);
-        }
-        instance.node.querySelector('.wrong-count').innerHTML = `${falseWord.length}`;
-        instance.node.querySelector('.wrong-cont').innerHTML ='';  
-        for (let i = 0; i < falseWord.length; i++) {
-          const wrongWordCont = new Control(instance.node.querySelector('.wrong-cont'), 'div', 'word-cont');      
-          new Control(wrongWordCont.node, 'div', 'word', `${falseWord[i].word} - `);
-          new Control(wrongWordCont.node, 'div', 'translate', ` ${falseWord[i].wordTranslate}`);
-        }
+        instance.getResultTable();
       }
       word.addEventListener('keydown', createResult.bind(null, this)) ;
       word.addEventListener('click', createResult.bind(null, this));})
+  }
+
+  private getResultTable() {
+    this.node.querySelector('.result').innerHTML = `${this.result}`;
+    this.node.querySelector('.point-result').innerHTML = `${this.result}`;
+    this.node.querySelector('.right-count').innerHTML = `${this.trueWord.length}`;
+    this.node.querySelector('.right-cont').innerHTML ='';  
+  for (let i = 0; i<this.trueWord.length; i++) {
+          const rightWordCont = new Control(this.node.querySelector('.right-cont'), 'div', 'word-cont');      
+          new Control(rightWordCont.node, 'div', 'word', `${this.trueWord[i].word} - `);
+          new Control(rightWordCont.node, 'div', 'translate', `${this.trueWord[i].wordTranslate}`);
+        }
+        this.node.querySelector('.wrong-count').innerHTML = `${this.falseWord.length}`;
+        this.node.querySelector('.wrong-cont').innerHTML ='';  
+        for (let i = 0; i < this.falseWord.length; i++) {
+          const wrongWordCont = new Control(this.node.querySelector('.wrong-cont'), 'div', 'word-cont');      
+          new Control(wrongWordCont.node, 'div', 'word', `${this.falseWord[i].word} - `);
+          new Control(wrongWordCont.node, 'div', 'translate', ` ${this.falseWord[i].wordTranslate}`);
+        }
   }
 
   private timer(): void {
@@ -96,7 +116,7 @@ export default class SprintGameCard extends Control {
     if (!isStart) {
       isStart = true;
       interval = setInterval( () => {
-        if (count == 0 || ((this.node.querySelector('.true-button') as HTMLButtonElement).disabled === true)) {
+        if (count == 0 || (this.stop === true)) {
           clearInterval(interval);
           this.getResult();
         }
