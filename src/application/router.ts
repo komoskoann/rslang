@@ -4,7 +4,7 @@ import MiniGamesSection from '../application/gamesPage/miniGamesSection';
 import StatisticsSection from '../application/statisticsPage/statisticsSection';
 import AboutTeamSection from '../application/aboutTeamPage/aboutTeamSection';
 import SprintGameSection from './gamesPage/sprintGame/sprintGameSection';
-import AudioSection from '../application/gamesPage/audioCallGameSection';
+import AudioCallGameSection from './gamesPage/audioChallenge/audioCallGameSection';
 import SprintGameCard from './gamesPage/sprintGame/sprintGameCard';
 
 export default class Router {
@@ -48,7 +48,7 @@ export default class Router {
           resolved = SprintGameCard;
           break;  
       case this.audioGame:
-        resolved = AudioSection;
+        resolved = AudioCallGameSection;
         break;
       case this.eBook:
         resolved = EBookSection;

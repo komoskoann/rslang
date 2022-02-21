@@ -1,5 +1,5 @@
 import SprintGameSection from './sprintGame/sprintGameSection';
-import AudioCallGameSection from './audioCallGameSection';
+import AudioCallGameSection from './audioChallenge/audioCallGameSection';
 
 export default class MiniGamesRouter {
   resolve(path?: string) {
