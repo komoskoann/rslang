@@ -5,6 +5,7 @@ import { IWordCard } from './ebookInterface';
 import WordsController from '../services/words/wordsController';
 import { app } from '../..';
 import EBookSection from './eBookSection';
+import wordStats from './wordStats.html';
 
 export interface IPlayList {
   title: string;
@@ -74,6 +75,7 @@ export default class WordCard extends Control {
     this.listenEvents();
     this.renderToggleButtons();
     this.renderEngLevelMark();
+    this.renderWordGameStats();
   }
 
   private getId() {
@@ -166,6 +168,11 @@ export default class WordCard extends Control {
         engLevelMark.node.classList.add('blue');
         break;
     }
+  }
+
+  private renderWordGameStats() {
+    const wordGameStatsWrapper = new Control(this.node, 'div', 'word-game-stats-wrapper');
+
   }
 
   private playAudio(): void {
