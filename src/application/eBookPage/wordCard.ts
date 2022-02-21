@@ -179,7 +179,7 @@ export default class WordCard extends Control {
     const modalWrapper = new Control(wordGameStatsWrapper.node, 'div', 'modal-overlay');
     modalWrapper.node.id = 'simpleModal';
     modalWrapper.node.innerHTML = wordStats;
-    
+
   }
 
   private openModalStats() {
