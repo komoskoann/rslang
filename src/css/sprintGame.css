@@ -97,6 +97,7 @@
   left: -35%;
   width: 100px;
   top: -500px;
+  z-index: 1;
   transform: rotate(380deg);
 }
 .sprint-line1{
@@ -104,9 +105,11 @@
   left: 4%;
   width: 390px;
   top: -170px;
+  z-index: 1;
   transform: rotate(5deg);
 }
 .sprint-line2{
+  z-index: 1;
   position: relative;
   left: 5%;
   width: 380px;
@@ -138,8 +141,8 @@
   margin-left: 20px;
   font-size: 2.4rem;
 }
-.card-translate {
-  height: 300px;
+.card-translate,
+.card-start-time {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -149,11 +152,24 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+.time-text{
+  height: 60px;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+  color: rgb(15, 15, 112);
+}
 .word-english,
 .word-russian{
   height: 50px;
   font-weight: 700;
   color: rgb(15, 15, 112);
+}
+.time-to-start{
+  height: 65px;
+  font-weight: 500;
+  color: rgb(15, 15, 112);
+  font-size: 3rem;
 }
 .true-button,
 .false-button{
@@ -166,8 +182,46 @@
   font-size: 1.2rem;
   border: none;
   margin-top: 40px;
+  z-index: 10;
 }
 
+.card-result-wrapper{  
+  position: absolute;
+  border-radius: 10px;
+  top: 13%;
+  left: 5%;
+  width: 60%;
+  display: none;
+  flex-direction: column;
+  height: 500px;
+  overflow-y: auto;
+  background: var(--main-color);
+  z-index: 15;
+  padding: 20px;
+}
+.card-title-wrapper{
+  color: black;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 20px;
+}
+.result-of-right,
+.result-of-wrong{
+  margin: 20px;
+  color: rgb(21, 131, 17);
+  font-weight: 900;
+  font-size: 1.8rem;
+}
+.result-of-wrong{
+  color: rgb(131, 17, 17);
+}
+.word-cont{
+  margin: 20px;
+  display: flex;
+  height: 15px;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
 @media (max-width:1090px) {
   .points-sprint {
     display: flex;

@@ -9,6 +9,8 @@
   --color-c1: rgba(86, 168, 104, 0.76);
   --color-c2: rgba(24, 179, 171, 0.76);
   --color-hard: rgba(201, 9, 35, 0.897);
+  --right-ans: rgba(72, 179, 99, 0.438);
+  --wrong-ans: rgba(192, 56, 56, 0.795);
   --autorization-bgc: whitesmoke;
   --autorization-shadow-color: rgba(44, 44, 44, 0.4);
   --autorization-border-color: #bbb;
