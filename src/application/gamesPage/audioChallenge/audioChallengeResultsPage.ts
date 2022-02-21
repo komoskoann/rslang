@@ -1,21 +1,27 @@
 import audioChallengeResultsPageHTML from './audioChallengeResultsPage.html';
 import Control from '../../../controls/control';
-import { roundResult } from './audioChallengeGamePage';
+import { RoundResult } from './audioChallengeGamePage';
 
-export default class audioChallengeResultsPage extends Control {
+export default class AudioChallengeResultsPage extends Control {
   private audio: HTMLAudioElement;
+
   private serverURL = 'https://rslangapplication.herokuapp.com/';
+
   isPlaying = false;
-  results: roundResult[] = [];
-  tableResults:  HTMLTableSectionElement;
-  constructor(parentNode: HTMLElement, results: roundResult[]) {
+
+  results: RoundResult[] = [];
+
+  tableResults: HTMLTableSectionElement;
+
+  constructor(parentNode: HTMLElement, results: RoundResult[]) {
     super(parentNode.parentElement, 'div', 'audio-challenge-container', '');
     this.node.innerHTML = audioChallengeResultsPageHTML;
     this.results = results;
     this.renderResultsTable(this.results);
     this.renderResultsTitle(this.results);
   }
-  private renderResultsTitle(results: roundResult[]): void {
+
+  private renderResultsTitle(results: RoundResult[]): void {
     const textNode = this.node.querySelector('.audio-challenge__results-title') as HTMLElement;
     let confirmAnswers = 0;
     let message = '';
@@ -24,10 +30,19 @@ export default class audioChallengeResultsPage extends Control {
         ++confirmAnswers;
       }
     }
-    message = confirmAnswers < 3 ? 'Снизу скоро постучат.' : confirmAnswers < 6 ? 'Неплохо-неплохо. Попробуй еще разок.' : confirmAnswers < 8 ? 'Ты можешь ещё лучше, я уверен.' : confirmAnswers < 10 ? 'А ты хорош.' : 'Ты великолепен.';
+    if (confirmAnswers < 3) {
+      message = 'Снизу скоро постучат.';
+    } else if (confirmAnswers < 6) {
+      message = 'Неплохо-неплохо. Попробуй еще разок.';
+    } else if (confirmAnswers < 8) {
+      message = 'Ты можешь ещё лучше, я уверен.';
+    } else if (confirmAnswers < 10) {
+      message = 'А ты хорош.';
+    } else message = 'Ты великолепен.';
     textNode.textContent = message;
   }
-  private renderResultsTable(results: roundResult[]): void {
+
+  private renderResultsTable(results: RoundResult[]): void {
     if (results.length) {
       this.tableResults = document.getElementById('tableResultsBody') as HTMLTableSectionElement;
       for (let i = 0; i < this.results.length; i++) {
@@ -64,6 +79,7 @@ export default class audioChallengeResultsPage extends Control {
       this.node.addEventListener('click', this.playSoundWord);
     }
   }
+
   private playSoundWord = (): void => {
     const target = (event.target as Element).closest('.table-button__sound') as HTMLButtonElement;
     if (target) {
@@ -74,7 +90,8 @@ export default class audioChallengeResultsPage extends Control {
       }
       this.playAudio(index);
     }
-  }
+  };
+
   private playAudio = (index: number): void => {
     if (!this.isPlaying || this.audio?.ended) {
       this.audio = new Audio();
@@ -86,5 +103,5 @@ export default class audioChallengeResultsPage extends Control {
       this.audio.pause();
       this.isPlaying = false;
     }
-  }
+  };
 }

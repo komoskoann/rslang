@@ -1,4 +1,4 @@
-import { ISprint } from "../../gamesPage/sprintGame/ISprint";
+import { ISprint } from '../../gamesPage/sprintGame/ISprint';
 import { getAuthorizedUser } from '../authorizationService/authorizedUser';
 
 export default class GetWordsToSprint {

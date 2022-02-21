@@ -44,9 +44,9 @@ export default class Router {
       case this.sprintGame:
         resolved = SprintGameSection;
         break;
-        case this.sprintGameStart:
-          resolved = SprintGameCard;
-          break;  
+      case this.sprintGameStart:
+        resolved = SprintGameCard;
+        break;
       case this.audioGame:
         resolved = AudioCallGameSection;
         break;
