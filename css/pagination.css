@@ -54,6 +54,10 @@
   align-items: center;
 }
 
+.learnt-page-number {
+  background-color: var(--color-c1);
+}
+
 .input-page-number {
   width: 100%;
   text-align: center;
