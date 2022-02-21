@@ -4,12 +4,17 @@ import { roundResult } from './audioChallengeGamePage';
 
 export default class audioChallengeResultsPage extends Control {
   private audio: HTMLAudioElement;
+
   private serverURL = 'https://rslangapplication.herokuapp.com/';
+
   /* words: IWordCard[];
   answers: boolean[]; */
   isPlaying = false;
+
   results: roundResult[] = [];
-  tableResults:  HTMLTableSectionElement;
+
+  tableResults: HTMLTableSectionElement;
+
   constructor(parentNode: HTMLElement, results: roundResult[]) {
     super(parentNode.parentElement, 'div', 'audio-challenge-container', '');
     this.node.innerHTML = audioChallengeResultsPageHTML;
@@ -17,6 +22,7 @@ export default class audioChallengeResultsPage extends Control {
     this.renderResultsTable(this.results);
     this.renderResultsTitle(this.results);
   }
+
   private renderResultsTitle(results: roundResult[]): void {
     const textNode = this.node.querySelector('.audio-challenge__results-title') as HTMLElement;
     let confirmAnswers = 0;
@@ -26,9 +32,19 @@ export default class audioChallengeResultsPage extends Control {
         ++confirmAnswers;
       }
     }
-    message = confirmAnswers < 3 ? 'bad' : confirmAnswers < 6 ? 'not bad' : confirmAnswers < 8 ? 'normal' : confirmAnswers < 10 ? 'good' : 'perfectly';
+    message =
+      confirmAnswers < 3
+        ? 'bad'
+        : confirmAnswers < 6
+          ? 'not bad'
+          : confirmAnswers < 8
+            ? 'normal'
+            : confirmAnswers < 10
+              ? 'good'
+              : 'perfectly';
     textNode.textContent = message;
   }
+
   private renderResultsTable(results: roundResult[]): void {
     if (results.length) {
       this.tableResults = document.getElementById('tableResultsBody') as HTMLTableSectionElement;
@@ -66,6 +82,7 @@ export default class audioChallengeResultsPage extends Control {
       this.node.addEventListener('click', this.playSoundWord);
     }
   }
+
   private playSoundWord = (): void => {
     const target = (event.target as Element).closest('.table-button__sound') as HTMLButtonElement;
     if (target) {
@@ -76,7 +93,8 @@ export default class audioChallengeResultsPage extends Control {
       }
       this.playAudio(index);
     }
-  }
+  };
+
   private playAudio = (index: number): void => {
     if (!this.isPlaying || this.audio?.ended) {
       this.audio = new Audio();
@@ -88,5 +106,5 @@ export default class audioChallengeResultsPage extends Control {
       this.audio.pause();
       this.isPlaying = false;
     }
-  }
+  };
 }

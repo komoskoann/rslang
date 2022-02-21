@@ -19,5 +19,4 @@ export default class MiniGamesSection {
   destroy() {
     this.section.destroy();
   }
-
 }

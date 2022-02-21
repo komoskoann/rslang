@@ -86,6 +86,7 @@ button#audioCall {
 
 .game-nav-title {
   font-size: 2rem;
+  color: #ffffff;
 }
 
 @keyframes pulse-sprint {

@@ -7,7 +7,6 @@ import LocalStorage from '../../services/words/localStorage';
 import WordsPagination from '../../eBookPage/wordsPagination';
 
 export default class MainSprintSection extends Control {
-
   service: GetWordsToSprint = new GetWordsToSprint();
 
   private currentEnglishLevel: number;
@@ -19,8 +18,7 @@ export default class MainSprintSection extends Control {
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'select-main-section');
     this.node.innerHTML = sprintSection;
-    this.currentEnglishLevel =
-      +this.localStorage.getFromLocalStorage(this.englishLevel);
+    this.currentEnglishLevel = +this.localStorage.getFromLocalStorage(this.englishLevel);
     this.navLevels();
   }
 
@@ -33,12 +31,10 @@ export default class MainSprintSection extends Control {
           instance.currentEnglishLevel = +level.getAttribute('level');
           instance.node.querySelector('[level]').classList.add('levelGame');
           instance.localStorage.setToLocalStorage(instance.englishLevel, `${instance.currentEnglishLevel}`);
-        }.bind(null, this), 
+        }.bind(null, this),
       );
     });
-   
   }
-
 
   destroy() {
     super.destroy();

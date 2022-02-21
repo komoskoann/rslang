@@ -6,6 +6,7 @@ import WordsController from '../services/words/wordsController';
 import { app } from '../..';
 import EBookSection from './eBookSection';
 import wordStats from './wordStats.html';
+import { getAuthorizedUser } from '../services/authorizationService/authorizedUser';
 
 export interface IPlayList {
   title: string;
@@ -78,7 +79,6 @@ export default class WordCard extends Control {
     this.renderEngLevelMark();
     this.renderWordGameStats();
     this.listenEvents();
-
   }
 
   private getId() {
@@ -174,20 +174,21 @@ export default class WordCard extends Control {
   }
 
   private renderWordGameStats() {
-    const wordGameStatsWrapper = new Control(this.node, 'div', 'word-game-stats-wrapper');
-    this.gameStatsButton = new Control(wordGameStatsWrapper.node, 'div', 'game-stats-button');
-    const modalWrapper = new Control(wordGameStatsWrapper.node, 'div', 'modal-overlay');
-    modalWrapper.node.id = 'simpleModal';
-    modalWrapper.node.innerHTML = wordStats;
-
+    if (getAuthorizedUser()) {
+      const wordGameStatsWrapper = new Control(this.node, 'div', 'word-game-stats-wrapper');
+      this.gameStatsButton = new Control(wordGameStatsWrapper.node, 'div', 'game-stats-button');
+      const modalWrapper = new Control(wordGameStatsWrapper.node, 'div', 'modal-overlay');
+      modalWrapper.node.id = 'simpleModal';
+      modalWrapper.node.innerHTML = wordStats;
+    }
   }
 
   private openModalStats() {
-    document.getElementById('simpleModal').style.display = "block";
+    document.getElementById('simpleModal').style.display = 'block';
   }
 
   private closeModalStats() {
-    document.getElementById('simpleModal').style.display = "none";
+    document.getElementById('simpleModal').style.display = 'none';
   }
 
   private closeModalStatsOutsideClick(e: Event) {
@@ -322,8 +323,10 @@ export default class WordCard extends Control {
     this.playButton.node.addEventListener('click', this.playAudio.bind(this));
     this.difficultWordButton.node.addEventListener('click', this.toggleToDifficult.bind(this));
     this.learntWordButton.node.addEventListener('click', this.toggleToLearnt.bind(this));
-    this.gameStatsButton.node.addEventListener('click', this.openModalStats.bind(this));
-    document.querySelector('.closeBtn').addEventListener('click', this.closeModalStats.bind(this));
-    window.addEventListener('click', this.closeModalStatsOutsideClick);
+    if (getAuthorizedUser()) {
+      this.gameStatsButton.node.addEventListener('click', this.openModalStats.bind(this));
+      document.querySelector('.closeBtn').addEventListener('click', this.closeModalStats.bind(this));
+      window.addEventListener('click', this.closeModalStatsOutsideClick);
+    }
   }
 }
