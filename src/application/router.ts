@@ -5,6 +5,7 @@ import StatisticsSection from '../application/statisticsPage/statisticsSection';
 import AboutTeamSection from '../application/aboutTeamPage/aboutTeamSection';
 import SprintGameSection from './gamesPage/sprintGame/sprintGameSection';
 import AudioSection from '../application/gamesPage/audioCallGameSection';
+import SprintGameCard from './gamesPage/sprintGame/sprintGameCard';
 
 export default class Router {
   private defaultPath = 'main';
@@ -25,6 +26,8 @@ export default class Router {
 
   private sprintGame: string = 'sprint';
 
+  private sprintGameStart: string = 'sprintStart';
+
   private audioGame: string = 'audio';
 
   resolve(path?: string) {
@@ -41,6 +44,9 @@ export default class Router {
       case this.sprintGame:
         resolved = SprintGameSection;
         break;
+        case this.sprintGameStart:
+          resolved = SprintGameCard;
+          break;  
       case this.audioGame:
         resolved = AudioSection;
         break;

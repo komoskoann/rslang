@@ -18,7 +18,7 @@ export default class SprintGameCard extends Control {
 
   private stop: boolean;
 
-  private seriesAns : number;
+  private seriesAns : number = 0;
 
   private trueWord : ISprint[] = [];
 
@@ -27,6 +27,8 @@ export default class SprintGameCard extends Control {
   private falseWord : ISprint[] = [];
 
   private result : number = 0;
+
+  private maxSeries: number = 0;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'sprint-card-section');
@@ -38,8 +40,11 @@ export default class SprintGameCard extends Control {
     this.currentEnglishLevel =
       +this.localStorage.getFromLocalStorage('EngLevel');
     this.getWords(this.currentEnglishLevel);
+    this.maxSeries = Math.max.apply(null, this.seriesArr);
   }
 
+
+  
   private randomPage() {
     return Math.floor(Math.random()*31);
   }
@@ -50,6 +55,8 @@ export default class SprintGameCard extends Control {
     this.node.querySelector('.word-translation').innerHTML = shuffled[0].wordTranslate;
     this.node.querySelector('.word-name').innerHTML = wordsOnPage[0].word;
     let j = 1;
+    
+    
     this.node.querySelectorAll('[word]').forEach((word) => {
       function createResult(instance: SprintGameCard, e: KeyboardEventInit) {
         if (j < wordsOnPage.length) {          
@@ -80,9 +87,9 @@ export default class SprintGameCard extends Control {
           if (j === wordsOnPage.length-1){
           instance.stop = true;
         }
+        let coefficient = (instance.seriesAns >=4) ? 20 : 10;
+        instance.node.querySelector('.coefficient').innerHTML = `${coefficient}`;
         instance.seriesArr.push(instance.seriesAns);
-        //console.log(Math.max.apply(null, instance.seriesArr));
-        console.log(instance.seriesAns)
         } j += 1;
         instance.getResultTable();
       }
@@ -95,7 +102,7 @@ export default class SprintGameCard extends Control {
     this.node.querySelector('.point-result').innerHTML = `${this.result}`;
     this.node.querySelector('.right-count').innerHTML = `${this.trueWord.length}`;
     this.node.querySelector('.right-cont').innerHTML ='';  
-  for (let i = 0; i<this.trueWord.length; i++) {
+        for (let i = 0; i<this.trueWord.length; i++) {
           const rightWordCont = new Control(this.node.querySelector('.right-cont'), 'div', 'word-cont');      
           new Control(rightWordCont.node, 'div', 'word', `${this.trueWord[i].word} - `);
           new Control(rightWordCont.node, 'div', 'translate', `${this.trueWord[i].wordTranslate}`);
@@ -116,7 +123,7 @@ export default class SprintGameCard extends Control {
     if (!isStart) {
       isStart = true;
       interval = setInterval( () => {
-        if (count == 0 || (this.stop === true)) {
+        if (!count || this.stop) {
           clearInterval(interval);
           this.getResult();
         }
@@ -127,14 +134,7 @@ export default class SprintGameCard extends Control {
   }
    
   private colorIndicator(word : boolean) : void {
-    switch(word){
-      case(false):
-      (this.node.querySelector('.card-translate') as HTMLElement).style.background = 'var(--wrong-ans)';
-      break;
-      case(true):
-      (this.node.querySelector('.card-translate') as HTMLElement).style.background = 'var(--right-ans)';
-      break;
-    }
+    (this.node.querySelector('.card-translate') as HTMLElement).style.background = word ? 'var(--right-ans)' : 'var(--wrong-ans)';
   }
  
   private startTime() {
