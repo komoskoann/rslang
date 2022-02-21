@@ -1,0 +1,322 @@
+.audio-challenge-wrapper {
+  flex-grow: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.audio-challenge-container {
+  flex-grow: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  margin: auto;
+  max-width: 1320px;
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.audio-challenge__start-image {
+  position: absolute;
+  width: 600px;
+  height: 460px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  z-index: -1;
+}
+.audio-challenge__start-image-one {
+  right: 6vw;
+  top: 2vh;
+  background-image: url('../assets/audio-challenge/start-page-two.png');
+}
+.audio-challenge__start-image-two {
+  left: 5vw;
+  bottom: 7vh;
+  background-image: url('../assets/audio-challenge/start-page-one.png');
+}
+.audio-challenge__rewind-button {
+  position: absolute;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  height: 40px;
+  width: 40px;
+  top: 6vh;
+  right: 4vw;
+  background-image: url('../assets/audio-challenge/rewind.svg');
+  filter: var(--main-color-filter);
+  transition: all 0.3s;
+}
+.audio-challenge__rewind-button:hover {
+  transform: scale(1.2);
+}
+.audio-challenge__title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 0 0 4vh 0;
+}
+.audio-challenge__text {
+  font-size: 1.25rem;
+  text-align: center;
+  max-width: 750px;
+  margin: 10px 0;
+}
+.audio-challenge__levels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 4vh 0 0 0;
+}
+.audio-challenge__levels-title {
+  font-size: 1.75rem;
+  margin: 0;
+  font-weight: 600;
+}
+.audio-challenge__levels-container {
+  display: flex;
+  margin: 10px 0;
+}
+.audio-challenge__level-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 500;
+  width: 50px;
+  height: 50px;
+  border-radius: 20px;
+  border: var(--main-color) solid 2px;
+  transition: all 0.3s;
+  cursor: pointer;
+  user-select: none;
+}
+.audio-challenge__level-button:not(:last-child) {
+  margin: 0 20px 0 0;
+}
+.audio-challenge__start-button {
+  height: 65px;
+  width: 180px;
+  border-radius: 20px;
+  border: var(--main-color) solid 2px;
+  margin: 4vh 0 0 0;
+  font-size: 1.25rem;
+  transition: all 0.3s;
+  user-select: none;
+  position: relative;
+}
+.audio-challenge__start-button::after {
+  position: absolute;
+  content: "Перед началом игры необходимо выбрать уровень";
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s;
+  height: 40px;
+  width: max-content;
+  top: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 15px;
+  color: var(--text-color);
+}
+.audio-challenge__start-button:disabled:hover::after {
+  visibility: visible;
+  opacity: 1;
+}
+.audio-challenge__start-button:not(:disabled):hover {
+  background-color: var(--main-color);
+}
+.audio-challenge__level-button:hover {
+  background-color: var(--main-color-50-percent);
+}
+.audio-challenge__level-button.active {
+  background-color: var(--main-color);
+}
+.audio-challenge__music-button {
+  position: absolute;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  height: 40px;
+  width: 40px;
+  top: 6vh;
+  right: 4vw;
+  background-color: transparent;
+  background-image: url('../assets/audio-challenge/music.svg');
+  background-position: left;
+  filter: var(--main-color-filter);
+  transition: all 0.3s;
+  border: none;
+}
+.audio-challenge__music-button:hover,
+.audio-challenge__sound-button:hover {
+  transform: scale(1.1);
+}
+.audio-challenge__music-button.music-cancel {
+  background-image: url('../assets/audio-challenge/music-off.svg');
+}
+.audio-challenge__dots-items {
+  display: flex;
+  justify-content: space-between;
+  margin: -100px 0 0;
+}
+.audio-challenge__dots-item {
+  height: 16px;
+  width: 16px;
+  background-color: var(--main-color);
+  border-radius: 50%;
+}
+.audio-challenge__description {
+  height: 340px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+.audio-challenge__card {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 220px;
+  min-width: 750px;
+  padding: 10px;
+  display: flex;
+  gap: 20px;
+  border-radius: 10px;
+}
+.audio-challenge__card-image {
+  height: 200px;
+  width: 320px;
+  border-radius: 10px;
+  object-fit: cover;
+  -webkit-box-shadow: 0px 3px 6px 3px var(--autorization-shadow-color);
+  -moz-box-shadow: 0px 3px 6px 3px var(--autorization-shadow-color);
+  box-shadow: 0px 3px 6px 3px var(--autorization-shadow-color);
+}
+.audio-challenge__card-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 0;
+  gap: 15px;
+  max-width: 100%;
+}
+.audio-challenge__card-info_item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.audio-challenge__sound-icon {
+  min-height: 30px;
+  min-width: 30px;
+  background-image: url('../assets/audio-challenge/sound-icon.svg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center;
+  cursor: pointer;
+  filter: invert(72%) sepia(74%) saturate(1219%) hue-rotate(350deg) brightness(103%) contrast(107%);
+}
+.audio-challenge__word-info,
+.audio-challenge__word-example {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+.audio-challenge__word-example {
+  display: flex;
+  flex-direction: column;
+}
+.audio-challenge__word-transcription {
+  margin: 0 0 0 10px;
+  color: var(--main-color);
+  font-style: italic;
+}
+.audio-challenge__word-example_title,
+.audio-challenge__word-example_translation {
+  margin: 0;
+}
+.audio-challenge__dots-item:not(:last-child) {
+  margin: 0 30px 0 0;
+}
+.audio-challenge__sound-button {
+  border: none;
+  background-color: transparent;
+  height: 100px;
+  width: 100px;
+  background-image: url('../assets/audio-challenge/sound.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: var(--main-color-filter);
+  transition: all 0.3s;
+}
+.audio-challenge__sound-button:active {
+  transform: scale(1.0);
+}
+.audio-challenge__words-buttons {
+  margin: 0 0 120px;
+  display: flex;
+}
+.audio-challenge__word-button {
+  background-color: var(--main-color-50-percent);
+  border: 2px solid var(--main-color);
+  padding: 5px 20px;
+  border-radius: 15px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s;
+  height: 50px;
+  min-width: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.audio-challenge__word-button:hover {
+  transform: scale(1.1);
+  background-color: transparent;
+}
+.audio-challenge__word-button.active.correct {
+  border: 2px solid #008000;
+  background-color: #0080004f;
+}
+.audio-challenge__word-button.active.not-correct {
+  border: 2px solid #ff0000;
+  background-color: #ff00004f;
+}
+.audio-challenge__word-button:not(:last-child) {
+  margin: 0 30px 0 0;
+}
+.audio-challenge__skip-button {
+  height: 65px;
+  width: 180px;
+  border-radius: 20px;
+  border: var(--main-color) solid 2px;
+  background-color: transparent;
+  font-size: 1.25rem;
+  transition: all 0.3s;
+  user-select: none;
+  padding: 0px;
+  background-position: center;
+  background-size: cover;
+}
+.audio-challenge__skip-button_background {
+  background-position: center;
+  background-size: 25%;
+  background-image: url('../assets/audio-challenge/right-arrow.svg');
+  background-repeat: no-repeat;
+}
+.audio-challenge__skip-button.active {
+  background-color: var(--main-color);
+  color: white;
+}
