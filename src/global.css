@@ -15,6 +15,7 @@
   --autorization-shadow-color: rgba(44, 44, 44, 0.4);
   --autorization-border-color: #bbb;
   --autorization-border-color-2: #888;
+  --main-color-rgba-50: rgba(255, 193, 7, 0.5);
   --dictionary-table-button-filter-color: invert(12%) sepia(0%) saturate(2711%) hue-rotate(216deg) brightness(108%) contrast(81%);
   --dictionary-table-button-filter-color-hover: invert(69%) sepia(3%) saturate(17%) hue-rotate(351deg) brightness(88%) contrast(94%);
 }
@@ -31,4 +32,11 @@ main {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+}
+a {
+  text-decoration: none;
+  color: var(--text-color);
+}
+a:hover{
+  color: var(--text-color);
 }
