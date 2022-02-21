@@ -21,7 +21,6 @@ export default class audioChallengeStartPage extends Control {
     this.navLevels();
     this.addEventListeners();
     this.checkEbookLevel();
-    console.log(page, group)
   }
   private checkEbookLevel = (): void => {
     if (this.group) {

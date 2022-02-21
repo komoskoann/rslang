@@ -1,9 +1,10 @@
 import audioChallengeGamePageHTML from './audioChallengeGamePage.html';
 import Control from '../../../controls/control';
-import '../../../css/audioChallege.css';
 import { IWordCard } from '../../eBookPage/ebookInterface';
 import { IPlayList } from '../../eBookPage/wordCard';
 import { Resolver } from 'webpack';
+import audioChallengeResultsPage from './audioChallengeResultsPage';
+export type roundResult = [IWordCard, boolean];
 
 export default class audioChallengeGamePage extends Control {
   private audio: HTMLAudioElement;
@@ -12,13 +13,13 @@ export default class audioChallengeGamePage extends Control {
   private card: HTMLElement;
   private musicModeButton: HTMLElement;
   private soundRepeatButton: HTMLElement;
-  /* private wordButtons: NodeListOf<Element>; */
   private dotIndicators: NodeListOf<Element>;
   private skipButton: HTMLElement;
   private isSoundsOn: boolean = true;
   private isAnswerChecked: boolean = false;
   private round: number = 0;
   private totalRounds = 10;
+  private results: roundResult[] = [];
   private playList: IPlayList[];
   private serverURL = 'https://rslangapplication.herokuapp.com/';
   constructor(parentNode: HTMLElement, words: IWordCard[]) {
@@ -28,7 +29,6 @@ export default class audioChallengeGamePage extends Control {
     this.musicModeButton = this.node.querySelector('.audio-challenge__music-button');
     this.soundRepeatButton = document.querySelector('.audio-challenge__sound-button');
     this.card = document.querySelector('.audio-challenge__card');
-    /* this.wordButtons = document.querySelectorAll('.audio-challenge__word-button'); */
     this.skipButton = this.node.querySelector('.audio-challenge__skip-button');
     this.addEventListeners();
     this.nextRound();
@@ -74,13 +74,17 @@ export default class audioChallengeGamePage extends Control {
       this.isPlaying = false;
     }
   }
+  private showResults = (): void => {
+    /* let count = 0;
+    let maxcount: number[] = [];
+    this.results.forEach((item, index, array) => {
+      count = item[1] === array[index-1][1] && item[1] === true ? count++ : 0;
+      maxcount.push(count);
+    });
+    console.log(Math.max(...maxcount)); */
+  }
   private nextRound = (): void => {
     this.isAnswerChecked = false;
-    if (this.round >= this.totalRounds) {
-      console.log('end');
-      this.summurize();
-      return;
-    }
     this.skipButton.textContent = 'Не знаю';
     this.playAudio(0);
     const wordButtons = document.querySelectorAll('.audio-challenge__word-button');
@@ -98,7 +102,7 @@ export default class audioChallengeGamePage extends Control {
     setTimeout(() => window.addEventListener('click', this.checkAnswer), 0);
     setTimeout(() => window.addEventListener('click', this.skipWord), 0);
   }
-  private fillCard = async (): Promise<void> => {
+  private formCard = async (): Promise<void> => {
     const img = this.card.querySelector('.audio-challenge__card-image') as HTMLImageElement;
     img.src = img.src = `${this.serverURL}${this.words[this.round].image}`;
     this.node.querySelector('.audio-challenge__word-title').textContent = `${this.words[this.round].word}`;
@@ -113,7 +117,9 @@ export default class audioChallengeGamePage extends Control {
     }
   }
   private summurize = (): void => {
-    this.node.innerHTML = 'ТАБЛИЦА ИТОГОВ';
+    this.summarizeSound();
+    new audioChallengeResultsPage(this.node, this.results);
+    this.destroy();
   }
   private checkAnswer = (): void => {
     const variantButton = (event.target as Element).closest('.audio-challenge__word-button') as HTMLButtonElement;
@@ -121,18 +127,52 @@ export default class audioChallengeGamePage extends Control {
       variantButton.classList.add('active');
       if (!variantButton.classList.contains('correct')) {
         this.node.querySelector('.correct').classList.add('active');
+        this.wrongAnswerSound();
         (this.dotIndicators[this.round] as HTMLElement).style.backgroundColor = 'red';
+        this.results.push([this.words[this.round], false]);
       } else {
+        this.rightAnswerSound();
         (this.dotIndicators[this.round] as HTMLElement).style.backgroundColor = 'green';
+        this.results.push([this.words[this.round], true]);
       }
       this.renderWordCard();
+    }
+  }
+  private rightAnswerSound = (): void => {
+    if (this.isSoundsOn) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.playAudio(3);
+    }
+  }
+  private skipAnswerSound = (): void => {
+    if (this.isSoundsOn) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.playAudio(4);
+    }
+  }
+  private wrongAnswerSound = (): void => {
+    if (this.isSoundsOn) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.playAudio(5);
+    }
+  }
+  private summarizeSound = (): void => {
+    if (this.isSoundsOn) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.playAudio(6);
     }
   }
   private skipWord = (): void => {
     if (event.target === this.skipButton) {
       this.node.querySelector('.correct').classList.add('active');
       (this.dotIndicators[this.round] as HTMLElement).style.backgroundColor = 'royalblue';
+      this.skipAnswerSound();
       this.renderWordCard();
+      this.results.push([this.words[this.round], false]);
     }
   }
   private renderWordCard = (): void => {
@@ -143,12 +183,17 @@ export default class audioChallengeGamePage extends Control {
     this.skipButton.addEventListener('click', this.hideWordCard);
     this.soundRepeatButton.style.visibility = 'hidden';
     this.soundRepeatButton.style.opacity = '0';
-    this.fillCard();
+    this.formCard();
     this.isAnswerChecked = true;
+    window.removeEventListener('click', this.skipWord);
   }
   private hideWordCard = (): void => {
-    this.skipButton.className = 'audio-challenge__skip-button';
     ++this.round;
+    if (this.round >= this.totalRounds) {
+      this.summurize();
+      return;
+    }
+    this.skipButton.className = 'audio-challenge__skip-button';
     this.skipButton.removeEventListener('click', this.nextRound);
     this.soundRepeatButton.style.visibility = 'visible';
     this.soundRepeatButton.style.opacity = '1';
@@ -159,7 +204,6 @@ export default class audioChallengeGamePage extends Control {
     this.nextRound();
     this.skipButton.removeEventListener('click', this.hideWordCard);
     window.removeEventListener('click', this.checkAnswer);
-    window.removeEventListener('click', this.skipWord);
   }
   private createPlaylist = (): IPlayList[] => {
     return this.playList = [
@@ -176,11 +220,19 @@ export default class audioChallengeGamePage extends Control {
         src: `${this.serverURL}${this.words[this.round].audioExample}`,
       },
       {
-        title: 'answer',
-        src: `../../../assets/audio-challenge/answer.mp3`,
+        title: 'right-answer',
+        src: `../../../assets/audio-challenge/right-answer.mp3`,
       },
       {
-        title: 'table',
+        title: 'skip-answer',
+        src: `../../../assets/audio-challenge/skip-answer.mp3`,
+      },
+      {
+        title: 'wrong-answer',
+        src: `../../../assets/audio-challenge/wrong-answer.mp3`,
+      },
+      {
+        title: 'summarize',
         src: `../../../assets/audio-challenge/table.mp3`,
       },
     ];

@@ -163,7 +163,6 @@
 .audio-challenge__dots-items {
   display: flex;
   justify-content: space-between;
-  margin: -100px 0 0;
 }
 .audio-challenge__dots-item {
   height: 16px;
@@ -172,7 +171,7 @@
   border-radius: 50%;
 }
 .audio-challenge__description {
-  height: 340px;
+  height: 280px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -264,8 +263,9 @@
   transform: scale(1.0);
 }
 .audio-challenge__words-buttons {
-  margin: 0 0 120px;
+  margin: 0 0 6vh;
   display: flex;
+  flex-wrap: wrap;
 }
 .audio-challenge__word-button {
   background-color: var(--main-color-50-percent);
@@ -279,7 +279,7 @@
   height: 50px;
   min-width: 180px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 .audio-challenge__word-button:hover {
@@ -295,7 +295,7 @@
   background-color: #ff00004f;
 }
 .audio-challenge__word-button:not(:last-child) {
-  margin: 0 30px 0 0;
+  margin: 0 30px 20px 0;
 }
 .audio-challenge__skip-button {
   height: 65px;
@@ -319,4 +319,52 @@
 .audio-challenge__skip-button.active {
   background-color: var(--main-color);
   color: white;
+}
+.audio-challenge__results-title {
+  font-weight: 500;
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0 0 30px;
+}
+.audio-challenge__results-table {
+  justify-self: flex-start;
+  align-self: flex-start;
+  margin: 0;
+}
+.audio-challenge__col-button-sound {
+  min-width: 40px;
+}
+.audio-challenge__col1-point {
+  min-width: 50px;
+  font-weight: 700;
+}
+.audio-challenge__col2-word,
+.audio-challenge__col3-transcription,
+.audio-challenge__col4-translate {
+  width: 33%;
+}
+.audio-challenge__col5-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+}
+.table-button__sound {
+  background: no-repeat transparent;
+  background-position: center;
+  background-size: contain;
+  background-image: url("../assets/audio-challenge/sound-icon.svg");
+}
+.audio-challenge__col5-result_icon {
+  height: 24px;
+  width: 24px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.audio-challenge__col5-result_icon.confirm {
+  background-image: url("../assets/audio-challenge/confirm.svg");
+}
+.audio-challenge__col5-result_icon.wrong {
+  background-image: url("../assets/audio-challenge/cancel.svg");
 }
