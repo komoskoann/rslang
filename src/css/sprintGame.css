@@ -123,6 +123,18 @@
   top: 25px;
   transform: rotate(370deg);
 }
+.play-button {
+  width: 30px;
+  height: 30px;
+  margin-right: 20px;
+  background-image: url("/src/assets/play-button.svg");
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  filter: invert(80%) sepia(73%) saturate(3569%) hue-rotate(355deg) brightness(107%) contrast(100%);
+  background-repeat: no-repeat;
+  transition: 0.3s ease-out;
+}
 .word-card{
   width: 500px;
   height: 400px;
@@ -235,6 +247,7 @@
 .word-cont{
   margin: 20px;
   display: flex;
+  align-items: center;
   height: 15px;
   font-size: 1.4rem;
   font-weight: 500;
