@@ -22,6 +22,5 @@ export class Application {
     this.main.call();
     this.footer = new Footer(document.body);
     this.currentUser = new CurrentUser();
-    console.log(this.currentUser); // индикатор
   }
 }

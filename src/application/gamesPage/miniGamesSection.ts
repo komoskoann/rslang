@@ -19,7 +19,7 @@ export default class MiniGamesSection {
   destroy() {
     this.section.destroy();
   }
-
+  /* 
   private resolvePaths(path: string) {
     const newSection = this.miniGamesRouter.resolve(path);
     if (this.section instanceof newSection) {
@@ -43,5 +43,5 @@ export default class MiniGamesSection {
         }.bind(null, this),
       );
     });
-  }
+  } */
 }

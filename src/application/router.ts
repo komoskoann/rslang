@@ -6,6 +6,7 @@ import AboutTeamSection from '../application/aboutTeamPage/aboutTeamSection';
 import SprintGameSection from './gamesPage/sprintGame/sprintGameSection';
 import AudioCallGameSection from './gamesPage/audioChallenge/audioCallGameSection';
 import SprintGameCard from './gamesPage/sprintGame/sprintGameCard';
+import AudioChallengeGamePage from './gamesPage/audioChallenge/audioChallengeGamePage';
 
 export default class Router {
   private defaultPath = 'main';
@@ -30,6 +31,8 @@ export default class Router {
 
   private audioGame: string = 'audio';
 
+  private audioGameGamePage: string = 'audioGame';
+
   resolve(path?: string) {
     this.path = path || location.hash.split('/')?.pop() || this.defaultPath;
     let resolved;
@@ -49,6 +52,9 @@ export default class Router {
         break;
       case this.audioGame:
         resolved = AudioCallGameSection;
+        break;
+      case this.audioGameGamePage:
+        resolved = AudioChallengeGamePage;
         break;
       case this.eBook:
         resolved = EBookSection;

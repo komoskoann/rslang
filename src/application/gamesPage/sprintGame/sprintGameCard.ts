@@ -4,6 +4,7 @@ import { ISprint } from './ISprint';
 import GetWordsToSprint from '../../services/sprintGame/getWordsToSprint';
 import MainSprintSection from './sprintMainSection';
 import LocalStorage from '../../services/words/localStorage';
+import Footer from '../../mainPage/footer';
 
 export default class SprintGameCard extends Control {
   mainSprint: MainSprintSection;
@@ -31,15 +32,16 @@ export default class SprintGameCard extends Control {
   private maxSeries: number = 0;
 
   constructor(parentNode: HTMLElement) {
+    console.log('test');
     super(parentNode, 'section', 'sprint-card-section');
     const cardSprint = new Control(this.node, 'div', 'card-sprint container-xxl');
     cardSprint.node.innerHTML = sprintGameCard;
     this.currentPage = this.randomPage();
-    console.log(this.currentPage);
     this.startTime();
     this.currentEnglishLevel = +this.localStorage.getFromLocalStorage('EngLevel');
     this.getWords(this.currentEnglishLevel);
     this.maxSeries = Math.max.apply(null, this.seriesArr);
+    document.querySelector('.footer')?.remove();
   }
 
   private randomPage() {
@@ -175,5 +177,6 @@ export default class SprintGameCard extends Control {
 
   destroy() {
     super.destroy();
+    new Footer(document.body);
   }
 }
