@@ -3,6 +3,7 @@ import Footer from '../../mainPage/footer';
 import '../../../css/sprintGame.css';
 import SprintRouter from './sprintRouter';
 import MainSprintSection from './sprintMainSection';
+import LocalStorage from '../../services/words/localStorage';
 
 export default class SprintGameSection {
   sprintRouter: SprintRouter = new SprintRouter();
@@ -12,6 +13,10 @@ export default class SprintGameSection {
   section: Control<HTMLElement>;
 
   isReloadRequired: boolean = false;
+
+  localStorage: LocalStorage = new LocalStorage();
+
+  from: string = 'from';
 
   constructor(parentNode: HTMLElement) {
     this.node = parentNode;
@@ -38,6 +43,7 @@ export default class SprintGameSection {
     this.node.querySelector('.start-button').addEventListener(
         'click',
         function (instance: SprintGameSection) {
+          instance.localStorage.setToLocalStorage(instance.from, `game`);
           instance.resolvePath((instance.node.querySelector('.start-button') as HTMLElement).id);
           instance.isReloadRequired = true;
       }.bind(null, this),

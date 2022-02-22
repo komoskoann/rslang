@@ -44,6 +44,8 @@ export default class EBookSection extends Control {
   words: IWordCard[];
 
   private tableHardWords: HTMLTableSectionElement;
+  
+  private from: string = 'from';
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
@@ -60,6 +62,7 @@ export default class EBookSection extends Control {
     this.enterUserPage();
     this.paginationWrapper.changePageNumber(this.node);
     this.highlightCurrentEnglishLevel();
+    this.clickToGame();
   }
 
   private resolveCurrentLevel() {
@@ -358,6 +361,15 @@ export default class EBookSection extends Control {
       }
     }
     this.highlightLearntPage();
+  }
+
+  private clickToGame() {
+    document.querySelector('.to-sprint').addEventListener('click', () => {
+      this.localStorage.setToLocalStorage(this.from, `ebook`);
+    });
+    document.querySelector('.to-chalenge').addEventListener('click', () => {
+      this.localStorage.setToLocalStorage(this.from, `ebook`);
+    });
   }
 
   private highlightLearntPage() {

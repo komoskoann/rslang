@@ -12,6 +12,12 @@ export default class SprintGameCard extends Control {
 
   currentEnglishLevel: number;
 
+  englishLevelBook : number;
+
+  englishPageBook : number;
+
+  gameFrom: string;
+
   localStorage: LocalStorage = new LocalStorage();
 
   private  currentPage : number;
@@ -30,6 +36,10 @@ export default class SprintGameCard extends Control {
 
   private maxSeries: number = 0;
 
+  private correctAnswers: number;
+
+  private wrongAnswers: number;
+
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'sprint-card-section');
     const cardSprint = new Control(this.node, 'div', 'card-sprint container-xxl');
@@ -37,20 +47,36 @@ export default class SprintGameCard extends Control {
     this.currentPage = this.randomPage();
     console.log(this.currentPage)
     this.startTime();
+    this.englishPageBook =
+      +this.localStorage.getFromLocalStorage('currentWordPage');
+      this.englishLevelBook =
+      +this.localStorage.getFromLocalStorage('currentEngLevel');
     this.currentEnglishLevel =
       +this.localStorage.getFromLocalStorage('EngLevel');
-    this.getWords(this.currentEnglishLevel);
     this.maxSeries = Math.max.apply(null, this.seriesArr);
+    this.getFrom()
   }
 
+  private getFrom() {
+    this.gameFrom = this.localStorage.getFromLocalStorage('from');
+    if (this.gameFrom === 'game'){
+      this.getWords(this.currentPage, this.currentEnglishLevel);
+      console.log(this.currentPage, this.currentEnglishLevel)
+    }
+    else if (this.gameFrom === 'ebook'){
+      this.getWords(this.englishPageBook,this.englishLevelBook);
+      console.log(this.englishLevelBook, this.englishPageBook)
+    }
+    
+  }
 
-  
   private randomPage() {
     return Math.floor(Math.random()*31);
   }
 
-  async getWords(group: number): Promise<void> {
-    let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(this.currentPage, group);
+  async getWords(page: number, group: number): Promise<void> {
+    let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(page, group);
+    console.log(wordsOnPage)
     let shuffled = wordsOnPage.map((value) => ({value})).sort(() => Math.random() - 0.5).map(({value}) => value);
     this.node.querySelector('.word-translation').innerHTML = shuffled[0].wordTranslate;
     this.node.querySelector('.word-name').innerHTML = wordsOnPage[0].word;
@@ -59,7 +85,7 @@ export default class SprintGameCard extends Control {
     
     this.node.querySelectorAll('[word]').forEach((word) => {
       function createResult(instance: SprintGameCard, e: KeyboardEventInit) {
-        if (j < wordsOnPage.length) {          
+        if (j < wordsOnPage.length) {
           instance.node.querySelector('.word-translation').innerHTML = shuffled[j].wordTranslate;
           instance.node.querySelector('.word-name').innerHTML = wordsOnPage[j].word;
           if (word.classList.contains('true-button') || e.key === 'ArrowRight'){
