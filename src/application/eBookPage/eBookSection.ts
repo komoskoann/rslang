@@ -45,11 +45,14 @@ export default class EBookSection extends Control {
 
   private tableHardWords: HTMLTableSectionElement;
 
+  private toAudioChallengeButton: HTMLElement;
+
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
     this.node.innerHTML = eBook;
     this.wordCardsWrapper = new Control(this.node, 'div', 'word-cards-wrapper');
     this.paginationWrapper = new WordsPagination(this.node);
+    this.toAudioChallengeButton = this.node.querySelector('.to-chalenge');
     this.currentWordsPage =
       +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentPageLSName) || this.defaultWordsPage;
     EBookSection.currentEnglishLevel = this.resolveCurrentLevel();
@@ -60,7 +63,13 @@ export default class EBookSection extends Control {
     this.enterUserPage();
     this.paginationWrapper.changePageNumber(this.node);
     this.highlightCurrentEnglishLevel();
+    this.toAudioChallengeButton.addEventListener('click', this.saveDataGame);
   }
+
+  private saveDataGame = (): void => {
+    this.localStorage.setToLocalStorage('audiochallenge-group', String(EBookSection.currentEnglishLevel));
+    this.localStorage.setToLocalStorage('audiochallenge-page', String(this.currentWordsPage));
+  };
 
   private resolveCurrentLevel() {
     let levelFromStorage = +this.localStorage.getFromLocalStorage(this.paginationWrapper.currentLevelLSName);

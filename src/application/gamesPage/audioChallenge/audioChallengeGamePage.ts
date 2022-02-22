@@ -2,10 +2,17 @@ import audioChallengeGamePageHTML from './audioChallengeGamePage.html';
 import Control from '../../../controls/control';
 import { IWordCard } from '../../eBookPage/ebookInterface';
 import { IPlayList } from '../../eBookPage/wordCard';
+import WordsController from '../../services/words/wordsController';
+import '../../../css/preloader.css';
+import preloadHtml from '../../eBookPage/preloader.html';
+import Footer from '../../mainPage/footer';
+import LocalStorage from '../../services/words/localStorage';
 import AudioChallengeResultsPage from './audioChallengeResultsPage';
 export type RoundResult = [IWordCard, boolean];
 
 export default class AudioChallengeGamePage extends Control {
+  LocalStorage: LocalStorage = new LocalStorage();
+
   private audio: HTMLAudioElement;
 
   private isPlaying = false;
@@ -36,18 +43,34 @@ export default class AudioChallengeGamePage extends Control {
 
   private serverURL = 'https://rslangapplication.herokuapp.com/';
 
-  constructor(parentNode: HTMLElement, words: IWordCard[]) {
-    super(parentNode.parentElement, 'div', 'audio-challenge-container', '');
-    this.node.innerHTML = audioChallengeGamePageHTML;
-    this.words = this.shuffle(words);
+  service: WordsController = new WordsController();
+
+  constructor(parentNode: HTMLElement) {
+    super(parentNode, 'section', 'audio-challenge-wrapper', '');
+    const gameContainer = new Control(this.node, 'div', 'audio-challenge-container');
+    document.querySelector('.footer')?.remove();
+    this.getWords();
+    gameContainer.node.innerHTML = audioChallengeGamePageHTML;
     this.musicModeButton = this.node.querySelector('.audio-challenge__music-button');
     this.soundRepeatButton = document.querySelector('.audio-challenge__sound-button');
     this.card = document.querySelector('.audio-challenge__card');
     this.skipButton = this.node.querySelector('.audio-challenge__skip-button');
     this.addEventListeners();
-    this.nextRound();
     this.createDots();
   }
+
+  private getWords = async (): Promise<void> => {
+    const group = this.LocalStorage.getFromLocalStorage('audiochallenge-group');
+    const page = this.LocalStorage.getFromLocalStorage('audiochallenge-page');
+    const preloader = document.createElement('div');
+    preloader.className = 'loader-wrapper';
+    preloader.innerHTML = preloadHtml;
+    this.node.append(preloader as HTMLElement);
+    this.words = await this.service.getWords(+page, +group);
+    this.words = this.shuffle(this.words);
+    this.nextRound();
+    preloader.remove();
+  };
 
   private shuffle = (array: IWordCard[]): IWordCard[] => {
     const arraycopy = [...array];
@@ -180,7 +203,7 @@ export default class AudioChallengeGamePage extends Control {
     window.removeEventListener('keydown', this.keyHandler);
     window.removeEventListener('keydown', this.numHandler);
     new AudioChallengeResultsPage(this.node, this.results);
-    this.destroy();
+    this.node.firstElementChild.remove();
   };
 
   private checkAnswer = (button: HTMLElement): void => {
@@ -287,4 +310,9 @@ export default class AudioChallengeGamePage extends Control {
       },
     ]);
   };
+
+  destroy() {
+    super.destroy();
+    new Footer(document.body);
+  }
 }

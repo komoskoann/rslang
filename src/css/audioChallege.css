@@ -41,6 +41,8 @@
 .audio-challenge__rewind-button {
   position: absolute;
   cursor: pointer;
+  background-color: transparent;
+  border: none;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
