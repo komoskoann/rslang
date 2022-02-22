@@ -41,11 +41,11 @@ export default class SprintGameSection {
 
   private navigateStart() {
     this.node.querySelector('.start-button').addEventListener(
-        'click',
-        function (instance: SprintGameSection) {
-          instance.localStorage.setToLocalStorage(instance.from, `game`);
-          instance.resolvePath((instance.node.querySelector('.start-button') as HTMLElement).id);
-          instance.isReloadRequired = true;
+      'click',
+      function (instance: SprintGameSection) {
+        instance.localStorage.setToLocalStorage(instance.from, 'game');
+        instance.resolvePath((instance.node.querySelector('.start-button') as HTMLElement).id);
+        instance.isReloadRequired = true;
       }.bind(null, this),
     );
   }

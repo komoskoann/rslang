@@ -44,7 +44,7 @@ export default class EBookSection extends Control {
   words: IWordCard[];
 
   private tableHardWords: HTMLTableSectionElement;
-  
+
   private from: string = 'from';
 
   constructor(parentNode: HTMLElement) {
@@ -365,10 +365,10 @@ export default class EBookSection extends Control {
 
   private clickToGame() {
     document.querySelector('.to-sprint').addEventListener('click', () => {
-      this.localStorage.setToLocalStorage(this.from, `ebook`);
+      this.localStorage.setToLocalStorage(this.from, 'ebook');
     });
     document.querySelector('.to-chalenge').addEventListener('click', () => {
-      this.localStorage.setToLocalStorage(this.from, `ebook`);
+      this.localStorage.setToLocalStorage(this.from, 'ebook');
     });
   }
 

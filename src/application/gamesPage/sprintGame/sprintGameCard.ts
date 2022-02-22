@@ -18,10 +18,10 @@ export default class SprintGameCard extends Control {
 
   currentEnglishLevel: number;
 
-  englishLevelBook : number;
+  englishLevelBook: number;
 
-  englishPageBook : number;
-  
+  englishPageBook: number;
+
   private isPlaying: boolean = false;
 
   gameFrom: string;
@@ -58,26 +58,20 @@ export default class SprintGameCard extends Control {
     cardSprint.node.innerHTML = sprintGameCard;
     this.currentPage = this.randomPage();
     this.startTime();
-    this.englishPageBook =
-      +this.localStorage.getFromLocalStorage('currentWordPage');
-      this.englishLevelBook =
-      +this.localStorage.getFromLocalStorage('currentEngLevel');
-    this.currentEnglishLevel =
-      +this.localStorage.getFromLocalStorage('EngLevel');
+    this.englishPageBook = +this.localStorage.getFromLocalStorage('currentWordPage');
+    this.englishLevelBook = +this.localStorage.getFromLocalStorage('currentEngLevel');
+    this.currentEnglishLevel = +this.localStorage.getFromLocalStorage('EngLevel');
     this.maxSeries = Math.max.apply(null, this.seriesArr);
-    this.getFrom()
-   
+    this.getFrom();
   }
 
   private getFrom() {
     this.gameFrom = this.localStorage.getFromLocalStorage('from');
-    if (this.gameFrom === 'game'){
+    if (this.gameFrom === 'game') {
       this.getWords(this.currentPage, this.currentEnglishLevel);
+    } else if (this.gameFrom === 'ebook') {
+      this.getWords(this.englishPageBook, this.englishLevelBook);
     }
-    else if (this.gameFrom === 'ebook'){
-      this.getWords(this.englishPageBook,this.englishLevelBook);
-    }
-    
   }
 
   private randomPage() {
@@ -86,29 +80,36 @@ export default class SprintGameCard extends Control {
 
   async getWords(page: number, group: number): Promise<void> {
     let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(page, group);
-    let shuffled = wordsOnPage.map((value) => ({value})).sort(() => Math.random() - 0.5).map(({value}) => value);
+    let shuffled = wordsOnPage
+      .map((value) => ({ value }))
+      .sort(() => Math.random() - 0.5)
+      .map(({ value }) => value);
     let correctArr = shuffled.slice(0, 8);
-    this.node.querySelector('.word-translation').innerHTML = (correctArr.includes(wordsOnPage[0])) ? wordsOnPage[0].wordTranslate : shuffled[0].wordTranslate;
+    this.node.querySelector('.word-translation').innerHTML = correctArr.includes(wordsOnPage[0])
+      ? wordsOnPage[0].wordTranslate
+      : shuffled[0].wordTranslate;
     this.node.querySelector('.word-name').innerHTML = wordsOnPage[0].word;
-    let j = 1; 
+    let j = 1;
     this.node.querySelectorAll('[word]').forEach((word) => {
       function createResult(instance: SprintGameCard, e: KeyboardEventInit) {
         if (j < wordsOnPage.length) {
-          instance.node.querySelector('.word-translation').innerHTML = (correctArr.includes(wordsOnPage[j])) ? wordsOnPage[j].wordTranslate : shuffled[j].wordTranslate;
+          instance.node.querySelector('.word-translation').innerHTML = correctArr.includes(wordsOnPage[j])
+            ? wordsOnPage[j].wordTranslate
+            : shuffled[j].wordTranslate;
           instance.node.querySelector('.word-name').innerHTML = wordsOnPage[j].word;
-          if (word.classList.contains('true-button')|| e.key === 'ArrowRight') {
+          if (word.classList.contains('true-button') || e.key === 'ArrowRight') {
             if (correctArr.includes(wordsOnPage[j])) {
-            instance.trueWord.push(wordsOnPage[j]);
-            instance.colorIndicator(true);
-            instance.seriesAns += 1;
-            if (instance.seriesAns >= 4) {
-              instance.result += 20;
-            } else instance.result += 10;
+              instance.trueWord.push(wordsOnPage[j]);
+              instance.colorIndicator(true);
+              instance.seriesAns += 1;
+              if (instance.seriesAns >= 4) {
+                instance.result += 20;
+              } else instance.result += 10;
             }
-          instance.result -= 10;
-          instance.seriesAns = 0;
-          instance.colorIndicator(false);
-          instance.falseWord.push(wordsOnPage[j]);
+            instance.result -= 10;
+            instance.seriesAns = 0;
+            instance.colorIndicator(false);
+            instance.falseWord.push(wordsOnPage[j]);
           }
           if (word.classList.contains('false-button') || e.key === 'ArrowLeft') {
             if (correctArr.includes(wordsOnPage[j])) {
@@ -119,7 +120,7 @@ export default class SprintGameCard extends Control {
             }
             instance.colorIndicator(true);
             instance.trueWord.push(wordsOnPage[j]);
-            
+
             if (instance.seriesAns >= 4) {
               instance.result += 20;
             } else instance.result += 10;
@@ -144,12 +145,12 @@ export default class SprintGameCard extends Control {
     this.node.querySelector('.result').innerHTML = `${this.result}`;
     this.node.querySelector('.point-result').innerHTML = `${this.result}`;
     this.node.querySelector('.right-count').innerHTML = `${this.trueWord.length}`;
-    this.node.querySelector('.right-cont').innerHTML = ''; 
-    
+    this.node.querySelector('.right-cont').innerHTML = '';
+
     for (let i = 0; i < this.trueWord.length; i++) {
       const rightWordCont = new Control(this.node.querySelector('.right-cont'), 'div', 'word-cont');
       const playButton = new Control(rightWordCont.node, 'button', 'play-button');
-      playButton.node.addEventListener('click', () =>  this.playAudio(this.trueWord, i));
+      playButton.node.addEventListener('click', () => this.playAudio(this.trueWord, i));
       new Control(rightWordCont.node, 'div', 'word', `${this.trueWord[i].word} - `);
       new Control(rightWordCont.node, 'div', 'translate', `${this.trueWord[i].wordTranslate}`);
     }
@@ -158,13 +159,13 @@ export default class SprintGameCard extends Control {
     for (let i = 0; i < this.falseWord.length; i++) {
       const wrongWordCont = new Control(this.node.querySelector('.wrong-cont'), 'div', 'word-cont');
       const playButton = new Control(wrongWordCont.node, 'button', 'play-button');
-      playButton.node.addEventListener('click', () =>  this.playAudio(this.falseWord, i));
+      playButton.node.addEventListener('click', () => this.playAudio(this.falseWord, i));
       new Control(wrongWordCont.node, 'div', 'word', `${this.falseWord[i].word} - `);
       new Control(wrongWordCont.node, 'div', 'translate', ` ${this.falseWord[i].wordTranslate}`);
     }
   }
 
-  private playAudio(arr: Array<ISprint>, i:number): void {
+  private playAudio(arr: Array<ISprint>, i: number): void {
     if (!this.isPlaying || this.audio?.ended) {
       this.audio = new Audio();
       this.audio.src = `${this.serverURL}${arr[i].audio}`;
@@ -177,7 +178,7 @@ export default class SprintGameCard extends Control {
     }
   }
 
-  private getSongNext(arr: Array<ISprint>, i:number): void {
+  private getSongNext(arr: Array<ISprint>, i: number): void {
     this.isPlaying = !this.isPlaying;
     if (this.playNum != 0) {
       this.playNum++;
