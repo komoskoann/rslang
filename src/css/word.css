@@ -240,7 +240,11 @@
 .closeBtn:hover {
   transform: scale(1.15);
 }
+.disable-word-buttons{
+  pointer-events: none;
+  opacity: 0.5;
 
+}
 
 @media (max-width: 370px) {
 
