@@ -7,7 +7,7 @@ export interface IWordCard {
   image: string;
   page: number;
   textExample: string;
-  userWord?: { difficulty: string; optional?: { isDifficult: boolean; isLearnt?: boolean } };
+  userWord?: { difficulty: string; optional?: { isDifficult: boolean; isLearnt?: boolean,  seriaLength: number, result: string} };
   textExampleTranslate: string;
   textMeaning: string;
   textMeaningTranslate: string;

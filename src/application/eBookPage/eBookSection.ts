@@ -243,7 +243,7 @@ export default class EBookSection extends Control {
     textNotice.style.fontSize = '1.25rem';
     textNotice.style.fontWeight = '500';
     textNotice.textContent = `Привет, ${
-      getAuthorizedUser().currentUser.name
+      getAuthorizedUser().name
     }! Ты пока не встретил сложных слов при изучении английского языка. Умница!`;
     this.wordCardsWrapper.node.appendChild(textNotice);
   }

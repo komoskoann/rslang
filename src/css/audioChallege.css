@@ -390,7 +390,7 @@
   cursor: pointer;
 }
 .audio-challenge__results_button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   background-color: var(--main-color);
   color: white;
 }

@@ -7,11 +7,14 @@ import '../../../css/preloader.css';
 import preloadHtml from '../../eBookPage/preloader.html';
 import Footer from '../../mainPage/footer';
 import LocalStorage from '../../services/words/localStorage';
+import GameWordsController from '../../services/gameWords/gameWordsController';
 import AudioChallengeResultsPage from './audioChallengeResultsPage';
 export type RoundResult = [IWordCard, boolean];
 
 export default class AudioChallengeGamePage extends Control {
   LocalStorage: LocalStorage = new LocalStorage();
+
+  GameWordsController: GameWordsController = new GameWordsController();
 
   private audio: HTMLAudioElement;
 
@@ -42,6 +45,8 @@ export default class AudioChallengeGamePage extends Control {
   private playList: IPlayList[];
 
   private serverURL = 'https://rslangapplication.herokuapp.com/';
+
+  private rightWord: IWordCard;
 
   service: WordsController = new WordsController();
 
@@ -122,16 +127,16 @@ export default class AudioChallengeGamePage extends Control {
     this.skipButton.textContent = 'Не знаю';
     this.playAudio(0);
     const wordButtons = document.querySelectorAll('.audio-challenge__word-button');
-    const rightWord = this.words[this.round];
+    this.rightWord = this.words[this.round];
     const variants: IWordCard[] = this.shuffle(
-      Array.from(new Set([rightWord, ...this.shuffle(this.words)])).slice(0, 5),
+      Array.from(new Set([this.rightWord, ...this.shuffle(this.words)])).slice(0, 5),
     );
     wordButtons.forEach((button, index) => {
       button.className = 'audio-challenge__word-button';
       button.textContent = `${index + 1}. ${
         variants[index].wordTranslate.slice(0, 1).toUpperCase() + variants[index].wordTranslate.slice(1)
       }`;
-      if (button.textContent.toLowerCase().slice(3) === rightWord.wordTranslate) {
+      if (button.textContent.toLowerCase().slice(3) === this.rightWord.wordTranslate) {
         button.classList.add('correct');
       } else {
         button.classList.add('not-correct');
@@ -243,12 +248,13 @@ export default class AudioChallengeGamePage extends Control {
   private skipWord = (): void => {
     this.node.querySelector('.correct').classList.add('active');
     (this.dotIndicators[this.round] as HTMLElement).style.backgroundColor = 'royalblue';
+    this.results.push([this.words[this.round], false]);
     this.playGameSound(4);
     this.renderWordCard();
-    this.results.push([this.words[this.round], false]);
   };
 
   private renderWordCard = (): void => {
+    this.checkResult();
     this.skipButton.innerHTML = '';
     this.skipButton.classList.add('audio-challenge__skip-button_background');
     this.skipButton.classList.add('audio-challenge__skip-button_next-round');
@@ -259,6 +265,49 @@ export default class AudioChallengeGamePage extends Control {
     this.isAnswerChecked = true;
     window.removeEventListener('click', this.checkButtons);
   };
+
+  private checkResult = async (): Promise<void> => {
+    const word = (await this.GameWordsController.getUserAgrWord(this.rightWord.id))[0];
+    const roundResult = this.results[this.results.length - 1][1] === true ? 'right' : 'wrong';
+    if (!word.userWord) {
+      if (roundResult === 'right') {
+        await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult } });
+      } else {
+        await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult } });
+      }
+    } else {
+      if (word.userWord.optional.seriaLength) {
+        let seriaLength = word.userWord.optional.seriaLength;
+        let result = word.userWord.optional.result;
+        if (roundResult === 'right') {
+          if (result === roundResult) {
+            word.userWord.optional.seriaLength = ++seriaLength;
+            if (word.userWord.difficulty === 'studied' && seriaLength >= 3 || word.userWord.difficulty === 'hard' && seriaLength >= 5) {
+              word.userWord.difficulty = 'easy';
+              word.userWord.optional.isLearnt = true;
+              word.userWord.optional.isDifficult = false;
+            }
+          } else {
+            word.userWord.optional.seriaLength = 1;
+            word.userWord.optional.result = roundResult;
+          }
+        } else {
+          if (result === roundResult) {
+            word.userWord.optional.seriaLength = ++seriaLength;
+          } else {
+            word.userWord.optional.seriaLength = 1;
+            word.userWord.optional.result = roundResult;
+          }
+        }
+      } else {
+        word.userWord.optional.seriaLength = 1;
+        word.userWord.optional.result = roundResult;
+        word.userWord.optional.isLearnt = false;
+        word.userWord.optional.isDifficult = false;
+      }
+      await this.GameWordsController.changeUserWord(word.id, word.userWord);
+    }
+  }
 
   private hideWordCard = (): void => {
     ++this.round;
