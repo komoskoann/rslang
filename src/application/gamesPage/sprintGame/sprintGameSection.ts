@@ -19,6 +19,7 @@ export default class SprintGameSection {
     this.node = parentNode;
     this.section = new MainSprintSection(parentNode);
     document.querySelector('.footer')?.remove();
+    this.localStorage.setToLocalStorage(this.from, `game`);
   }
 
   destroy() {
