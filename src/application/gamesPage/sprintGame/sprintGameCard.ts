@@ -5,6 +5,7 @@ import GetWordsToSprint from '../../services/sprintGame/getWordsToSprint';
 import MainSprintSection from './sprintMainSection';
 import LocalStorage from '../../services/words/localStorage';
 import Footer from '../../mainPage/footer';
+import GameWordsController from '../../services/gameWords/gameWordsController';
 
 export default class SprintGameCard extends Control {
   private wordCardInfo: ISprint;
@@ -12,6 +13,14 @@ export default class SprintGameCard extends Control {
   private audio: HTMLAudioElement;
 
   private serverURL: string = 'https://rslangapplication.herokuapp.com/';
+
+  private rightWord: ISprint;
+
+  private wordsOnPage: ISprint[];
+
+  private shuffled: ISprint[];
+
+  private round: number = 0;
 
   mainSprint: MainSprintSection;
 
@@ -30,6 +39,8 @@ export default class SprintGameCard extends Control {
   private playNum: number = 0;
 
   localStorage: LocalStorage = new LocalStorage();
+
+  GameWordsController: GameWordsController = new GameWordsController();
 
   private currentPage: number;
 
@@ -62,6 +73,7 @@ export default class SprintGameCard extends Control {
     this.currentEnglishLevel = +this.localStorage.getFromLocalStorage('EngLevel');
     this.maxSeries = Math.max.apply(null, this.seriesArr);
     this.getFrom();
+    this.addEventLisneters();
     document.querySelector('.footer')?.remove();
   }
 
@@ -78,84 +90,113 @@ export default class SprintGameCard extends Control {
     return Math.floor(Math.random() * 30);
   }
 
-  async getWords(page: number, group: number): Promise<void> {
-    let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(page, group);
-    console.log(wordsOnPage);
-    let shuffled = wordsOnPage
+  private getWords = async (page: number, group: number): Promise<void> => {
+    this.wordsOnPage = await this.service.getWordstoSprint(page, group);
+    this.shuffled = this.wordsOnPage
       .map((value) => ({ value }))
       .sort(() => Math.random() - 0.5)
       .map(({ value }) => value);
-    this.node.querySelector('.word-translation').innerHTML = shuffled[0].wordTranslate;
-    this.node.querySelector('.word-name').innerHTML = wordsOnPage[0].word;
-    let j = 1;
-    this.node.querySelectorAll('[word]').forEach((word) => {
-      function createResult(instance: SprintGameCard, e: KeyboardEventInit) {
-        if (j < wordsOnPage.length) {
-          instance.node.querySelector('.word-translation').innerHTML = shuffled[j].wordTranslate;
-          instance.node.querySelector('.word-name').innerHTML = wordsOnPage[j].word;
-          if (word.classList.contains('true-button') || e.key === 'ArrowRight') {
-            if (wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
-              instance.trueWord.push(wordsOnPage[j]);
-              instance.colorIndicator(true);
-              setTimeout(() => {
-                (instance.node.querySelector('.card-translate') as HTMLElement).style.background =
-                  'rgba(255, 255, 255, 0.315)';
-              }, 300);
-              instance.seriesAns += 1;
-              if (instance.seriesAns >= 4) {
-                instance.result += 20;
-              } else {
-                instance.result += 10;
-              }
-            } else {
-              instance.result -= 10;
-              instance.seriesAns = 0;
-              instance.colorIndicator(false);
-              setTimeout(() => {
-                (instance.node.querySelector('.card-translate') as HTMLElement).style.background =
-                  'rgba(255, 255, 255, 0.315)';
-              }, 300);
-              instance.falseWord.push(wordsOnPage[j]);
-            }
-          }
-          if (word.classList.contains('false-button') || e.key === 'ArrowLeft') {
-            if (wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
-              instance.falseWord.push(wordsOnPage[j]);
-              instance.colorIndicator(false);
-              setTimeout(() => {
-                (instance.node.querySelector('.card-translate') as HTMLElement).style.background =
-                  'rgba(255, 255, 255, 0.315)';
-              }, 300);
-              instance.result -= 10;
-              instance.seriesAns = 0;
-            } else {
-              instance.colorIndicator(true);
-              setTimeout(() => {
-                (instance.node.querySelector('.card-translate') as HTMLElement).style.background =
-                  'rgba(255, 255, 255, 0.315)';
-              }, 300);
-              instance.trueWord.push(wordsOnPage[j]);
-              if (instance.seriesAns >= 4) {
-                instance.result += 20;
-              } else {
-                instance.result += 10;
-              }
-              instance.seriesAns += 1;
-            }
-          }
-          if (j === wordsOnPage.length - 1) {
-            instance.stop = true;
-          }
-          let coefficient = instance.seriesAns >= 4 ? 20 : 10;
-          instance.node.querySelector('.coefficient').innerHTML = `${coefficient}`;
-          instance.seriesArr.push(instance.seriesAns);
-        }
-        j += 1;
-        instance.getResultTable();
+    this.nextRound();
+  }
+
+  private nextRound = (): void => {
+    this.getResultTable();
+    if (this.round < this.wordsOnPage.length) {
+      this.node.querySelector('.word-translation').innerHTML = Math.random() > 0.5 ? this.shuffled[this.round].wordTranslate : this.wordsOnPage[this.round].wordTranslate;
+      this.node.querySelector('.word-name').innerHTML = this.wordsOnPage[this.round].word;
+    } else {
+      window.removeEventListener('click', this.checkMouseWordButtons);
+      window.removeEventListener('keydown', this.checkKeyboardWordButtons);
+      this.stop = true;
+      console.log('false:', this.falseWord, 'true:', this.trueWord);
+    }
+  }
+
+  private addEventLisneters = (): void => {
+    window.addEventListener('click', this.checkMouseWordButtons);
+    window.addEventListener('keydown', this.checkKeyboardWordButtons);
+  }
+
+  private checkMouseWordButtons = (e: MouseEvent): void => {
+    const target = (e.target as Element).closest('[word]') as HTMLButtonElement;
+    if (!target) {
+      return;
+    }
+    if (target.classList.contains('true-button')) {
+      this.giveTrueAnswer();
+    } else if (target.classList.contains('false-button')) {
+      this.giveFalseAnswer();
+    }
+  }
+
+  private checkKeyboardWordButtons = (e: KeyboardEvent): void => {
+    if (e.code === 'ArrowRight') {
+      this.giveTrueAnswer();
+    } else if (e.code === 'ArrowLeft') {
+      this.giveFalseAnswer();
+    }
+  }
+
+  private giveTrueAnswer = (): void => {
+    if (this.node.querySelector('.word-translation').innerHTML === this.wordsOnPage[this.round].wordTranslate) {
+      this.trueWord.push(this.wordsOnPage[this.round]);
+      this.colorIndicator(true);
+      setTimeout(() => {
+        (this.node.querySelector('.card-translate') as HTMLElement).style.background =
+          'rgba(255, 255, 255, 0.315)';
+      }, 300);
+      this.seriesAns += 1;
+      if (this.seriesAns >= 4) {
+        this.result += 20;
+      } else {
+        this.result += 10;
       }
-      word.addEventListener('keydown', createResult.bind(null, this));
-      word.addEventListener('click', createResult.bind(null, this));
-    });
+    } else {
+      this.result -= 10;
+      this.seriesAns = 0;
+      this.colorIndicator(false);
+      setTimeout(() => {
+        (this.node.querySelector('.card-translate') as HTMLElement).style.background =
+          'rgba(255, 255, 255, 0.315)';
+      }, 300);
+      this.falseWord.push(this.wordsOnPage[this.round]);
+    }
+    this.checkRound();
+  }
+
+  private giveFalseAnswer = (): void => {
+    if (this.node.querySelector('.word-translation').innerHTML === this.wordsOnPage[this.round].wordTranslate) {
+      this.falseWord.push(this.wordsOnPage[this.round]);
+      this.colorIndicator(false);
+      setTimeout(() => {
+        (this.node.querySelector('.card-translate') as HTMLElement).style.background =
+          'rgba(255, 255, 255, 0.315)';
+      }, 300);
+      this.result -= 10;
+      this.seriesAns = 0;
+    } else {
+      this.colorIndicator(true);
+      setTimeout(() => {
+        (this.node.querySelector('.card-translate') as HTMLElement).style.background =
+          'rgba(255, 255, 255, 0.315)';
+      }, 300);
+      this.trueWord.push(this.wordsOnPage[this.round]);
+      if (this.seriesAns >= 4) {
+        this.result += 20;
+      } else {
+        this.result += 10;
+      }
+      this.seriesAns += 1;
+    }
+    this.checkRound();
+  }
+
+  private checkRound = (): void => {
+    ++this.round;
+    let coefficient = this.seriesAns >= 4 ? 20 : 10;
+    this.node.querySelector('.coefficient').innerHTML = `${coefficient}`;
+    this.seriesArr.push(this.seriesAns);
+    this.nextRound();
   }
 
   /*
