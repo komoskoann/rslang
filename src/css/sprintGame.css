@@ -123,6 +123,18 @@
   top: 25px;
   transform: rotate(370deg);
 }
+.play-button {
+  width: 30px;
+  height: 30px;
+  margin-right: 20px;
+  background-image: url("/src/assets/play-button.svg");
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  filter: invert(80%) sepia(73%) saturate(3569%) hue-rotate(355deg) brightness(107%) contrast(100%);
+  background-repeat: no-repeat;
+  transition: 0.3s ease-out;
+}
 .word-card{
   width: 500px;
   height: 400px;
@@ -176,6 +188,9 @@
   font-weight: 500;
   color: rgb(15, 15, 112);
   font-size: 3rem;
+}
+.buttons-sprint{
+  z-index: 13;
 }
 .true-button,
 .false-button,
@@ -232,6 +247,7 @@
 .word-cont{
   margin: 20px;
   display: flex;
+  align-items: center;
   height: 15px;
   font-size: 1.4rem;
   font-weight: 500;
@@ -304,17 +320,36 @@
     margin-right: 50px;
     gap: 20px 50px;
   }
- 
 }
-@media (max-width:405px) {
-  .sprint-cont{
-    margin: 20px auto;
+@media (max-width:570px) {
+  .word-card{
+    width: 350px;
+    height: 350px;
   }
-  .level-cont-sprint{
-    width: 200px;
+  .sprint-line{
+    left: -35%;
+    width: 80px;
+    top: -430px;
   }
-  .choose-level {
-    font-size: 1.2rem;
-    font-weight: 700;
+  .sprint-line1{
+    position: relative;
+    left: 4%;
+    width: 270px;
+    top: -130px;
+    z-index: 1;
+    transform: rotate(5deg);
+  }
+  .sprint-line2{
+    left: 5%;
+    width: 280px;
+    top: 25px;
+  }
+  .cont-buttons{
+    text-align: center;
+  }
+}
+@media (max-width:430px) {
+  .card-result-wrapper{  
+    width: 80%;
   }
 }

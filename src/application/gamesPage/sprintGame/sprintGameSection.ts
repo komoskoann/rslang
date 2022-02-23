@@ -2,6 +2,7 @@ import Control from '../../../controls/control';
 import Footer from '../../mainPage/footer';
 import '../../../css/sprintGame.css';
 import MainSprintSection from './sprintMainSection';
+import LocalStorage from '../../services/words/localStorage';
 
 export default class SprintGameSection {
   node: HTMLElement;
@@ -9,6 +10,10 @@ export default class SprintGameSection {
   section: Control<HTMLElement>;
 
   isReloadRequired: boolean = false;
+
+  localStorage: LocalStorage = new LocalStorage();
+
+  from: string = 'from';
 
   constructor(parentNode: HTMLElement) {
     this.node = parentNode;

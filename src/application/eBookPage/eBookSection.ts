@@ -45,6 +45,8 @@ export default class EBookSection extends Control {
 
   private tableHardWords: HTMLTableSectionElement;
 
+  private from: string = 'from';
+
   private toAudioChallengeButton: HTMLElement;
 
   constructor(parentNode: HTMLElement) {
@@ -367,6 +369,15 @@ export default class EBookSection extends Control {
       }
     }
     this.highlightLearntPage();
+  }
+
+  private clickToGame() {
+    document.querySelector('.to-sprint').addEventListener('click', () => {
+      this.localStorage.setToLocalStorage(this.from, 'ebook');
+    });
+    document.querySelector('.to-chalenge').addEventListener('click', () => {
+      this.localStorage.setToLocalStorage(this.from, 'ebook');
+    });
   }
 
   private highlightLearntPage() {
