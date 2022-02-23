@@ -5,7 +5,6 @@ import { IPlayList } from '../../eBookPage/wordCard';
 import WordsController from '../../services/words/wordsController';
 import '../../../css/preloader.css';
 import preloadHtml from '../../eBookPage/preloader.html';
-import Footer from '../../mainPage/footer';
 import LocalStorage from '../../services/words/localStorage';
 import GameWordsController from '../../services/gameWords/gameWordsController';
 import AudioChallengeResultsPage from './audioChallengeResultsPage';
@@ -53,7 +52,6 @@ export default class AudioChallengeGamePage extends Control {
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'audio-challenge-wrapper', '');
     const gameContainer = new Control(this.node, 'div', 'audio-challenge-container');
-    document.querySelector('.footer')?.remove();
     this.getWords();
     gameContainer.node.innerHTML = audioChallengeGamePageHTML;
     this.musicModeButton = this.node.querySelector('.audio-challenge__music-button');
@@ -362,6 +360,5 @@ export default class AudioChallengeGamePage extends Control {
 
   destroy() {
     super.destroy();
-    new Footer(document.body);
   }
 }

@@ -4,7 +4,6 @@ import { ISprint } from './ISprint';
 import GetWordsToSprint from '../../services/sprintGame/getWordsToSprint';
 import MainSprintSection from './sprintMainSection';
 import LocalStorage from '../../services/words/localStorage';
-import Footer from '../../mainPage/footer';
 import GameWordsController from '../../services/gameWords/gameWordsController';
 
 export default class SprintGameCard extends Control {
@@ -76,7 +75,6 @@ export default class SprintGameCard extends Control {
     this.maxSeries = Math.max.apply(null, this.seriesArr);
     this.getFrom();
     this.addEventLisneters();
-    document.querySelector('.footer')?.remove();
   }
 
   private getFrom() {
@@ -422,6 +420,5 @@ export default class SprintGameCard extends Control {
 
   destroy() {
     super.destroy();
-    new Footer(document.body);
   }
 }

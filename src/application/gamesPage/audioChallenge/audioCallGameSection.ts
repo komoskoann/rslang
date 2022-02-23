@@ -1,5 +1,4 @@
 import Control from '../../../controls/control';
-import Footer from '../../mainPage/footer';
 import '../../../css/audioChallege.css';
 import audioChallengeStartPage from './audioChallengeStartPage';
 
@@ -13,6 +12,5 @@ export default class AudioCallGameSection extends Control {
 
   destroy() {
     super.destroy();
-    new Footer(document.body);
   }
 }

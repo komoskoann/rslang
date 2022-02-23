@@ -1,7 +1,6 @@
 import audioCallSGameStartHTML from './audioChallengeStartPage.html';
 import Control from '../../../controls/control';
 import '../../../css/audioChallege.css';
-import Footer from '../../mainPage/footer';
 import LocalStorage from '../../services/words/localStorage';
 
 export default class AudioChallengeStartPage extends Control {
@@ -11,7 +10,6 @@ export default class AudioChallengeStartPage extends Control {
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'audio-challenge-container', '');
-    document.querySelector('.footer')?.remove();
     this.node.innerHTML = audioCallSGameStartHTML;
     this.startgameButton = this.node.querySelector('.audio-challenge__start-button');
     this.LocalStorage.setToLocalStorage('audiochallenge-group', String(Math.round(Math.random() * 5)));
@@ -35,6 +33,5 @@ export default class AudioChallengeStartPage extends Control {
 
   destroy() {
     super.destroy();
-    new Footer(document.body);
   }
 }
