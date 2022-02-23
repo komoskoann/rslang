@@ -322,6 +322,16 @@ export default class WordCard extends Control {
   private renderToggleButtons() {
     if (app.currentUser.isAuthenticated) {
       this.controlButtonsWrapper.node.style.display = 'flex';
+      if (this.isLearnt) {
+        this.node.querySelector('.difficult-word-button').classList.add('disable-word-buttons');
+        this.node.querySelector('.delete-word-button').classList.remove('disable-word-buttons');
+      } else if (this.isDifficult) {
+        this.node.querySelector('.difficult-word-button').classList.remove('disable-word-buttons');
+        this.node.querySelector('.delete-word-button').classList.add('disable-word-buttons');
+      } else {
+        this.node.querySelector('.delete-word-button').classList.remove('disable-word-buttons');
+        this.node.querySelector('.difficult-word-button').classList.remove('disable-word-buttons');
+      }
     }
   }
 
