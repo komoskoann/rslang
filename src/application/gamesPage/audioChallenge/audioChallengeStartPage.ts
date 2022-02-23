@@ -1,42 +1,23 @@
 import audioCallSGameStartHTML from './audioChallengeStartPage.html';
 import Control from '../../../controls/control';
 import '../../../css/audioChallege.css';
-import AudioChallengeGamePage from './audioChallengeGamePage';
-import { IWordCard } from '../../eBookPage/ebookInterface';
-import WordsController from '../../services/words/wordsController';
-import '../../../css/preloader.css';
-import preloadHtml from '../../eBookPage/preloader.html';
+import Footer from '../../mainPage/footer';
+import LocalStorage from '../../services/words/localStorage';
 
 export default class AudioChallengeStartPage extends Control {
+  LocalStorage: LocalStorage = new LocalStorage();
+
   private startgameButton: HTMLButtonElement;
 
-  private group: number;
-
-  private page: number;
-
-  service: WordsController = new WordsController();
-
-  constructor(parentNode: HTMLElement, group: number, page: number) {
-    super(parentNode, 'div', 'audio-challenge-container', '');
+  constructor(parentNode: HTMLElement) {
+    super(parentNode, 'section', 'audio-challenge-container', '');
+    document.querySelector('.footer')?.remove();
     this.node.innerHTML = audioCallSGameStartHTML;
     this.startgameButton = this.node.querySelector('.audio-challenge__start-button');
-    this.group = group;
-    this.page = page;
+    this.LocalStorage.setToLocalStorage('audiochallenge-group', String(Math.round(Math.random() * 5)));
+    this.LocalStorage.setToLocalStorage('audiochallenge-page', String(Math.round(Math.random() * 29)));
     this.navLevels();
-    this.addEventListeners();
-    /* this.checkEbookLevel(); */
   }
-
-  private checkEbookLevel = (): void => {
-    if (this.group) {
-      this.node.querySelectorAll('.audio-challenge__level-button').forEach((button) => {
-        if (+button.getAttribute('data-level') == this.group) {
-          button.classList.add('active');
-          this.startgameButton.disabled = false;
-        }
-      });
-    }
-  };
 
   private navLevels = (): void => {
     this.node.querySelectorAll('.audio-challenge__level-button').forEach((button) => {
@@ -46,25 +27,14 @@ export default class AudioChallengeStartPage extends Control {
         });
         button.classList.toggle('active');
         this.startgameButton.disabled = button.classList.contains('active') ? false : true;
-        this.group = +button.getAttribute('data-level');
-        this.page = Math.round(Math.random() * 30);
+        this.LocalStorage.setToLocalStorage('audiochallenge-group', button.getAttribute('data-level'));
+        this.LocalStorage.setToLocalStorage('audiochallenge-page', String(Math.round(Math.random() * 29)));
       });
     });
   };
 
-  private startGame = async (): Promise<void> => {
-    if (!this.startgameButton.disabled) {
-      const preloader = document.createElement('div');
-      preloader.className = 'loader-wrapper';
-      preloader.innerHTML = preloadHtml;
-      this.node.append(preloader as HTMLElement);
-      const words: IWordCard[] = await this.service.getWords(this.page, this.group);
-      new AudioChallengeGamePage(this.node, words);
-      this.destroy();
-    }
-  };
-
-  private addEventListeners = (): void => {
-    this.startgameButton.addEventListener('click', this.startGame);
-  };
+  destroy() {
+    super.destroy();
+    new Footer(document.body);
+  }
 }

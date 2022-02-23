@@ -4,6 +4,7 @@ import { ISprint } from './ISprint';
 import GetWordsToSprint from '../../services/sprintGame/getWordsToSprint';
 import MainSprintSection from './sprintMainSection';
 import LocalStorage from '../../services/words/localStorage';
+import Footer from '../../mainPage/footer';
 
 export default class SprintGameCard extends Control {
   private wordCardInfo: ISprint;
@@ -63,6 +64,7 @@ export default class SprintGameCard extends Control {
     this.currentEnglishLevel = +this.localStorage.getFromLocalStorage('EngLevel');
     this.maxSeries = Math.max.apply(null, this.seriesArr);
     this.getFrom();
+    document.querySelector('.footer')?.remove();
   }
 
   private getFrom() {
@@ -75,9 +77,59 @@ export default class SprintGameCard extends Control {
   }
 
   private randomPage() {
-    return Math.floor(Math.random() * 31);
+    return Math.floor(Math.random() * 30);
   }
 
+  async getWords(page: number, group: number): Promise<void> {
+    let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(page, group);
+    console.log(wordsOnPage)
+    let shuffled = wordsOnPage.map((value) => ({value})).sort(() => Math.random() - 0.5).map(({value}) => value);
+    this.node.querySelector('.word-translation').innerHTML = shuffled[0].wordTranslate;
+    this.node.querySelector('.word-name').innerHTML = wordsOnPage[0].word;
+    let j = 1;
+    this.node.querySelectorAll('[word]').forEach((word) => {
+      function createResult(instance: SprintGameCard, e: KeyboardEventInit) {
+        if (j < wordsOnPage.length) {
+          instance.node.querySelector('.word-translation').innerHTML = shuffled[j].wordTranslate;
+          instance.node.querySelector('.word-name').innerHTML = wordsOnPage[j].word;
+          if (word.classList.contains('true-button') || e.key === 'ArrowRight'){
+            if (wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
+              instance.trueWord.push(wordsOnPage[j]);
+              instance.colorIndicator(true);
+              instance.seriesAns +=1; 
+              (instance.seriesAns >= 4) ? instance.result += 20 : instance.result += 10; 
+            }
+            instance.result -= 10; instance.seriesAns = 0;
+            instance.colorIndicator(false);
+            instance.falseWord.push(wordsOnPage[j]);
+          }
+          if (word.classList.contains('false-button') || e.key === 'ArrowLeft'){
+            if(wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
+              instance.falseWord.push(wordsOnPage[j]);
+              instance.colorIndicator(false);
+              instance.result -= 10; instance.seriesAns = 0;
+            } 
+            instance.colorIndicator(true);
+            instance.trueWord.push(wordsOnPage[j]); 
+            (instance.seriesAns >= 4) ? instance.result += 20 : instance.result += 10; 
+            instance.seriesAns +=1;
+          }
+          if (j === wordsOnPage.length-1){
+          instance.stop = true;
+        }
+        let coefficient = (instance.seriesAns >=4) ? 20 : 10;
+        instance.node.querySelector('.coefficient').innerHTML = `${coefficient}`;
+        instance.seriesArr.push(instance.seriesAns);
+        } j += 1;
+        instance.getResultTable();
+      }
+      word.addEventListener('keydown', createResult.bind(null, this)) ;
+      word.addEventListener('click', createResult.bind(null, this));})
+  }
+
+
+
+ /*
   async getWords(page: number, group: number): Promise<void> {
     let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(page, group);
     let shuffled = wordsOnPage
@@ -106,10 +158,12 @@ export default class SprintGameCard extends Control {
                 instance.result += 20;
               } else instance.result += 10;
             }
-            instance.result -= 10;
+            else {
+              instance.result -= 10;
             instance.seriesAns = 0;
             instance.colorIndicator(false);
             instance.falseWord.push(wordsOnPage[j]);
+            }
           }
           if (word.classList.contains('false-button') || e.key === 'ArrowLeft') {
             if (correctArr.includes(wordsOnPage[j])) {
@@ -118,6 +172,7 @@ export default class SprintGameCard extends Control {
               instance.result -= 10;
               instance.seriesAns = 0;
             }
+            else {
             instance.colorIndicator(true);
             instance.trueWord.push(wordsOnPage[j]);
 
@@ -125,6 +180,7 @@ export default class SprintGameCard extends Control {
               instance.result += 20;
             } else instance.result += 10;
             instance.seriesAns += 1;
+          }
           }
           if (j === wordsOnPage.length - 1) {
             instance.stop = true;
@@ -140,7 +196,7 @@ export default class SprintGameCard extends Control {
       word.addEventListener('click', createResult.bind(null, this));
     });
   }
-
+*/
   private getResultTable() {
     this.node.querySelector('.result').innerHTML = `${this.result}`;
     this.node.querySelector('.point-result').innerHTML = `${this.result}`;
@@ -244,5 +300,6 @@ export default class SprintGameCard extends Control {
 
   destroy() {
     super.destroy();
+    new Footer(document.body);
   }
 }
