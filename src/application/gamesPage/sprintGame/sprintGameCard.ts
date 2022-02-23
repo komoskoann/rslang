@@ -51,8 +51,6 @@ export default class SprintGameCard extends Control {
 
   private wrongAnswers: number;
 
-  private isHard: boolean;
-
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'sprint-card-section');
     const cardSprint = new Control(this.node, 'div', 'card-sprint container-xxl');
@@ -82,8 +80,11 @@ export default class SprintGameCard extends Control {
 
   async getWords(page: number, group: number): Promise<void> {
     let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(page, group);
-    console.log(wordsOnPage)
-    let shuffled = wordsOnPage.map((value) => ({value})).sort(() => Math.random() - 0.5).map(({value}) => value);
+    console.log(wordsOnPage);
+    let shuffled = wordsOnPage
+      .map((value) => ({ value }))
+      .sort(() => Math.random() - 0.5)
+      .map(({ value }) => value);
     this.node.querySelector('.word-translation').innerHTML = shuffled[0].wordTranslate;
     this.node.querySelector('.word-name').innerHTML = wordsOnPage[0].word;
     let j = 1;
@@ -92,44 +93,54 @@ export default class SprintGameCard extends Control {
         if (j < wordsOnPage.length) {
           instance.node.querySelector('.word-translation').innerHTML = shuffled[j].wordTranslate;
           instance.node.querySelector('.word-name').innerHTML = wordsOnPage[j].word;
-          if (word.classList.contains('true-button') || e.key === 'ArrowRight'){
+          if (word.classList.contains('true-button') || e.key === 'ArrowRight') {
             if (wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
               instance.trueWord.push(wordsOnPage[j]);
               instance.colorIndicator(true);
-              instance.seriesAns +=1; 
-              (instance.seriesAns >= 4) ? instance.result += 20 : instance.result += 10; 
+              instance.seriesAns += 1;
+              if (instance.seriesAns >= 4) {
+                instance.result += 20;
+              } else {
+                instance.result += 10;
+              }
             }
-            instance.result -= 10; instance.seriesAns = 0;
+            instance.result -= 10;
+            instance.seriesAns = 0;
             instance.colorIndicator(false);
             instance.falseWord.push(wordsOnPage[j]);
           }
-          if (word.classList.contains('false-button') || e.key === 'ArrowLeft'){
-            if(wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
+          if (word.classList.contains('false-button') || e.key === 'ArrowLeft') {
+            if (wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
               instance.falseWord.push(wordsOnPage[j]);
               instance.colorIndicator(false);
-              instance.result -= 10; instance.seriesAns = 0;
-            } 
+              instance.result -= 10;
+              instance.seriesAns = 0;
+            }
             instance.colorIndicator(true);
-            instance.trueWord.push(wordsOnPage[j]); 
-            (instance.seriesAns >= 4) ? instance.result += 20 : instance.result += 10; 
-            instance.seriesAns +=1;
+            instance.trueWord.push(wordsOnPage[j]);
+            if (instance.seriesAns >= 4) {
+              instance.result += 20;
+            } else {
+              instance.result += 10;
+            }
+            instance.seriesAns += 1;
           }
-          if (j === wordsOnPage.length-1){
-          instance.stop = true;
+          if (j === wordsOnPage.length - 1) {
+            instance.stop = true;
+          }
+          let coefficient = instance.seriesAns >= 4 ? 20 : 10;
+          instance.node.querySelector('.coefficient').innerHTML = `${coefficient}`;
+          instance.seriesArr.push(instance.seriesAns);
         }
-        let coefficient = (instance.seriesAns >=4) ? 20 : 10;
-        instance.node.querySelector('.coefficient').innerHTML = `${coefficient}`;
-        instance.seriesArr.push(instance.seriesAns);
-        } j += 1;
+        j += 1;
         instance.getResultTable();
       }
-      word.addEventListener('keydown', createResult.bind(null, this)) ;
-      word.addEventListener('click', createResult.bind(null, this));})
+      word.addEventListener('keydown', createResult.bind(null, this));
+      word.addEventListener('click', createResult.bind(null, this));
+    });
   }
 
-
-
- /*
+  /*
   async getWords(page: number, group: number): Promise<void> {
     let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(page, group);
     let shuffled = wordsOnPage

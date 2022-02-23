@@ -46,7 +46,7 @@ export default class EBookSection extends Control {
   private tableHardWords: HTMLTableSectionElement;
 
   private from: string = 'from';
-  
+
   private toAudioChallengeButton: HTMLElement;
 
   constructor(parentNode: HTMLElement) {
