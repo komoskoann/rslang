@@ -66,6 +66,7 @@ export default class EBookSection extends Control {
     this.paginationWrapper.changePageNumber(this.node);
     this.highlightCurrentEnglishLevel();
     this.toAudioChallengeButton.addEventListener('click', this.saveDataGame);
+    this.clickToGame();
   }
 
   private saveDataGame = (): void => {
