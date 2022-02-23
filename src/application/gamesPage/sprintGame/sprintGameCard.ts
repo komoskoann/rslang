@@ -97,6 +97,7 @@ export default class SprintGameCard extends Control {
             if (wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
               instance.trueWord.push(wordsOnPage[j]);
               instance.colorIndicator(true);
+              setTimeout(() => {(instance.node.querySelector('.card-translate') as HTMLElement).style.background = 'rgba(255, 255, 255, 0.315)';}, 300);
               instance.seriesAns += 1;
               if (instance.seriesAns >= 4) {
                 instance.result += 20;
@@ -107,16 +108,19 @@ export default class SprintGameCard extends Control {
             instance.result -= 10;
             instance.seriesAns = 0;
             instance.colorIndicator(false);
+            setTimeout(() => {(instance.node.querySelector('.card-translate') as HTMLElement).style.background = 'rgba(255, 255, 255, 0.315)';}, 300);
             instance.falseWord.push(wordsOnPage[j]);
           }
           if (word.classList.contains('false-button') || e.key === 'ArrowLeft') {
             if (wordsOnPage[j].wordTranslate === shuffled[j].wordTranslate) {
               instance.falseWord.push(wordsOnPage[j]);
               instance.colorIndicator(false);
+              setTimeout(() => {(instance.node.querySelector('.card-translate') as HTMLElement).style.background = 'rgba(255, 255, 255, 0.315)';}, 300);
               instance.result -= 10;
               instance.seriesAns = 0;
             }
             instance.colorIndicator(true);
+            setTimeout(() => {(instance.node.querySelector('.card-translate') as HTMLElement).style.background = 'rgba(255, 255, 255, 0.315)';}, 300);
             instance.trueWord.push(wordsOnPage[j]);
             if (instance.seriesAns >= 4) {
               instance.result += 20;
