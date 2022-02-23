@@ -173,7 +173,7 @@ export default class WordCard extends Control {
     }
   }
 
-    private renderWordGameStats() {
+  private renderWordGameStats() {
     if (getAuthorizedUser()) {
       const wordGameStatsWrapper = new Control(this.node, 'div', 'word-game-stats-wrapper');
       this.gameStatsButton = new Control(wordGameStatsWrapper.node, 'div', 'game-stats-button');
@@ -183,7 +183,7 @@ export default class WordCard extends Control {
     }
   }
 
-   private openModalStats() {
+  private openModalStats() {
     document.getElementById('simpleModal').style.display = 'block';
   }
 
