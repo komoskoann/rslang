@@ -273,7 +273,7 @@ export default class AudioChallengeGamePage extends Control {
       if (roundResult === 'right') {
         await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult } });
       } else {
-        await this.GameWordsController.createUserWord(word.id, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false, seriaLength: 1, result: roundResult } });
+        await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult } });
       }
     } else {
       if (word.userWord.optional.seriaLength) {
@@ -302,13 +302,8 @@ export default class AudioChallengeGamePage extends Control {
       } else {
         word.userWord.optional.seriaLength = 1;
         word.userWord.optional.result = roundResult;
-        if (roundResult === 'right' && !word.userWord.difficulty) {
-          word.userWord.difficulty = 'studied';
-        } else {
-          word.userWord.difficulty = 'hard';
-          word.userWord.optional.isLearnt = false;
-          word.userWord.optional.isDifficult = true;
-        }
+        word.userWord.optional.isLearnt = false;
+        word.userWord.optional.isDifficult = false;
       }
       await this.GameWordsController.changeUserWord(word.id, word.userWord);
     }
