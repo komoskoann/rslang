@@ -230,6 +230,8 @@
 .audio-word-stats {
   display: flex;
   padding: 10px 0;
+  width: 150px;
+  justify-content: space-between;
 }
 
 .closeBtn {
