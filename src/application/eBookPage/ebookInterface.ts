@@ -9,7 +9,7 @@ export interface IWordCard {
   textExample: string;
   userWord?: {
     difficulty: string;
-    optional?: { isDifficult: boolean; isLearnt?: boolean; seriaLength: number; result: string };
+    optional?: { isDifficult: boolean; isLearnt?: boolean; seriaLength: number; result: string, gameStatistic?: {sprint: {right: number, wrong: number}, audioCall: {right: number, wrong: number}} };
   };
   textExampleTranslate: string;
   textMeaning: string;
