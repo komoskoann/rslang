@@ -271,12 +271,12 @@ export default class AudioChallengeGamePage extends Control {
       if (roundResult === 'right') {
         await this.GameWordsController.createUserWord(word.id, {
           difficulty: 'studied',
-          optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult },
+          optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult, gameStatistic: {sprint: {right: 0, wrong: 0}, audioCall: {right: 1, wrong: 0}}},
         });
       } else {
         await this.GameWordsController.createUserWord(word.id, {
           difficulty: 'studied',
-          optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult },
+          optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult, gameStatistic: {sprint: {right: 0, wrong: 0}, audioCall: {right: 0, wrong: 1}} },
         });
       }
     } else {
@@ -285,6 +285,7 @@ export default class AudioChallengeGamePage extends Control {
         let result = word.userWord.optional.result;
         if (roundResult === 'right') {
           if (result === roundResult) {
+            word.userWord.optional.gameStatistic.audioCall.right +=1;
             word.userWord.optional.seriaLength = ++seriaLength;
             if (
               (word.userWord.difficulty === 'studied' && seriaLength >= 3) ||
@@ -295,13 +296,16 @@ export default class AudioChallengeGamePage extends Control {
               word.userWord.optional.isDifficult = false;
             }
           } else {
+            word.userWord.optional.gameStatistic.audioCall.wrong +=1;
             word.userWord.optional.seriaLength = 1;
             word.userWord.optional.result = roundResult;
           }
         } else {
           if (result === roundResult) {
+            word.userWord.optional.gameStatistic.audioCall.wrong +=1;
             word.userWord.optional.seriaLength = ++seriaLength;
           } else {
+            word.userWord.optional.gameStatistic.audioCall.right +=1;
             word.userWord.optional.seriaLength = 1;
             word.userWord.optional.result = roundResult;
           }
