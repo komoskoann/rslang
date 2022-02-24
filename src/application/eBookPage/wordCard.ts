@@ -289,7 +289,16 @@ export default class WordCard extends Control {
       this.node.classList.add(this.difficultWordClassName);
       popupsContainer.node.innerHTML = 'Добавлено в сложные слова';
       this.hideAlert(popupsContainer);
-      this.createUserWord(cardId, { difficulty: 'hard', optional: { isDifficult: true, isLearnt: false } });
+      this.createUserWord(cardId, {
+        difficulty: 'hard',
+        optional: {
+          isDifficult: true,
+          isLearnt: false,
+          seriaLength: null,
+          result: null,
+          gameStatistic: { sprint: { right: 0, wrong: 0 }, audioCall: { right: 0, wrong: 0 } },
+        },
+      });
       this.callBack('difficult', '+');
       this.node.querySelector('.delete-word-button').classList.add('disable-word-buttons');
     } else if (this.isDifficult) {
@@ -319,7 +328,16 @@ export default class WordCard extends Control {
       this.isLearnt = true;
       this.node.querySelector('.delete-word-button').classList.remove('disable-word-buttons');
       this.node.classList.add(this.learntWordClassName);
-      this.createUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: true } });
+      this.createUserWord(cardId, {
+        difficulty: 'easy',
+        optional: {
+          isDifficult: false,
+          isLearnt: true,
+          seriaLength: null,
+          result: null,
+          gameStatistic: { sprint: { right: 0, wrong: 0 }, audioCall: { right: 0, wrong: 0 } },
+        },
+      });
       this.updateUserWord(cardId, { difficulty: 'easy', optional: { isDifficult: false, isLearnt: true } });
       popupsContainer.node.innerHTML = 'Добавлено в изученные слова';
       this.hideAlert(popupsContainer);
