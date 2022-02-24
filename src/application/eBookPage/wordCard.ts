@@ -281,6 +281,7 @@ export default class WordCard extends Control {
   private toggleToDifficult(): void {
     const popupsContainer = new Control(document.body, 'div', 'alert alert-info');
     const cardId = this.getId();
+    this.agregUserWord(cardId);
     if (!this.isDifficult) {
       this.node.querySelector('.difficult-word-button').classList.remove('disable-word-buttons');
       this.isDifficult = true;
