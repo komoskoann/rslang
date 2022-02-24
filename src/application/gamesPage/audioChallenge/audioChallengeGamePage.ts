@@ -5,7 +5,6 @@ import { IPlayList } from '../../eBookPage/wordCard';
 import WordsController from '../../services/words/wordsController';
 import '../../../css/preloader.css';
 import preloadHtml from '../../eBookPage/preloader.html';
-import Footer from '../../mainPage/footer';
 import LocalStorage from '../../services/words/localStorage';
 import GameWordsController from '../../services/gameWords/gameWordsController';
 import AudioChallengeResultsPage from './audioChallengeResultsPage';
@@ -53,7 +52,6 @@ export default class AudioChallengeGamePage extends Control {
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'audio-challenge-wrapper', '');
     const gameContainer = new Control(this.node, 'div', 'audio-challenge-container');
-    document.querySelector('.footer')?.remove();
     this.getWords();
     gameContainer.node.innerHTML = audioChallengeGamePageHTML;
     this.musicModeButton = this.node.querySelector('.audio-challenge__music-button');
@@ -271,9 +269,15 @@ export default class AudioChallengeGamePage extends Control {
     const roundResult = this.results[this.results.length - 1][1] === true ? 'right' : 'wrong';
     if (!word.userWord) {
       if (roundResult === 'right') {
-        await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult } });
+        await this.GameWordsController.createUserWord(word.id, {
+          difficulty: 'studied',
+          optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult },
+        });
       } else {
-        await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult } });
+        await this.GameWordsController.createUserWord(word.id, {
+          difficulty: 'studied',
+          optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: roundResult },
+        });
       }
     } else {
       if (word.userWord.optional.seriaLength) {
@@ -282,7 +286,10 @@ export default class AudioChallengeGamePage extends Control {
         if (roundResult === 'right') {
           if (result === roundResult) {
             word.userWord.optional.seriaLength = ++seriaLength;
-            if (word.userWord.difficulty === 'studied' && seriaLength >= 3 || word.userWord.difficulty === 'hard' && seriaLength >= 5) {
+            if (
+              (word.userWord.difficulty === 'studied' && seriaLength >= 3) ||
+              (word.userWord.difficulty === 'hard' && seriaLength >= 5)
+            ) {
               word.userWord.difficulty = 'easy';
               word.userWord.optional.isLearnt = true;
               word.userWord.optional.isDifficult = false;
@@ -307,7 +314,7 @@ export default class AudioChallengeGamePage extends Control {
       }
       await this.GameWordsController.changeUserWord(word.id, word.userWord);
     }
-  }
+  };
 
   private hideWordCard = (): void => {
     ++this.round;
@@ -362,6 +369,5 @@ export default class AudioChallengeGamePage extends Control {
 
   destroy() {
     super.destroy();
-    new Footer(document.body);
   }
 }

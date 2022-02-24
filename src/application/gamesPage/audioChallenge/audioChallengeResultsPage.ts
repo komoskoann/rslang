@@ -1,7 +1,6 @@
 import audioChallengeResultsPageHTML from './audioChallengeResultsPage.html';
 import Control from '../../../controls/control';
 import { RoundResult } from './audioChallengeGamePage';
-import Footer from '../../mainPage/footer';
 
 export default class AudioChallengeResultsPage extends Control {
   private audio: HTMLAudioElement;
@@ -16,7 +15,6 @@ export default class AudioChallengeResultsPage extends Control {
 
   constructor(parentNode: HTMLElement, results: RoundResult[]) {
     super(parentNode, 'div', 'audio-challenge-container', '');
-    document.querySelector('.footer')?.remove();
     this.node.innerHTML = audioChallengeResultsPageHTML;
     this.results = results;
     this.renderResultsTable(this.results);
@@ -109,6 +107,5 @@ export default class AudioChallengeResultsPage extends Control {
 
   destroy() {
     super.destroy();
-    new Footer(document.body);
   }
 }
