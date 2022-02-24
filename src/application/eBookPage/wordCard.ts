@@ -178,8 +178,8 @@ export default class WordCard extends Control {
   }
 
   private renderWordGameStats() {
-    this.audioResults = this.wordCardInfo.userWord?.optional?.gameStatistic.audioCall;
-    this.sprintResults = this.wordCardInfo.userWord?.optional?.gameStatistic.sprint;
+    this.audioResults = this.wordCardInfo.userWord?.optional?.gameStatistic?.audioCall;
+    this.sprintResults = this.wordCardInfo.userWord?.optional?.gameStatistic?.sprint;
     if (getAuthorizedUser() && (this.audioResults || this.sprintResults)) {
       const sprintTotalAnswers = this.sprintResults.right + this.sprintResults.wrong;
       const audioTotalAnswers = this.audioResults.right + this.audioResults.wrong;
