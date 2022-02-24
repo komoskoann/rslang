@@ -84,31 +84,33 @@ export default class SprintGameCard extends Control {
   }
 
   private randomPage() {
-    return Math.floor(Math.random() * 30);
+    return Math.round(Math.random() * 29);
   }
 
   private getWords = async (page: number, group: number): Promise<void> => {
     this.wordsOnPage = await this.service.getWordstoSprint(page, group);
-  }
+  };
 
   private nextRound = (): void => {
     this.getResultTable();
     if (this.round < this.wordsOnPage.length) {
       this.rightWord = this.wordsOnPage[this.round];
-      this.node.querySelector('.word-translation').innerHTML = Math.random() > 0.5 ? this.wordsOnPage[Math.floor(Math.random()*20)].wordTranslate : this.wordsOnPage[this.round].wordTranslate;
+      this.node.querySelector('.word-translation').innerHTML =
+        Math.random() > 0.5
+          ? this.wordsOnPage[Math.round(Math.random() * 19)].wordTranslate
+          : this.wordsOnPage[this.round].wordTranslate;
       this.node.querySelector('.word-name').innerHTML = this.wordsOnPage[this.round].word;
-      console.log( this.node.querySelector('.word-translation').innerHTML, this.wordsOnPage[this.round].wordTranslate, this.wordsOnPage[this.round].wordTranslate === this.node.querySelector('.word-translation').innerHTML)
     } else {
       window.removeEventListener('click', this.checkMouseWordButtons);
       window.removeEventListener('keydown', this.checkKeyboardWordButtons);
       this.stop = true;
     }
-  }
+  };
 
   private addEventLisneters = (): void => {
     window.addEventListener('click', this.checkMouseWordButtons);
     window.addEventListener('keydown', this.checkKeyboardWordButtons);
-  }
+  };
 
   private checkMouseWordButtons = (e: MouseEvent): void => {
     const target = (e.target as Element).closest('[word]') as HTMLButtonElement;
@@ -120,7 +122,7 @@ export default class SprintGameCard extends Control {
     } else if (target.classList.contains('false-button')) {
       this.giveFalseAnswer();
     }
-  }
+  };
 
   private checkKeyboardWordButtons = (e: KeyboardEvent): void => {
     if (e.code === 'ArrowRight') {
@@ -128,7 +130,7 @@ export default class SprintGameCard extends Control {
     } else if (e.code === 'ArrowLeft') {
       this.giveFalseAnswer();
     }
-  }
+  };
 
   private giveTrueAnswer = (): void => {
     if (this.node.querySelector('.word-translation').innerHTML === this.wordsOnPage[this.round].wordTranslate) {
@@ -136,8 +138,7 @@ export default class SprintGameCard extends Control {
       this.trueWord.push(this.wordsOnPage[this.round]);
       this.colorIndicator(true);
       setTimeout(() => {
-        (this.node.querySelector('.card-translate') as HTMLElement).style.background =
-          'rgba(255, 255, 255, 0.315)';
+        (this.node.querySelector('.card-translate') as HTMLElement).style.background = 'rgba(255, 255, 255, 0.315)';
       }, 300);
       this.seriesAns += 1;
       if (this.seriesAns >= 4) {
@@ -151,14 +152,13 @@ export default class SprintGameCard extends Control {
       this.seriesAns = 0;
       this.colorIndicator(false);
       setTimeout(() => {
-        (this.node.querySelector('.card-translate') as HTMLElement).style.background =
-          'rgba(255, 255, 255, 0.315)';
+        (this.node.querySelector('.card-translate') as HTMLElement).style.background = 'rgba(255, 255, 255, 0.315)';
       }, 300);
       this.falseWord.push(this.wordsOnPage[this.round]);
     }
     this.checkRound();
     this.checkResult();
-  }
+  };
 
   private giveFalseAnswer = (): void => {
     if (this.node.querySelector('.word-translation').innerHTML === this.wordsOnPage[this.round].wordTranslate) {
@@ -166,8 +166,7 @@ export default class SprintGameCard extends Control {
       this.falseWord.push(this.wordsOnPage[this.round]);
       this.colorIndicator(false);
       setTimeout(() => {
-        (this.node.querySelector('.card-translate') as HTMLElement).style.background =
-          'rgba(255, 255, 255, 0.315)';
+        (this.node.querySelector('.card-translate') as HTMLElement).style.background = 'rgba(255, 255, 255, 0.315)';
       }, 300);
       this.result -= 10;
       this.seriesAns = 0;
@@ -175,8 +174,7 @@ export default class SprintGameCard extends Control {
       this.roundResult = 'right';
       this.colorIndicator(true);
       setTimeout(() => {
-        (this.node.querySelector('.card-translate') as HTMLElement).style.background =
-          'rgba(255, 255, 255, 0.315)';
+        (this.node.querySelector('.card-translate') as HTMLElement).style.background = 'rgba(255, 255, 255, 0.315)';
       }, 300);
       this.trueWord.push(this.wordsOnPage[this.round]);
       if (this.seriesAns >= 4) {
@@ -188,7 +186,7 @@ export default class SprintGameCard extends Control {
     }
     this.checkResult();
     this.checkRound();
-  }
+  };
 
   private checkRound = (): void => {
     ++this.round;
@@ -196,15 +194,21 @@ export default class SprintGameCard extends Control {
     this.node.querySelector('.coefficient').innerHTML = `${coefficient}`;
     this.seriesArr.push(this.seriesAns);
     this.nextRound();
-  }
+  };
 
   private checkResult = async (): Promise<void> => {
     const word = (await this.GameWordsController.getUserAgrWord(this.rightWord.id))[0];
     if (!word.userWord) {
       if (this.roundResult === 'right') {
-        await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: this.roundResult } });
+        await this.GameWordsController.createUserWord(word.id, {
+          difficulty: 'studied',
+          optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: this.roundResult },
+        });
       } else {
-        await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: this.roundResult } });
+        await this.GameWordsController.createUserWord(word.id, {
+          difficulty: 'studied',
+          optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: this.roundResult },
+        });
       }
     } else {
       if (word.userWord.optional.seriaLength) {
@@ -213,7 +217,10 @@ export default class SprintGameCard extends Control {
         if (this.roundResult === 'right') {
           if (result === this.roundResult) {
             word.userWord.optional.seriaLength = ++seriaLength;
-            if (word.userWord.difficulty === 'studied' && seriaLength >= 3 || word.userWord.difficulty === 'hard' && seriaLength >= 5) {
+            if (
+              (word.userWord.difficulty === 'studied' && seriaLength >= 3) ||
+              (word.userWord.difficulty === 'hard' && seriaLength >= 5)
+            ) {
               word.userWord.difficulty = 'easy';
               word.userWord.optional.isLearnt = true;
               word.userWord.optional.isDifficult = false;
@@ -238,76 +245,8 @@ export default class SprintGameCard extends Control {
       }
       await this.GameWordsController.changeUserWord(word.id, word.userWord);
     }
-  }
+  };
 
-  /*
-  async getWords(page: number, group: number): Promise<void> {
-    let wordsOnPage: ISprint[] = await this.service.getWordstoSprint(page, group);
-    let shuffled = wordsOnPage
-      .map((value) => ({ value }))
-      .sort(() => Math.random() - 0.5)
-      .map(({ value }) => value);
-    let correctArr = shuffled.slice(0, 8);
-    this.node.querySelector('.word-translation').innerHTML = correctArr.includes(wordsOnPage[0])
-      ? wordsOnPage[0].wordTranslate
-      : shuffled[0].wordTranslate;
-    this.node.querySelector('.word-name').innerHTML = wordsOnPage[0].word;
-    let j = 1;
-    this.node.querySelectorAll('[word]').forEach((word) => {
-      function createResult(instance: SprintGameCard, e: KeyboardEventInit) {
-        if (j < wordsOnPage.length) {
-          instance.node.querySelector('.word-translation').innerHTML = correctArr.includes(wordsOnPage[j])
-            ? wordsOnPage[j].wordTranslate
-            : shuffled[j].wordTranslate;
-          instance.node.querySelector('.word-name').innerHTML = wordsOnPage[j].word;
-          if (word.classList.contains('true-button') || e.key === 'ArrowRight') {
-            if (correctArr.includes(wordsOnPage[j])) {
-              instance.trueWord.push(wordsOnPage[j]);
-              instance.colorIndicator(true);
-              instance.seriesAns += 1;
-              if (instance.seriesAns >= 4) {
-                instance.result += 20;
-              } else instance.result += 10;
-            }
-            else {
-              instance.result -= 10;
-            instance.seriesAns = 0;
-            instance.colorIndicator(false);
-            instance.falseWord.push(wordsOnPage[j]);
-            }
-          }
-          if (word.classList.contains('false-button') || e.key === 'ArrowLeft') {
-            if (correctArr.includes(wordsOnPage[j])) {
-              instance.falseWord.push(wordsOnPage[j]);
-              instance.colorIndicator(false);
-              instance.result -= 10;
-              instance.seriesAns = 0;
-            }
-            else {
-            instance.colorIndicator(true);
-            instance.trueWord.push(wordsOnPage[j]);
-
-            if (instance.seriesAns >= 4) {
-              instance.result += 20;
-            } else instance.result += 10;
-            instance.seriesAns += 1;
-          }
-          }
-          if (j === wordsOnPage.length - 1) {
-            instance.stop = true;
-          }
-          let coefficient = instance.seriesAns >= 4 ? 20 : 10;
-          instance.node.querySelector('.coefficient').innerHTML = `${coefficient}`;
-          instance.seriesArr.push(instance.seriesAns);
-        }
-        j += 1;
-        instance.getResultTable();
-      }
-      word.addEventListener('keydown', createResult.bind(null, this));
-      word.addEventListener('click', createResult.bind(null, this));
-    });
-  }
-*/
   private getResultTable() {
     this.node.querySelector('.result').innerHTML = `${this.result}`;
     this.node.querySelector('.point-result').innerHTML = `${this.result}`;
