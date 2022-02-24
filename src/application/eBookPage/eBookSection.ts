@@ -49,6 +49,10 @@ export default class EBookSection extends Control {
 
   private toAudioChallengeButton: HTMLElement;
 
+  private audioAnswers: { right: number; wrong: number }[];
+
+  private sprintAnswers: { right: number; wrong: number }[];
+
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
     this.node.innerHTML = eBook;
@@ -212,6 +216,7 @@ export default class EBookSection extends Control {
         this.words = await this.service.getWords(page, group);
       }
       this.wordCardsWrapper.node.lastElementChild.remove();
+
       this.wordCards = this.words.map(
         (word: IWordCard) => new WordCard(this.wordCardsWrapper.node, word, this.updateTotalCounter.bind(this)),
       );
