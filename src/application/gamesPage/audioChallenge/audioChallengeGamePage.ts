@@ -285,6 +285,7 @@ export default class AudioChallengeGamePage extends Control {
         let result = word.userWord.optional.result;
         if (roundResult === 'right') {
           if (result === roundResult) {
+            console.log(result, 'roundResult === right, result === roundResult')
             word.userWord.optional.gameStatistic.audioCall.right +=1;
             word.userWord.optional.seriaLength = ++seriaLength;
             if (
@@ -296,15 +297,18 @@ export default class AudioChallengeGamePage extends Control {
               word.userWord.optional.isDifficult = false;
             }
           } else {
+            console.log(result, 'roundResult === right, result !== roundResult')
             word.userWord.optional.gameStatistic.audioCall.wrong +=1;
             word.userWord.optional.seriaLength = 1;
             word.userWord.optional.result = roundResult;
           }
         } else {
           if (result === roundResult) {
+            console.log(result, 'roundResult !== right, result === roundResult')
             word.userWord.optional.gameStatistic.audioCall.wrong +=1;
             word.userWord.optional.seriaLength = ++seriaLength;
           } else {
+            console.log(result, 'roundResult !== right, result !== roundResult')
             word.userWord.optional.gameStatistic.audioCall.right +=1;
             word.userWord.optional.seriaLength = 1;
             word.userWord.optional.result = roundResult;
