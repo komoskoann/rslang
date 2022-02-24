@@ -17,8 +17,6 @@ export default class SprintGameCard extends Control {
 
   private wordsOnPage: ISprint[];
 
-  private shuffled: ISprint[];
-
   private round: number = 0;
 
   private roundResult: string;
@@ -74,7 +72,6 @@ export default class SprintGameCard extends Control {
     this.currentEnglishLevel = +this.localStorage.getFromLocalStorage('EngLevel');
     this.maxSeries = Math.max.apply(null, this.seriesArr);
     this.getFrom();
-    this.addEventLisneters();
   }
 
   private getFrom() {
@@ -92,19 +89,15 @@ export default class SprintGameCard extends Control {
 
   private getWords = async (page: number, group: number): Promise<void> => {
     this.wordsOnPage = await this.service.getWordstoSprint(page, group);
-    this.shuffled = this.wordsOnPage
-      .map((value) => ({ value }))
-      .sort(() => Math.random() - 0.5)
-      .map(({ value }) => value);
-    this.nextRound();
   }
 
   private nextRound = (): void => {
     this.getResultTable();
     if (this.round < this.wordsOnPage.length) {
       this.rightWord = this.wordsOnPage[this.round];
-      this.node.querySelector('.word-translation').innerHTML = Math.random() > 0.5 ? this.shuffled[this.round].wordTranslate : this.wordsOnPage[this.round].wordTranslate;
+      this.node.querySelector('.word-translation').innerHTML = Math.random() > 0.5 ? this.wordsOnPage[Math.floor(Math.random()*20)].wordTranslate : this.wordsOnPage[this.round].wordTranslate;
       this.node.querySelector('.word-name').innerHTML = this.wordsOnPage[this.round].word;
+      console.log( this.node.querySelector('.word-translation').innerHTML, this.wordsOnPage[this.round].wordTranslate, this.wordsOnPage[this.round].wordTranslate === this.node.querySelector('.word-translation').innerHTML)
     } else {
       window.removeEventListener('click', this.checkMouseWordButtons);
       window.removeEventListener('keydown', this.checkKeyboardWordButtons);
@@ -209,10 +202,8 @@ export default class SprintGameCard extends Control {
     const word = (await this.GameWordsController.getUserAgrWord(this.rightWord.id))[0];
     if (!word.userWord) {
       if (this.roundResult === 'right') {
-        console.log('new right')
         await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: this.roundResult } });
       } else {
-        console.log('new wrong')
         await this.GameWordsController.createUserWord(word.id, { difficulty: 'studied', optional: { isDifficult: false, isLearnt: false, seriaLength: 1, result: this.roundResult } });
       }
     } else {
@@ -400,6 +391,8 @@ export default class SprintGameCard extends Control {
       isStart = true;
       interval = setInterval(() => {
         if (count == 0) {
+          this.addEventLisneters();
+          this.nextRound();
           clearInterval(interval);
         }
         timeToStart.textContent = '' + count--;
