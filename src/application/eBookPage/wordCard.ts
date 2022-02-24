@@ -52,6 +52,10 @@ export default class WordCard extends Control {
 
   private gameStatsButton: Control<HTMLElement>;
 
+  private audioResults: { right: number; wrong: number; };
+
+  private sprintResults: { right: number; wrong: number; };
+
   constructor(parentNode: HTMLElement, wordCardInfo: IWordCard, callBack: (a: string, b: string) => void) {
     super(parentNode, 'div', 'word-card-wrapper', '');
     this.container = new Control(this.node, 'div');
@@ -174,26 +178,45 @@ export default class WordCard extends Control {
   }
 
   private renderWordGameStats() {
-    if (getAuthorizedUser()) {
-      const wordGameStatsWrapper = new Control(this.node, 'div', 'word-game-stats-wrapper');
-      this.gameStatsButton = new Control(wordGameStatsWrapper.node, 'div', 'game-stats-button');
-      const modalWrapper = new Control(wordGameStatsWrapper.node, 'div', 'modal-overlay');
-      modalWrapper.node.id = 'simpleModal';
-      modalWrapper.node.innerHTML = wordStats;
+    this.audioResults = this.wordCardInfo.userWord?.optional?.gameStatistic.audioCall;
+    this.sprintResults = this.wordCardInfo.userWord?.optional?.gameStatistic.sprint;
+    if (getAuthorizedUser() && (this.audioResults || this.sprintResults)) {
+      const sprintTotalAnswers = this.sprintResults.right + this.sprintResults.wrong;
+      const audioTotalAnswers = this.audioResults.right + this.audioResults.wrong;
+        const wordGameStatsWrapper = new Control(this.node, 'div', 'word-game-stats-wrapper');
+        this.gameStatsButton = new Control(wordGameStatsWrapper.node, 'div', 'game-stats-button');
+        const modalWrapper = new Control(wordGameStatsWrapper.node, 'div', 'modal-overlay');
+        modalWrapper.node.id = `modal-${this.wordCardInfo.id}`;
+        const modalContent = new Control(modalWrapper.node, 'div', 'modal-content');
+        const modalHeader = new Control(modalContent.node, 'div', 'modal-header');
+        modalHeader.node.innerHTML = wordStats;
+        const modalBody = new Control(modalContent.node, 'div', 'modal-body');
+        const sprintWordStats = new Control(modalBody.node, 'div', 'sprint-word-stats');
+        new Control(sprintWordStats.node, 'div', '', 'Спринт:');
+        new Control(sprintWordStats.node, 'div', 'sprint-correct-answers', `${this.sprintResults.right}`);
+        new Control(sprintWordStats.node, 'div', '', 'из');
+        new Control(sprintWordStats.node, 'div', 'sprint-total-answers', `${sprintTotalAnswers}`);
+        const audioWordStats = new Control(modalBody.node, 'div', 'audio-word-stats');
+        new Control(audioWordStats.node, 'div', '', 'Аудиовызов:');
+        new Control(audioWordStats.node, 'div', 'audio-correct-answers', `${this.audioResults.right}`);
+        new Control(audioWordStats.node, 'div', '', 'из');
+        new Control(audioWordStats.node, 'div', 'audio-total-answers', `${audioTotalAnswers}`);
+
     }
   }
 
   private openModalStats() {
-    document.getElementById('simpleModal').style.display = 'block';
+    document.getElementById(`modal-${this.wordCardInfo.id}`).style.display = 'block';
   }
 
   private closeModalStats() {
-    document.getElementById('simpleModal').style.display = 'none';
+    document.getElementById(`modal-${this.wordCardInfo.id}`).style.display = 'none';
   }
 
   private closeModalStatsOutsideClick(e: Event) {
-    if (e.target == document.getElementById('simpleModal')) {
-      document.getElementById('simpleModal').style.display = 'none';
+
+    if (e.target == document.getElementById(`modal-${this.wordCardInfo.id}`)) {
+      document.getElementById(`modal-${this.wordCardInfo.id}`).style.display = 'none';
     }
   }
 
@@ -339,10 +362,10 @@ export default class WordCard extends Control {
     this.playButton.node.addEventListener('click', this.playAudio.bind(this));
     this.difficultWordButton.node.addEventListener('click', this.toggleToDifficult.bind(this));
     this.learntWordButton.node.addEventListener('click', this.toggleToLearnt.bind(this));
-    if (getAuthorizedUser()) {
+    if (getAuthorizedUser() && (this.audioResults || this.sprintResults)) {
       this.gameStatsButton.node.addEventListener('click', this.openModalStats.bind(this));
-      document.querySelector('.closeBtn').addEventListener('click', this.closeModalStats.bind(this));
-      window.addEventListener('click', this.closeModalStatsOutsideClick);
+      document.querySelectorAll('.closeBtn').forEach(btn => btn.addEventListener('click', this.closeModalStats.bind(this)));
+      window.addEventListener('click', this.closeModalStatsOutsideClick.bind(this));
     }
   }
 }
