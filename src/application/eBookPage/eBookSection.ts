@@ -49,9 +49,9 @@ export default class EBookSection extends Control {
 
   private toAudioChallengeButton: HTMLElement;
 
-  private audioAnswers: { right: number; wrong: number; }[];
+  private audioAnswers: { right: number; wrong: number }[];
 
-  private sprintAnswers: { right: number; wrong: number; }[];
+  private sprintAnswers: { right: number; wrong: number }[];
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'section', 'e-book', '');
@@ -139,7 +139,7 @@ export default class EBookSection extends Control {
       const dictionaryCard = new WordCard(
         document.body,
         this.hardWordsDictionary[index],
-        this.updateTotalCounter.bind(this)
+        this.updateTotalCounter.bind(this),
       );
       new Control(dictionaryCard.node, 'button', 'dictionary-card-close-button');
       dictionaryCard.node.classList.add('dictionary__card');
